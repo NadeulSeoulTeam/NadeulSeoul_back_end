@@ -2,9 +2,9 @@ package com.alzal.nadeulseoulbackend.domain.tag.controller;
 
 import java.nio.charset.Charset;
 import java.util.List;
-import com.alzal.nadeulseoulbackend.domain.tag.dto.LocalTagDto;
-import com.alzal.nadeulseoulbackend.domain.tag.dto.ThemeTagDto;
-import com.alzal.nadeulseoulbackend.domain.tag.service.TagService;
+
+import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
+import com.alzal.nadeulseoulbackend.domain.tag.service.CodeService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TagController {
 
     @Autowired
-    private TagService tagService;
+    private CodeService codeService;
 
     @ApiOperation(value = "지역 태그", notes = "지역 태그 목록 가져오기")
     @ApiResponses({
@@ -35,8 +35,7 @@ public class TagController {
     })
     @GetMapping("/local")
     public ResponseEntity<Response> getLocalTagList() {
-        List<LocalTagDto> localTagDtoList = tagService.findAllLocalTag();
-        System.out.println(localTagDtoList.size());
+        List<CodeDto> localTagDtoList = codeService.findAllByGroup(1L);
         Response response = new Response();
         HttpHeaders headers= new HttpHeaders();
 
@@ -55,8 +54,7 @@ public class TagController {
     })
     @GetMapping("/theme")
     public ResponseEntity<Response> getThemeTagList() {
-        List<ThemeTagDto> themeTagDtoList = tagService.findAllThemeTag();
-        System.out.println(themeTagDtoList.size());
+        List<CodeDto> themeTagDtoList = codeService.findAllByGroup(2L);
         Response response = new Response();
         HttpHeaders headers= new HttpHeaders();
 
