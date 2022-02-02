@@ -1,10 +1,8 @@
 package com.alzal.nadeulseoulbackend.global.common;
 
 public enum StatusEnum {
-    OK(200, "OK"),
-    BAD_REQUEST(400, "BAD REQUEST"),
-    NOT_FOUND(404, "NOT FOUND"),
-    INTERNAL_SERVER_ERROR(500, "INTERNAL SERVER ERROR");
+
+    OK(200, "OK");
 
     int code;
     String message;
