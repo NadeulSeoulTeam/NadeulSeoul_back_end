@@ -30,7 +30,7 @@ public class CodeService {
 
     public List<CodeDto> findAllByGroup(Long groupSeq) {
         CodeGroup codeGroup = codeGroupRepositoroy.findById(groupSeq)
-                .orElseThrow(() -> new TagCustomException(ErrorStatusEnum.CODE_NOT_EXISTS));
+                .orElseThrow(() -> new TagCustomException(ErrorStatusEnum.CODE_EXCEPTION));
         List<Code> codeList = codeGroup.getCodeList();
         return codeList.stream().map(CodeDto::fromEntity).collect(Collectors.toList());
     }

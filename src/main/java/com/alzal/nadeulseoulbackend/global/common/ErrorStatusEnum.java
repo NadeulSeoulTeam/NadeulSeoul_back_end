@@ -11,7 +11,7 @@ public enum  ErrorStatusEnum {
     EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
 
     // tag
-    CODE_NOT_EXISTS(400, "CODE NOT EXISTS")
+    CODE_EXCEPTION(400, "CODE EXCEPTION")
     ;
 
 
