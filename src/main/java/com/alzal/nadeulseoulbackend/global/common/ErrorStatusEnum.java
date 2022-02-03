@@ -8,8 +8,13 @@ public enum  ErrorStatusEnum {
     INTERNAL_SERVER_ERROR(500, "INTERNAL SERVER ERROR"),
 
     // member
-    EMAIL_DUPLICATION(400, "DUPLICATED EMAIL")
+    EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
+
+    // tag
+    CODE_EXCEPTION(400, "CODE EXCEPTION")
     ;
+
+
 
     int code;
     String message;
