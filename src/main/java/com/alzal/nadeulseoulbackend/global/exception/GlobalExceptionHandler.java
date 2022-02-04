@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.global.exception;
 
+import com.alzal.nadeulseoulbackend.domain.tag.exception.TagCustomException;
 import com.alzal.nadeulseoulbackend.global.common.ErrorResponse;
 import com.alzal.nadeulseoulbackend.global.common.ErrorStatusEnum;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -35,6 +36,15 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(ErrorStatusEnum.BAD_REQUEST);
         errorResponse.setMessage(e.getClass().getName());
         errorResponse.setData("핸들러 없음");
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = TagCustomException.class)
+    public ResponseEntity customException(TagCustomException e) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(e.getErrorStatusEnum());
+        errorResponse.setMessage("예외 발생");
+        errorResponse.setData(e.getClass().getName());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
