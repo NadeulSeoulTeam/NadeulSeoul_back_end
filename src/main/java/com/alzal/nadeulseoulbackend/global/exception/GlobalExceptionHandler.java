@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         ErrorStatusEnum errorStatusEnum = e.getErrorStatusEnum();
         errorResponse.setStatus(errorStatusEnum);
-        errorResponse.setMessage(errorStatusEnum.getMessage());
+        errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorStatusEnum.getCode()));
     }
 
