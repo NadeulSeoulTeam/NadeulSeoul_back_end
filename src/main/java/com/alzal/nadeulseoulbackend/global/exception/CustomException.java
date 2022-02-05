@@ -8,4 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CustomException extends RuntimeException {
     private ErrorStatusEnum errorStatusEnum;
+
+    public CustomException(ErrorStatusEnum errorStatusEnum, String message) {
+        super(message);
+        this.errorStatusEnum = errorStatusEnum;
+    }
 }
