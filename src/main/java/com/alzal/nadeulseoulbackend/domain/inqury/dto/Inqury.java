@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Inqury {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long questionSeq;
 
     private Long memberSeq; // 회원 아이디 foreign key 설정해야함
@@ -34,5 +34,14 @@ public class Inqury {
     private LocalDateTime answerDate;
 
     private boolean hidden = false;
+
+    public void update(String questionTitle, String question){
+        this.questionTitle = questionTitle;
+        this.question = question;
+    }
+
+    public void setHidden(boolean hidden){
+        this.hidden = true;
+    }
 
 }

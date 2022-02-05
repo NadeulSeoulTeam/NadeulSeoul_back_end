@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @Builder
 @ApiModel("문의 사항 목록")
-public class InqurylistDto {
+public class InquryDtoList {
     private List<InquryDto> inquryDtoList;
 }
