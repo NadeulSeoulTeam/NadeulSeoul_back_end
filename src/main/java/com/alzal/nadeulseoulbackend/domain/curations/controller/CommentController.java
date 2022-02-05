@@ -31,6 +31,7 @@ public class CommentController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
         commentService.insertComment(commentDto);
+        response.setMessage("댓글 작성이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -44,6 +45,7 @@ public class CommentController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
         commentService.updateComment(commentDto);
+        response.setMessage("댓글 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -57,6 +59,7 @@ public class CommentController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
         commentService.deleteByCommentSeq(commentSeq);
+        response.setMessage("댓글 삭제가 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

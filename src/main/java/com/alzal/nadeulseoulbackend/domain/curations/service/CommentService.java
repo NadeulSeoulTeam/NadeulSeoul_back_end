@@ -3,10 +3,10 @@ package com.alzal.nadeulseoulbackend.domain.curations.service;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.Comment;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentCustomException;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
-import com.alzal.nadeulseoulbackend.global.common.ErrorStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class CommentService {
 
     public void insertComment(CommentDto commentDto) {
         Curation curation = curationRepository.findById(commentDto.getCurationSeq())
-                .orElseThrow(() -> new CommentCustomException(ErrorStatusEnum.CURATION_NOT_FOUND));
+                .orElseThrow(()-> new CurationNotFoundException("큐레이션이"));
         Comment comment = Comment.builder()
                 .curation(curation)
                 .memberSeq(commentDto.getMemberSeq())
@@ -37,11 +37,13 @@ public class CommentService {
 
     public void updateComment(CommentDto commentDto) {
         Comment comment = commentRepository.findById(commentDto.getCommentSeq())
-                .orElseThrow(() -> new CommentCustomException(ErrorStatusEnum.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new CommentNotFoundException("댓글이"));
         comment.change(commentDto.getContent());
     }
 
     public void deleteByCommentSeq(Long commentSeq) {
+        Comment comment = commentRepository.findById(commentSeq)
+                .orElseThrow(() -> new CommentNotFoundException("댓글이"));
         commentRepository.deleteById(commentSeq);
     }
 }
