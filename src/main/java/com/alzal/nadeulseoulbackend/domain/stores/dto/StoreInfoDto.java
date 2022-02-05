@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StoreInfoDto {
 
-    private Long sotreSeq;
+    private Long storeSeq;
     private String placeName;
     private String categoryName;
     private String addressName;
@@ -18,10 +18,10 @@ public class StoreInfoDto {
     private String x;
     
     @Builder
-    public StoreInfoDto(Long sotreSeq, String placeName, String categoryName,
+    public StoreInfoDto(Long storeSeq, String placeName, String categoryName,
                         String addressName, String placeUrl, String phone,
                         String y, String x) {
-        this.sotreSeq = sotreSeq;
+        this.storeSeq = storeSeq;
         this.placeName = placeName;
         this.categoryName = categoryName;
         this.addressName = addressName;
@@ -33,7 +33,7 @@ public class StoreInfoDto {
 
     public StoreInfo toEntyty(){
         return StoreInfo.builder()
-                .sotreSeq(sotreSeq)
+                .storeSeq(storeSeq)
                 .placeName(placeName)
                 .categoryName(categoryName)
                 .placeUrl(placeUrl)
@@ -45,7 +45,7 @@ public class StoreInfoDto {
 
     public StoreInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreInfoDto.builder()
-                .sotreSeq(storeInfo.getSotreSeq())
+                .storeSeq(storeInfo.getStoreSeq())
                 .placeName(storeInfo.getPlaceName())
                 .categoryName(storeInfo.getCategoryName())
                 .placeUrl(storeInfo.getPlaceUrl())

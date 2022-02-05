@@ -14,6 +14,13 @@ public enum  ErrorStatusEnum {
     // member
     EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
 
+    //curation
+    CURATION_NOT_FOUND(400, "CURATION NOT FOUND"),
+
+    //comment
+    COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
+
+
     // tag
     CODE_EXCEPTION(400, "CODE EXCEPTION")
     ;
