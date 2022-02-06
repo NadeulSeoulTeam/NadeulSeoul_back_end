@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.inqury.dto;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,11 +27,13 @@ public class Inqury {
     @Column(nullable = false)
     private String question;
 
+    @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime questionDate;
 
     private String answer;
 
+    @UpdateTimestamp
     private LocalDateTime answerDate;
 
     private boolean hidden = false;
@@ -44,4 +47,7 @@ public class Inqury {
         this.hidden = true;
     }
 
+    public void updateAnswer(String answer) {
+        this.answer = answer;
+    }
 }

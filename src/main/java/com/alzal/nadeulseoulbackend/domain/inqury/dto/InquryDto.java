@@ -13,4 +13,10 @@ public class InquryDto {
     private Long questionSeq;
     private String questionTitle;
     private LocalDateTime questionDate;
+
+    public InquryDto(Long questionSeq, String questionTitle, LocalDateTime questionDate) {
+        this.questionSeq = questionSeq;
+        this.questionTitle = questionTitle;
+        this.questionDate = questionDate;
+    }
 }

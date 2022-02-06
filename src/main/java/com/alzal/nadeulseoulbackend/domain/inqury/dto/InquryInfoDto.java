@@ -1,16 +1,14 @@
 package com.alzal.nadeulseoulbackend.domain.inqury.dto;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.models.auth.In;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
-@ApiModel("문의 사항 세부내용")
-@Builder
 @Data
+@Builder
+@ApiModel("문의 사항 세부내용")
 public class InquryInfoDto {
     //private Long questionSeq;
     private Long memberSeq;
@@ -19,5 +17,6 @@ public class InquryInfoDto {
     private LocalDateTime questionDate;
     private String answer;
     private LocalDateTime answerDate;
-
 }
+
+
