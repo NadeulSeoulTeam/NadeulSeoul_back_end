@@ -50,7 +50,9 @@ public class InquryService {
 
     //문의 사항 작성하기
     @Transactional
-    public int insertInqury(InquryInfoDto inquryInfoDto) {
+    public void insertInqury(InquryInfoDto inquryInfoDto) {
+
+        // 글자 수 예외 처리
 
         Inqury inquryEntity = inquryRepository.save(Inqury.builder()
                                             .memberSeq(inquryInfoDto.getMemberSeq())
@@ -58,8 +60,6 @@ public class InquryService {
                                             .question(inquryInfoDto.getQuestion())
                                             .questionDate(LocalDateTime.now())
                                             .build()); // answer값 들어가지 않아서 자동 null로 저장
-
-        return inquryEntity != null? 1 : 0;
     }
 
     // 문의 사항 수정하기
