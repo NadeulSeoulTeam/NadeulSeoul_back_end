@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.inqury.service;
 
 import com.alzal.nadeulseoulbackend.domain.inqury.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inqury.entity.Inqury;
 import com.alzal.nadeulseoulbackend.domain.inqury.exception.InquryNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inqury.repository.InquryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

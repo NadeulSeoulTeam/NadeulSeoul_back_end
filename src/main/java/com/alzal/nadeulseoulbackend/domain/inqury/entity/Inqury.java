@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.inqury.dto;
+package com.alzal.nadeulseoulbackend.domain.inqury.entity;
 
 import com.sun.istack.NotNull;
 import lombok.*;

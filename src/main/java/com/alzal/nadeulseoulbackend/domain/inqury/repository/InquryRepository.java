@@ -1,6 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.inqury.repository;
 
-import com.alzal.nadeulseoulbackend.domain.inqury.dto.Inqury;
+import com.alzal.nadeulseoulbackend.domain.inqury.entity.Inqury;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.inqury.controller;
 
 import com.alzal.nadeulseoulbackend.domain.inqury.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inqury.entity.Inqury;
 import com.alzal.nadeulseoulbackend.domain.inqury.service.InquryService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
@@ -72,8 +73,6 @@ public class InquryController {
     @PostMapping("/questions")
     public ResponseEntity<String> insertInqury(@RequestBody InquryInfoDto inquryInfoDto) {
         int result = inquryService.insertInqury(inquryInfoDto);
-        //System.out.println(inquryInfoDto.getAnswer());
-        System.out.println(inquryInfoDto.getQuestionTitle());
 
         if(result == 0){
             return new ResponseEntity<String>("FAIL", HttpStatus.NO_CONTENT);
