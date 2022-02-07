@@ -101,20 +101,20 @@ public class MypageController {
     /*
      * 언팔로우 하기
      * */
-//    @ApiOperation(value = "토큰에 저장된 사용자와 member_seq 해당 멤버를 언팔로우한다..", response = Response.class)
-//    @ApiResponses({
-//            @ApiResponse(code= 200, message = "언팔로우 하기 성공"),
-//            @ApiResponse(code= 404, message = "page not found")})
-//    @DeleteMapping("/{member_seq}/unfollow")
-//    public ResponseEntity<Response> unfollow(@PathVariable("member_seq") Long followedMemberSeq) {
-//        Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
-//
-//        Response response = new Response();
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        mypageService.deleteFollow(memberSeq, followedMemberSeq);
-//        response.setStatus(StatusEnum.OK);
-//        response.setMessage("언팔로우 하기 성공");
-//        return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
-//    }
+    @ApiOperation(value = "토큰에 저장된 사용자와 member_seq 해당 멤버를 언팔로우한다..", response = Response.class)
+    @ApiResponses({
+            @ApiResponse(code= 200, message = "언팔로우 하기 성공"),
+            @ApiResponse(code= 404, message = "page not found")})
+    @DeleteMapping("/{member_seq}/unfollow")
+    public ResponseEntity<Response> unfollow(@PathVariable("member_seq") Long followedMemberSeq) {
+        Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
+
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        mypageService.deleteFollow(memberSeq, followedMemberSeq);
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("언팔로우 하기 성공");
+        return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
+    }
 
 }

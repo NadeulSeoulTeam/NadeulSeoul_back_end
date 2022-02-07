@@ -43,11 +43,13 @@ public class MypageService {
 
     // 팔로잉 리스트 가져오기
     public FollowDtoList getFollowingList (Long memberSeq){
-        List<FollowInfo> followInfos = mypageRepository.findByFollowInfoFolloweeSeq(memberSeq)
-                .orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+        List<FollowInfo> followInfoList = mypageRepository.findByFollowFolloweeSeq(memberSeq);
+                //.orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+
+        if(followInfoList.isEmpty()) {}
 
         List<FollowDto> followDtos = new ArrayList<>();
-        for (FollowInfo followInfo : followInfos) {
+        for (FollowInfo followInfo : followInfoList) {
             Follow follow = followInfo.getFollow();
             followDtos.add(new FollowDto(follow.getFolloweeSeq(),follow.getFollowerSeq()));
         }
@@ -59,11 +61,13 @@ public class MypageService {
 
     // 팔로워 리스트 가져오기
     public FollowDtoList getFollowerList (Long memberSeq){
-        List<FollowInfo> followInfos = mypageRepository.findByFollowInfoFollowerSeq(memberSeq)
-                .orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+        List<FollowInfo> followInfoList = mypageRepository.findByFollowFollowerSeq(memberSeq);
+                //.orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+
+        if(followInfoList.isEmpty()) {}
 
         List<FollowDto> followDtos = new ArrayList<>();
-        for (FollowInfo followInfo : followInfos) {
+        for (FollowInfo followInfo : followInfoList) {
             Follow follow = followInfo.getFollow();
             followDtos.add(new FollowDto(follow.getFolloweeSeq(),follow.getFollowerSeq()));
         }
@@ -94,23 +98,23 @@ public class MypageService {
     }
 
     // 언팔로우 하기
-//    @Transactional
-//    public void deleteFollow (Long memberSeq, Long followedMemberSeq){
-//        //팔로우 테이블에서 삭제
-//        FollowInfo followInfo = mypageRepository.findByFolloweeSeqAndFollowerSeq(memberSeq, followedMemberSeq)
-//                .orElseThrow(() -> new FollowInfoNotFoundException("팔로우 내역이 존재하지 않습니다."));
-//        mypageRepository.delete(followInfo);
-//
-//        // 회원테이블에 팔로잉 수 업데이트 (감소)
-//        Member member = memberRepository.findByMemberSeq(memberSeq)
-//                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-//        member.deleteFollowee();
-//
-//        // 팔로우한 사람의 회원테이블에 팔로워 수 업데이트 (감소)
-//        Member followedMember = memberRepository.findByMemberSeq(followedMemberSeq)
-//                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-//        followedMember.deleteFollower();
-//    }
+    @Transactional
+    public void deleteFollow (Long memberSeq, Long followedMemberSeq){
+        //팔로우 테이블에서 삭제
+        FollowInfo followInfo = mypageRepository.findByFollowFolloweeSeqAndFollowFollowerSeq(memberSeq, followedMemberSeq)
+                .orElseThrow(() -> new FollowInfoNotFoundException("팔로우 내역이 존재하지 않습니다."));
+        mypageRepository.delete(followInfo);
+
+        // 회원테이블에 팔로잉 수 업데이트 (감소)
+        Member member = memberRepository.findByMemberSeq(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
+        member.deleteFollowee();
+
+        // 팔로우한 사람의 회원테이블에 팔로워 수 업데이트 (감소)
+        Member followedMember = memberRepository.findByMemberSeq(followedMemberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
+        followedMember.deleteFollower();
+    }
 
 
 }
