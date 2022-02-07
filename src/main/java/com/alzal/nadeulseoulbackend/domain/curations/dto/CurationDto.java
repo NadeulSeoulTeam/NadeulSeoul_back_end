@@ -9,15 +9,14 @@ import java.util.List;
 @Data
 public class CurationDto {
     private Long curationSeq;
+    private Long memberSeq;
     private String title;
-    private Integer budget;
-    private Integer personnel;
     private String description;
+    private Integer personnel;
+    private Integer budget;
     private LocalDateTime date;
     private Integer good;
     private Integer views;
-    private Long memberSeq;
     private Integer photoCount;
-    private List<ImageDto> fileList;
-//    private List<MultipartFile> fileList;
+    private List<MultipartFile> fileList;
 }

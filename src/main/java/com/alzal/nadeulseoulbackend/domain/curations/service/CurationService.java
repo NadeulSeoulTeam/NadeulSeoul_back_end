@@ -1,9 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.ImageDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
@@ -12,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,31 +29,32 @@ public class CurationService {
     @Autowired
     private ImageHandler imageHandler;
 
-    public void insertCuration(CurationDto request) throws IOException {
-        List<ImageDto> imageDtoList = request.getFileList();
+    public void insertCuration(CurationDto curationDto) throws IOException {
+//        List<ImageDto> imageDtoList = curationDto.getFileList();
+        List<MultipartFile> multipartFileList = curationDto.getFileList();
         Curation curation = Curation.builder()
-                .title(request.getTitle())
-                .budget(request.getBudget())
-                .personnel(request.getPersonnel())
-                .description(request.getDescription())
+                .title(curationDto.getTitle())
+                .budget(curationDto.getBudget())
+                .personnel(curationDto.getPersonnel())
+                .description(curationDto.getDescription())
                 .good(0)
                 .views(0)
-                .memberSeq(request.getMemberSeq())
-                .photoCount(imageDtoList.size())
+                .memberSeq(curationDto.getMemberSeq())
+                .photoCount(multipartFileList.size())
                 .hidden(Boolean.FALSE)
                 .build();
 
-        List<Image> imageList = imageHandler.parseImageInfo(imageDtoList, curation);
+        curationRepository.save(curation);
+        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
         if(!imageList.isEmpty()){
             for(Image image : imageList) {
                 curation.addImage(imageRepositoroy.save(image));
             }
         }
-        curationRepository.save(curation);
     }
 
-    public void updateCuration(CurationDto request) throws IOException {
-        Curation curation = curationRepository.findById(request.getCurationSeq())
+    public void updateCuration(CurationDto curationDto) throws IOException {
+        Curation curation = curationRepository.findById(curationDto.getCurationSeq())
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이"));
 
         List<String> pathList = new ArrayList<>();
@@ -66,8 +65,13 @@ public class CurationService {
 
         imageHandler.deleteImageInfo(pathList);
 
-        List<ImageDto> imageDtoList = request.getFileList();
-        List<Image> imageList = imageHandler.parseImageInfo(imageDtoList, curation);
+//        List<ImageDto> imageDtoList = request.getFileList();
+//        List<Image> imageList = imageHandler.parseImageInfo(imageDtoList, curation);
+
+        List<MultipartFile> multipartFileList = curationDto.getFileList();
+        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
+
+//        curation.changePhotoCount(imageList.size());
 
         if(!imageList.isEmpty()){
             for(Image image : imageList) {
@@ -75,7 +79,6 @@ public class CurationService {
             }
         }
 
-        curationRepository.save(curation);
 
     }
 

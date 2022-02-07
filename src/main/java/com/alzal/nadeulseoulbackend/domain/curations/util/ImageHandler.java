@@ -23,12 +23,15 @@ public class ImageHandler {
     @Autowired
     private CurationService curationService;
 
-    public List<Image> parseImageInfo(List<ImageDto> imageDtoList, Curation curation) throws IOException {
 
-        List<MultipartFile> multipartFileList = new ArrayList<>();
-        for (ImageDto imageDto : imageDtoList) {
-            multipartFileList.add(imageDto.getMultipartFile());
-        }
+//    public List<Image> parseImageInfo(List<ImageDto> imageDtoList, Curation curation) throws IOException {
+
+    public List<Image> parseImageInfo(List<MultipartFile> multipartFileList, Curation curation) throws IOException {
+
+//        List<MultipartFile> multipartFileList = new ArrayList<>();
+//        for (ImageDto imageDto : imageDtoList) {
+//            multipartFileList.add(imageDto.getMultipartFile());
+//        }
 
         List<Image> imageList = new ArrayList<>();
 
@@ -71,7 +74,8 @@ public class ImageHandler {
                 Image image = Image.builder()
                         .curation(curation)
                         .originName(multipartFile.getOriginalFilename())
-                        .imageOrder(imageDtoList.get(i).getImageOrder())
+                        .imageOrder(i)
+//                        .imageOrder(multipartFileList.get(i).getImageOrder())
                         .imagePath(path + File.separator + storeName)
                         .imageSize(multipartFile.getSize())
                         .build();
