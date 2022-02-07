@@ -1,10 +1,7 @@
-package com.alzal.nadeulseoulbackend.global.config.auth;
+package com.alzal.nadeulseoulbackend.global.config.auth.service;
 
 
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.OAuthAttributes;
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.SessionUser;
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.User;
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.UserRepository;
+import com.alzal.nadeulseoulbackend.global.config.auth.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -17,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -32,14 +30,18 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
-
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user));
 
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())), attributes.getAttributes(), attributes.getNameAttributeKey());
+        String provider = userRequest.getClientRegistration().getClientId();
+        String providerId = oAuth2User.getAttribute("sub");
+        String email = oAuth2User.getAttribute("email");
+        String role = Role.MEMBER.getKey();
 
+
+
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())), attributes.getAttributes(), attributes.getNameAttributeKey());
     }
 
     private User saveOrUpdate(OAuthAttributes attributes) {

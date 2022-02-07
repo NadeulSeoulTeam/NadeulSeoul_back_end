@@ -4,16 +4,23 @@ import com.alzal.nadeulseoulbackend.global.config.auth.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name="tb_user")
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name="memberSeq")
+    private Long id;
+
+    @Column(nullable = false)
+    private String nickname;
 
     @Column(nullable = false)
     private String name;
@@ -21,10 +28,18 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
+    @Column
+    @ColumnDefault("0")
+    private int curationCount;
+
+    @Column
+    private String emoji;
+
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
 
     @Builder
     public User(String name, String email, Role role) {

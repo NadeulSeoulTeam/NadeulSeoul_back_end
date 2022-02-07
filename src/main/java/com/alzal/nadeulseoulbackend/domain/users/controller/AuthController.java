@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.profile.controller;
+package com.alzal.nadeulseoulbackend.domain.users.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
