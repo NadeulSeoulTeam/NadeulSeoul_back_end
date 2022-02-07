@@ -37,8 +37,8 @@ public class CurationController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
+        response.setStatus(StatusEnum.OK);
         response.setMessage("큐레이션 작성이 완료되었습니다.");
-
         try {
             curationService.insertCuration(curationDto);
         } catch (IOException e) {
@@ -59,6 +59,8 @@ public class CurationController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
+
+        System.out.println(curationDto.getFileList());
         response.setMessage("큐레이션 수정이 완료되었습니다.");
 
         try {
@@ -88,23 +90,4 @@ public class CurationController {
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
-
-    @PostMapping("/test")
-    public ResponseEntity<Response> testCuration(FileDto fileDto) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-        System.out.println("통신 확인");
-        System.out.println(fileDto.getImg());
-        for(MultipartFile multipartFile : fileDto.getImg()) {
-            System.out.println(multipartFile.getOriginalFilename());
-        }
-
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 생성이 완료되었습니다.");
-
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
-
-
 }

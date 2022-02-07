@@ -25,14 +25,7 @@ public class ImageHandler {
 
 
 //    public List<Image> parseImageInfo(List<ImageDto> imageDtoList, Curation curation) throws IOException {
-
     public List<Image> parseImageInfo(List<MultipartFile> multipartFileList, Curation curation) throws IOException {
-
-//        List<MultipartFile> multipartFileList = new ArrayList<>();
-//        for (ImageDto imageDto : imageDtoList) {
-//            multipartFileList.add(imageDto.getMultipartFile());
-//        }
-
         List<Image> imageList = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(multipartFileList)) {
@@ -48,7 +41,7 @@ public class ImageHandler {
             if (!file.exists()) {
                 boolean wasSuccessful = file.mkdirs();
                 if (!wasSuccessful) {
-                    System.out.println("디렉토리 생성에 실패했습니다.");
+                    throw new IOException("디텍토리 생성 실패");
                 }
             }
 
@@ -75,14 +68,12 @@ public class ImageHandler {
                         .curation(curation)
                         .originName(multipartFile.getOriginalFilename())
                         .imageOrder(i)
-//                        .imageOrder(multipartFileList.get(i).getImageOrder())
                         .imagePath(path + File.separator + storeName)
                         .imageSize(multipartFile.getSize())
                         .build();
 
                 imageList.add(image);
                 file = new File(absolutePath + path + File.separator + storeName);
-                System.out.println(absolutePath + path + File.separator + storeName);
                 multipartFile.transferTo(file);
                 file.setWritable(true);
                 file.setReadable(true);

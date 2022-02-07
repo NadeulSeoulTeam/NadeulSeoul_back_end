@@ -30,7 +30,6 @@ public class CurationService {
     private ImageHandler imageHandler;
 
     public void insertCuration(CurationDto curationDto) throws IOException {
-//        List<ImageDto> imageDtoList = curationDto.getFileList();
         List<MultipartFile> multipartFileList = curationDto.getFileList();
         Curation curation = Curation.builder()
                 .title(curationDto.getTitle())
@@ -46,8 +45,8 @@ public class CurationService {
 
         curationRepository.save(curation);
         List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
-        if(!imageList.isEmpty()){
-            for(Image image : imageList) {
+        if (!imageList.isEmpty()) {
+            for (Image image : imageList) {
                 curation.addImage(imageRepositoroy.save(image));
             }
         }
@@ -55,36 +54,33 @@ public class CurationService {
 
     public void updateCuration(CurationDto curationDto) throws IOException {
         Curation curation = curationRepository.findById(curationDto.getCurationSeq())
-                .orElseThrow(()-> new CurationNotFoundException("큐레이션이"));
+                .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
         List<String> pathList = new ArrayList<>();
-        for(Image image : curation.getImageList()) {
+        for (Image image : curation.getImageList()) {
             pathList.add(image.getImagePath());
             imageRepositoroy.delete(image);
         }
-
         imageHandler.deleteImageInfo(pathList);
-
-//        List<ImageDto> imageDtoList = request.getFileList();
-//        List<Image> imageList = imageHandler.parseImageInfo(imageDtoList, curation);
 
         List<MultipartFile> multipartFileList = curationDto.getFileList();
         List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
 
-//        curation.changePhotoCount(imageList.size());
-
-        if(!imageList.isEmpty()){
-            for(Image image : imageList) {
+        if (!imageList.isEmpty()) {
+            for (Image image : imageList) {
                 curation.addImage(imageRepositoroy.save(image));
             }
         }
 
-
+        curation.changeCuration(
+                curationDto.getTitle(), curationDto.getBudget(), curationDto.getPersonnel(),
+                curationDto.getDescription(), imageList.size()
+        );
     }
 
     public void deleteCuration(Long curationSeq) {
         Curation curation = curationRepository.findById(curationSeq)
-                .orElseThrow(()-> new CurationNotFoundException("큐레이션이"));
+                .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
         curation.changeHidden(Boolean.TRUE);
     }
 }

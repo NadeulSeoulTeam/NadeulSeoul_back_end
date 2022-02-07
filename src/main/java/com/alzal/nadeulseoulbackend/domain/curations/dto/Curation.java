@@ -71,7 +71,13 @@ public class Curation {
     public void addImage(Image image) {
         this.imageList.add(image);
     }
-//    public void changePhotoCount(Integer photoCount) {
-//        this.photoCount = photoCount;
-//    }
+
+    public void changeCuration(String title, Integer budget, Integer personnel,
+                               String description, Integer photoCount ) {
+        this.title = title;
+        this.budget = budget;
+        this.personnel = personnel;
+        this.description = description;
+        this.photoCount = photoCount;
+    }
 }

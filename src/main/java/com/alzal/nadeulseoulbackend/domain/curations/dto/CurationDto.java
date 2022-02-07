@@ -1,6 +1,8 @@
 package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
