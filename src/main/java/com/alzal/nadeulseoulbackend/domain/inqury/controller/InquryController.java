@@ -64,6 +64,9 @@ public class InquryController {
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 가져오기 성공");
+        InquryInfoDto inquryInfoDto = inquryService.getInqury(questionSeq);
+        System.out.println("title : " + inquryInfoDto.getQuestionTitle());
+        System.out.println("content : " + inquryInfoDto.getQuestion());
         response.setData(inquryService.getInqury(questionSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
@@ -77,6 +80,9 @@ public class InquryController {
             @ApiResponse(code= 404, message = "page not found")})
     @PostMapping("/questions")
     public ResponseEntity<Response> insertInqury(@RequestBody InquryInfoDto inquryInfoDto) {
+
+        System.out.println("title : " + inquryInfoDto.getQuestionTitle());
+        System.out.println("content : " + inquryInfoDto.getQuestion());
         inquryService.insertInqury(inquryInfoDto);
 
         Response response = new Response();
@@ -95,6 +101,9 @@ public class InquryController {
             @ApiResponse(code= 404, message = "page not found")})
     @PutMapping("/questions/{question_seq}")
     public ResponseEntity<Response> updateInqury(@PathVariable("question_seq") Long questionSeq, @RequestBody InquryInfoDto inquryInfoDto) {
+        System.out.println("questionSeq" + questionSeq);
+        System.out.println(inquryInfoDto.toString());
+
         inquryService.updateInqury(questionSeq, inquryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -143,6 +152,8 @@ public class InquryController {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
 
+        //answer이 null 일때 예외 처리!!!!!
+
         if(result == 0){
             response.setMessage("이미 작성된 답변이 있습니다.");
         }else {
@@ -177,7 +188,7 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 삭제 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @DeleteMapping("/answers/{/question_seq}")
+    @DeleteMapping("/answers/{question_seq}")
     public ResponseEntity<Response> deleteAnswer(@PathVariable("question_seq") Long questionSeq) {
         inquryService.deleteAnswer(questionSeq);
 
