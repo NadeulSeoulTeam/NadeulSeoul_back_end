@@ -24,7 +24,7 @@ import java.util.List;
 * */
 
 @RestController
-@RequestMapping("api/v1/inqury")
+@RequestMapping("api/v1/inqurys")
 @Api(value = "InquryController")
 public class InquryController {
 

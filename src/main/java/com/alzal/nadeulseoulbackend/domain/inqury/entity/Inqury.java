@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.inqury.entity;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
