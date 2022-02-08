@@ -136,7 +136,7 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 작성 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @PostMapping("/answer")
+    @PostMapping("/answers")
     public ResponseEntity<Response> insertAnswer(@RequestBody AnswerDto answerDto) {
         int result = inquryService.insertAnswer(answerDto);
 
@@ -159,7 +159,7 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 수정 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @PutMapping("/answer")
+    @PutMapping("/answers")
     public ResponseEntity<Response> updateAnswer(@RequestBody AnswerDto answerDto) {
         inquryService.updateAnswer(answerDto);
 
@@ -177,7 +177,7 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 삭제 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @DeleteMapping("/answer/{/question_seq}")
+    @DeleteMapping("/answers/{/question_seq}")
     public ResponseEntity<Response> deleteAnswer(@PathVariable("question_seq") Long questionSeq) {
         inquryService.deleteAnswer(questionSeq);
 
