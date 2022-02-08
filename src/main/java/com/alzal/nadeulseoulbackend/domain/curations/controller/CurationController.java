@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationHotResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.curations.service.ImageService;
@@ -65,6 +66,25 @@ public class CurationController {
                 .photoCount(curationDto.getPhotoCount())
                 .build();
         response.setData(responseDto);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "큐레이션 목록 불러오기", notes = "큐레이션 불러오기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping("/statics/courses")
+    public ResponseEntity<Response> getHostCurationList() {
+        Response response = new Response();
+        HttpHeaders headers = new HttpHeaders();
+
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
+
+        List<CurationHotResponseDto> curationHotResponseDtoList = curationService.getHotCurationList();
+        response.setData(curationHotResponseDtoList);
+
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

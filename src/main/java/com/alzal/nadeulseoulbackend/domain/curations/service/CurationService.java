@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,12 @@ public class CurationService {
         return curationDto;
     }
 
+    public List<CurationHotResponseDto> getHotCurationList() {
+        List<Curation> curationList = curationRepository.findAll();
+        return curationList.stream().map(CurationHotResponseDto::fromEntity).collect(Collectors.toList());
+
+    }
+
     public void insertCuration(CurationDto curationDto) throws IOException {
         List<MultipartFile> multipartFileList = curationDto.getFileList();
         Curation curation = Curation.builder()
@@ -68,6 +75,7 @@ public class CurationService {
             for (Image image : imageList) {
                 curation.addImage(imageRepositoroy.save(image));
             }
+            curation.changeThumnail(imageList.get(0).getImageSeq());
         }
     }
 
@@ -89,6 +97,7 @@ public class CurationService {
             for (Image image : imageList) {
                 curation.addImage(imageRepositoroy.save(image));
             }
+            curation.changeThumnail(imageList.get(0).getImageSeq());
         }
 
         curation.changeCuration(

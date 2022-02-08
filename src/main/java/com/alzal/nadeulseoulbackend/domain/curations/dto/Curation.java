@@ -38,6 +38,7 @@ public class Curation {
     private Integer views;
     private Long memberSeq;
     private Integer photoCount;
+    private Long thumnail;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;
@@ -51,7 +52,7 @@ public class Curation {
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,
                     String description, LocalDateTime date, Integer good, Integer views,
-                    Long memberSeq, Integer photoCount, Boolean hidden) {
+                    Long memberSeq, Integer photoCount, Long thumnail, Boolean hidden) {
         this.curationSeq = curationSeq;
         this.title = title;
         this.budget = budget;
@@ -62,6 +63,7 @@ public class Curation {
         this.views = views;
         this.memberSeq = memberSeq;
         this.photoCount = photoCount;
+        this.thumnail = thumnail;
         this.hidden = hidden;
     }
 
@@ -70,6 +72,9 @@ public class Curation {
     }
     public void addImage(Image image) {
         this.imageList.add(image);
+    }
+    public void changeThumnail(Long imageSeq) {
+        this.thumnail = imageSeq;
     }
 
     public void changeCuration(String title, Integer budget, Integer personnel,
