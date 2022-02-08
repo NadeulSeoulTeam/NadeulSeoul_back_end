@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.stores.dto;
+package com.alzal.nadeulseoulbackend.domain.stores.entity;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class StoreInfo {
 
     @Id
-    private Long storeSeq;
+    private Long storeSeq; //카카오 api 상가id
     private String placeName;
     private String categoryName;
     private String addressName;
