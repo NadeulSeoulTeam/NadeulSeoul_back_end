@@ -26,7 +26,9 @@ public class InquryService {
 
         List<InquryDto> inquryDtos = new ArrayList<>();
         for (int i = 0; i < inquryList.size(); i++) {
-            inquryDtos.add(new InquryDto(inquryList.get(i).getQuestionSeq(), inquryList.get(i).getQuestion(), inquryList.get(i).getQuestionDate()));
+            if(!inquryList.get(i).isHidden()) {
+                inquryDtos.add(new InquryDto(inquryList.get(i).getQuestionSeq(), inquryList.get(i).getQuestionTitle(), inquryList.get(i).getQuestionDate()));
+            }
         }
 
         return InquryDtoList.builder()
@@ -65,6 +67,7 @@ public class InquryService {
     // 문의 사항 수정하기
     @Transactional
     public void updateInqury(Long questionSeq, InquryInfoDto inquryInfoDto) {
+        System.out.println("updateInquryService");
 
         Inqury inqury = inquryRepository.findByQuestionSeq(questionSeq)
                 .orElseThrow(() -> new InquryNotFoundException("문의 사항이"));
@@ -125,7 +128,7 @@ public class InquryService {
         Inqury inqury = inquryRepository.findByQuestionSeq(questionSeq)
                 .orElseThrow(() -> new InquryNotFoundException("문의 사항이"));
 
-        // 삭제대신 null처리
+        // 삭제대신 null 처리
         inqury.updateAnswer(null);
     }
 
