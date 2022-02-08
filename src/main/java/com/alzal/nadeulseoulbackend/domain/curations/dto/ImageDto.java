@@ -10,12 +10,23 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @NoArgsConstructor
 public class ImageDto {
-    private Integer imageOrder;
-    private MultipartFile multipartFile;
+
+    private String originName;
+    private String imagePath;
+    private Long imageSize;
 
     @Builder
-    public ImageDto(Integer imageOrder, MultipartFile multipartFile) {
-        this.imageOrder = imageOrder;
-        this.multipartFile = multipartFile;
+    public ImageDto(String origFileName, String imagePath, Long imageSize){
+        this.originName = origFileName;
+        this.imagePath = imagePath;
+        this.imageSize = imageSize;
+    }
+
+    public Image toEntity(){
+        return  Image.builder()
+                .originName(originName)
+                .imagePath(imagePath)
+                .imageSize(imageSize)
+                .build();
     }
 }

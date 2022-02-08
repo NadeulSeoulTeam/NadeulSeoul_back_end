@@ -10,8 +10,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -23,8 +22,6 @@ public class ImageHandler {
     @Autowired
     private CurationService curationService;
 
-
-//    public List<Image> parseImageInfo(List<ImageDto> imageDtoList, Curation curation) throws IOException {
     public List<Image> parseImageInfo(List<MultipartFile> multipartFileList, Curation curation) throws IOException {
         List<Image> imageList = new ArrayList<>();
 

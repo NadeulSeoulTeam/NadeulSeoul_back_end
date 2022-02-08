@@ -29,6 +29,25 @@ public class CurationService {
     @Autowired
     private ImageHandler imageHandler;
 
+    public CurationDto getCuration(Long curationSeq) throws Exception {
+        Curation curation = curationRepository.findById(curationSeq)
+                .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
+
+        CurationDto curationDto = CurationDto.builder()
+                .curationSeq(curation.getCurationSeq())
+                .title(curation.getTitle())
+                .budget(curation.getBudget())
+                .personnel(curation.getPersonnel())
+                .description(curation.getDescription())
+                .good(curation.getGood())
+                .views(curation.getViews())
+                .memberSeq(curation.getMemberSeq())
+                .photoCount(curation.getPhotoCount())
+                .build();
+
+        return curationDto;
+    }
+
     public void insertCuration(CurationDto curationDto) throws IOException {
         List<MultipartFile> multipartFileList = curationDto.getFileList();
         Curation curation = Curation.builder()
