@@ -38,7 +38,7 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "문의 사항 목록가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/questions/list/{member_seq}")
+    @GetMapping("/questions")
     public ResponseEntity<Response> getInquryList(@PathVariable("member_seq") Long memberSeq) {
         // 사용자 정보 토큰으로 가져옴 -> url 변경하고 pathvariable 없애기!!!!!!!! (실험하려고 작성)
 //        Member member = new Member();
