@@ -1,5 +1,7 @@
 package com.alzal.nadeulseoulbackend.global.config.auth.dto;
 
+import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -49,6 +51,7 @@ public class OAuthAttributes {
 
     public User toEntity(){
         return User.builder()
+                .nickname("default")
                 .name(name)
                 .email(email)
                 .role(Role.MEMBER)

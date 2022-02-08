@@ -1,6 +1,5 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.dto;
+package com.alzal.nadeulseoulbackend.domain.users.entity;
 
-import com.alzal.nadeulseoulbackend.global.config.auth.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,17 +11,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name="tb_user")
-public class User extends BaseTimeEntity {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="memberSeq")
+    @Column(name="userSeq")
     private Long id;
 
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
     @Column(nullable = false)
@@ -42,11 +41,13 @@ public class User extends BaseTimeEntity {
 
 
     @Builder
-    public User(String name, String email, Role role) {
+    public User(String nickname,String name, String email, Role role) {
+        this.nickname = name;
         this.name = name;
         this.email = email;
         this.role = role;
     }
+
 
     public User update(String name) {
         this.name = name;

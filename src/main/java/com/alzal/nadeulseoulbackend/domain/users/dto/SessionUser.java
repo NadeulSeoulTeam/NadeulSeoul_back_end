@@ -1,5 +1,6 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.dto;
+package com.alzal.nadeulseoulbackend.domain.users.dto;
 
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -8,7 +9,6 @@ import java.io.Serializable;
 public class SessionUser implements Serializable {
     private String name;
     private String email;
-
     public SessionUser(User user) {
         this.name = user.getName();
         this.email = user.getEmail();

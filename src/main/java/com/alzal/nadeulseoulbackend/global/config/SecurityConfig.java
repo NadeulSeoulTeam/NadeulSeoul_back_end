@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.global.config;
 
 import com.alzal.nadeulseoulbackend.global.config.auth.service.CustomOAuth2UserService;
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.Role;
+import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,6 +26,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/signin")
                 .userInfoEndpoint()
                 .userService(customOauth2UserService);
+//                .and()
+//                .failureHandler(oAuth2AuthenticationFailureHandler)
 
     }
 }

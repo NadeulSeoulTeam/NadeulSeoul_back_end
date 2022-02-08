@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.dto;
+package com.alzal.nadeulseoulbackend.domain.users.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
