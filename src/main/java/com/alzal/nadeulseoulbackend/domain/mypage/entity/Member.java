@@ -34,7 +34,7 @@ public class Member {
     }
 
     public void deleteFollower() {
-        this.followerCount++;
+        this.followerCount--;
     }
 
 }
