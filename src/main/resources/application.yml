@@ -24,3 +24,8 @@ spring:
         max-active: 2
         max-idle: 2
         min-idle: 0
+
+app:
+  auth:
+    tokenSecret: [Secret Token]
+    tokenExpirationMsec: 864000000
