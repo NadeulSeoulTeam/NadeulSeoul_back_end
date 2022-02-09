@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface InquryRepository extends JpaRepository<Inqury, Long> {
 
     // 문의 목록 가져오기
-    Optional<List<Inqury>> findByMemberSeq(Long memberSeq);
+    Optional<List<Inqury>> findByMemberSeqAndHiddenIsFalse(Long memberSeq);
 
     //문의 사항 가져오기
     Optional<Inqury> findByQuestionSeq (Long questionSeq);

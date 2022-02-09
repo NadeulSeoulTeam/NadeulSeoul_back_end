@@ -21,14 +21,12 @@ public class InquryService {
 
     // 문의 사항 목록 가져오기
     public InquryDtoList getInquryList(Long memberSeq) {
-        List<Inqury> inquryList = inquryRepository.findByMemberSeq(memberSeq)
+        List<Inqury> inquryList = inquryRepository.findByMemberSeqAndHiddenIsFalse(memberSeq)
                 .orElseThrow(() -> new InquryNotFoundException("문의 사항이"));
 
         List<InquryDto> inquryDtos = new ArrayList<>();
         for (int i = 0; i < inquryList.size(); i++) {
-            if(!inquryList.get(i).isHidden()) {
                 inquryDtos.add(new InquryDto(inquryList.get(i).getQuestionSeq(), inquryList.get(i).getQuestionTitle(), inquryList.get(i).getQuestionDate()));
-            }
         }
 
         return InquryDtoList.builder()
