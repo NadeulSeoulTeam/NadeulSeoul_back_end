@@ -28,5 +28,5 @@ spring:
 
 app:
   auth:
-    tokenSecret:
+    tokenSecret: nes0610ljy
     tokenExpirationMsec: 864000000

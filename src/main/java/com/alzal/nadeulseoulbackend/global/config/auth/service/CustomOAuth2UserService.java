@@ -31,21 +31,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final UserRepository userRepository;
 //    private final HttpSession httpSession;
-    @Autowired
-    private OAuth2AuthorizedClientService authorizedClientService;
+
 
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        OAuth2AuthorizedClient clientInfo = authorizedClientService.loadAuthorizedClient("google",authentication.getName());
-        OAuth2RefreshToken refreshToken = clientInfo.getRefreshToken();
-        System.out.println(refreshToken);
         System.out.println(oAuth2User);
-        System.out.println(userRequest.getClass());
+        System.out.println("client registration id : "+userRequest.getClientRegistration().getRegistrationId());
         try{
             return processOAuth2User(userRequest,oAuth2User);
         }catch(AuthenticationException ex){

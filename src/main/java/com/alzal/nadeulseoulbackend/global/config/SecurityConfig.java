@@ -58,9 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationRequestRepository(cookieAuthorizationRequestRepository())
                 .and()
                 .userInfoEndpoint()
-                .userService(customOauth2UserService);
-//                .and()
-//                .successHandler(oAuth2AuthenticationSuccessHandler);
+                .userService(customOauth2UserService)
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler);
 
     }
 

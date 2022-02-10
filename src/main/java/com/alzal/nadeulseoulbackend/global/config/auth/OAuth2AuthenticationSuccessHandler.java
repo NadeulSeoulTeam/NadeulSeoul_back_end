@@ -6,6 +6,10 @@ import com.alzal.nadeulseoulbackend.global.config.util.CookieUtils;
 import com.alzal.nadeulseoulbackend.global.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -25,6 +29,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private TokenProvider tokenProvider;
     private AppProperties appProperties;
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
     public OAuth2AuthenticationSuccessHandler(
@@ -41,6 +46,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String targetUrl = determineTargetUrl(request, response, authentication);
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("authentication : "+authentication.getName());
+//        System.out.println("clientInfo : "+authorizedClientService.loadAuthorizedClient("google",authentication.getName()));
+//        OAuth2AuthorizedClient clientInfo = authorizedClientService.loadAuthorizedClient("google",authentication.getName());
+//        OAuth2RefreshToken refreshToken = clientInfo.getRefreshToken();
+//        System.out.println(refreshToken);
 
         if (response.isCommitted()) {
             logger.debug("응답이 이미 커밋되었습니다. " + targetUrl + "로 리다이렉션 할 수 없습니다.");
@@ -61,6 +72,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //            throw new BadRequestException("승인되지 않은 리디렉션 URI가 있어 인증을 진행할 수 없습니다.");
 //        }
 
+
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         String token = tokenProvider.createToken(authentication);
@@ -77,19 +89,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         httpCookieOAuth2AuthorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
-//    private boolean isAuthorizedRedirectUri(String uri) {
-//        URI clientRedirectUri = URI.create(uri);
-//
-//        return appProperties.getOAuth2().getAuthorizedRedirectUris()
-//                .stream()
-//                .anyMatch(authorizedRedirectUri -> {
-//                    URI authorizedUri = URI.create(authorizedRedirectUri);
-//                    if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) &&
-//                            authorizedUri.getPort() == clientRedirectUri.getPort()) {
-//                        return true;
-//                    }
-//
-//                    return false;
-//                });
-//    }
+    private boolean isAuthorizedRedirectUri(String uri) {
+                        URI clientRedirectUri = URI.create(uri);
+
+                        return appProperties.getOAuth2().getAuthorizedRedirectUris()
+                                .stream()
+                                .anyMatch(authorizedRedirectUri -> {
+                                    URI authorizedUri = URI.create(authorizedRedirectUri);
+                                    if (authorizedUri.getHost().equalsIgnoreCase(clientRedirectUri.getHost()) &&
+                                            authorizedUri.getPort() == clientRedirectUri.getPort()) {
+                                        return true;
+                                    }
+
+                                    return false;
+                });
+    }
 }
