@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.service;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
@@ -30,7 +31,7 @@ public class CurationService {
     @Autowired
     private ImageHandler imageHandler;
 
-    public CurationDto getCuration(Long curationSeq) throws Exception {
+    public CurationDto getCuration(Long curationSeq) {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
@@ -50,13 +51,12 @@ public class CurationService {
     }
 
     public List<CurationHotResponseDto> getHotCurationList() {
-        List<Curation> curationList = curationRepository.findTop10ByOrderByViewsDesc();
-//        List<Curation> curationList = curationRepository.findAll();
+        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
         return curationList.stream().map(CurationHotResponseDto::fromEntity).collect(Collectors.toList());
 
     }
 
-    public void insertCuration(CurationDto curationDto) throws IOException {
+    public void insertCuration(CurationDto curationDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationDto.getFileList();
         Curation curation = Curation.builder()
                 .title(curationDto.getTitle())
@@ -77,10 +77,12 @@ public class CurationService {
                 curation.addImage(imageRepositoroy.save(image));
             }
             curation.changeThumnail(imageList.get(0).getImageSeq());
+        } else {
+            curation.changeThumnail(0L);
         }
     }
 
-    public void updateCuration(CurationDto curationDto) throws IOException {
+    public void updateCuration(CurationDto curationDto) throws ImageIOException {
         Curation curation = curationRepository.findById(curationDto.getCurationSeq())
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
@@ -99,6 +101,8 @@ public class CurationService {
                 curation.addImage(imageRepositoroy.save(image));
             }
             curation.changeThumnail(imageList.get(0).getImageSeq());
+        } else {
+            curation.changeThumnail(0L);
         }
 
         curation.changeCuration(

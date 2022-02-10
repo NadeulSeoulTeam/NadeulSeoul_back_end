@@ -2,9 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.util;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.ImageDto;
-import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -19,10 +17,7 @@ import java.util.List;
 @Component
 public class ImageHandler {
 
-    @Autowired
-    private CurationService curationService;
-
-    public List<Image> parseImageInfo(List<MultipartFile> multipartFileList, Curation curation) throws IOException {
+    public List<Image> parseImageInfo(List<MultipartFile> multipartFileList, Curation curation) throws ImageIOException {
         List<Image> imageList = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(multipartFileList)) {
@@ -38,7 +33,7 @@ public class ImageHandler {
             if (!file.exists()) {
                 boolean wasSuccessful = file.mkdirs();
                 if (!wasSuccessful) {
-                    throw new IOException("디텍토리 생성 실패");
+                    throw new ImageIOException("폴더 생성 실패");
                 }
             }
 
@@ -71,7 +66,11 @@ public class ImageHandler {
 
                 imageList.add(image);
                 file = new File(absolutePath + path + File.separator + storeName);
-                multipartFile.transferTo(file);
+                try {
+                    multipartFile.transferTo(file);
+                } catch (IOException e) {
+                    throw new ImageIOException("파일 변경 실패");
+                }
                 file.setWritable(true);
                 file.setReadable(true);
             }
@@ -80,7 +79,7 @@ public class ImageHandler {
         return imageList;
     }
 
-    public void deleteImageInfo(List<String> imageList) throws IOException {
+    public void deleteImageInfo(List<String> imageList) {
         String absolutePath = new File("").getAbsolutePath() + File.separator + File.separator;
         for (String path : imageList) {
             File file = new File(absolutePath + path);

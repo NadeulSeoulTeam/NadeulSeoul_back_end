@@ -7,6 +7,5 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CurationRepository extends JpaRepository<Curation, Long> {
-    List<Curation> findTop10ByOrderByViewsDesc();
-//    List<Curation> findAll();
+    List<Curation> findTop10ByHiddenFalseOrderByViewsDesc();
 }

@@ -4,10 +4,9 @@ import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.ImageDto;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
-import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
-import com.alzal.nadeulseoulbackend.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public class ImageService {
     // 이미지 개별 조회
     public ImageDto getImageById(Long imageSeq){
         Image image = imageRepositoroy.findById(imageSeq)
-                .orElseThrow(()-> new EntityNotFoundException("이미지가"));
+                .orElseThrow(()-> new ImageNotFoundException("이미지가"));
         return ImageDto.builder()
                 .origFileName(image.getOriginName())
                 .imagePath(image.getImagePath())
