@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -42,78 +44,85 @@ public class MypageService {
     }
 
     // 팔로잉 리스트 가져오기
-    public FollowDtoList getFollowingList (Long memberSeq){
-        List<FollowInfo> followInfoList = mypageRepository.findByFollowFolloweeSeq(memberSeq);
-                //.orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+    public List<FollowDto> getFollowingList (Long memberSeq){
+        Member member = memberRepository.findByMemberSeq(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
 
-        if(followInfoList.isEmpty()) {}
+        Set<FollowInfo> followeeList = member.getFolloweeList();
 
-        List<FollowDto> followDtos = new ArrayList<>();
-        for (FollowInfo followInfo : followInfoList) {
-            Follow follow = followInfo.getFollow();
-            followDtos.add(new FollowDto(follow.getFolloweeSeq(),follow.getFollowerSeq()));
+        List<FollowDto> followDtoList = new ArrayList<>();
+        Iterator<FollowInfo> iter = followeeList.iterator();
+        while (iter.hasNext()){
+            Member followee = iter.next().getFollowee();
+            followDtoList.add(new FollowDto(followee.getMemberSeq(), followee.getNickName(),followee.getEmoji()));
         }
 
-        return FollowDtoList.builder()
-                .followDtoList(followDtos)
-                .build();
+        return followDtoList;
     }
 
     // 팔로워 리스트 가져오기
-    public FollowDtoList getFollowerList (Long memberSeq){
-        List<FollowInfo> followInfoList = mypageRepository.findByFollowFollowerSeq(memberSeq);
-                //.orElseThrow(() -> new IllegalArgumentException("팔로잉한 사람이 없습니다."));
+    public List<FollowDto> getFollowerList (Long memberSeq){
+        Member member = memberRepository.findByMemberSeq(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
 
-        if(followInfoList.isEmpty()) {}
+        Set<FollowInfo> followerList = member.getFollowerList();
 
-        List<FollowDto> followDtos = new ArrayList<>();
-        for (FollowInfo followInfo : followInfoList) {
-            Follow follow = followInfo.getFollow();
-            followDtos.add(new FollowDto(follow.getFolloweeSeq(),follow.getFollowerSeq()));
+        List<FollowDto> followDtoList = new ArrayList<>();
+        Iterator<FollowInfo> iter = followerList.iterator();
+        while (iter.hasNext()){
+            Member follower = iter.next().getFollowee();
+            followDtoList.add(new FollowDto(follower.getMemberSeq(), follower.getNickName(),follower.getEmoji()));
         }
 
-        return FollowDtoList.builder()
-                .followDtoList(followDtos)
-                .build();
+        return followDtoList;
+
     }
 
     // 팔로우 하기
     @Transactional
     public void insertFollow (Long memberSeq, Long followedMemberSeq){
+        //followee와 follower seq에 해당하는 Member를 조회 한 후 tb_follow 에 저장
+        Member followee = memberRepository.findByMemberSeq(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("followee 가 존재하지 않습니다."));
+
+        Member follower = memberRepository.findByMemberSeq(followedMemberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("follower 가 존재하지 않습니다."));
+
         //팔로우 테이블에 저장
-        Follow follow = new Follow(memberSeq, followedMemberSeq);
-        FollowInfo followInfoEntity = mypageRepository.save(FollowInfo.builder()
-                                                    .follow(follow)
-                                                    .build());
+        FollowInfo followInfoEntity = mypageRepository.save(
+                FollowInfo.builder()
+                        .followee(followee)
+                        .follower(follower)
+                        .build()
+        );
 
         // 회원테이블에 팔로잉 수 업데이트 (증가)
-        Member member = memberRepository.findByMemberSeq(memberSeq)
-                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-        member.addFollowee();
-
+        followee.addFollowee();
         // 팔로우한 사람의 회원테이블에 팔로워 수 없데이트 (증가)
-        Member followedMember = memberRepository.findByMemberSeq(followedMemberSeq)
-                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-        followedMember.addFollower();
+        follower.addFollower();
     }
 
     // 언팔로우 하기
     @Transactional
     public void deleteFollow (Long memberSeq, Long followedMemberSeq){
+        //followee와 follower seq에 해당하는 Member를 조회 한 후 tb_follow 에 저장
+        Member followee = memberRepository.findByMemberSeq(memberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("followee 가 존재하지 않습니다."));
+
+        Member follower = memberRepository.findByMemberSeq(followedMemberSeq)
+                .orElseThrow(() -> new MemberNotFoundException("follower 가 존재하지 않습니다."));
+
         //팔로우 테이블에서 삭제
-        FollowInfo followInfo = mypageRepository.findByFollowFolloweeSeqAndFollowFollowerSeq(memberSeq, followedMemberSeq)
+        FollowInfo followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower)
                 .orElseThrow(() -> new FollowInfoNotFoundException("팔로우 내역이 존재하지 않습니다."));
         mypageRepository.delete(followInfo);
-
+        System.out.println(followInfo.toString());
         // 회원테이블에 팔로잉 수 업데이트 (감소)
-        Member member = memberRepository.findByMemberSeq(memberSeq)
-                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-        member.deleteFollowee();
+        followee.deleteFollowee();
 
         // 팔로우한 사람의 회원테이블에 팔로워 수 업데이트 (감소)
-        Member followedMember = memberRepository.findByMemberSeq(followedMemberSeq)
-                .orElseThrow(() -> new MemberNotFoundException("해당 사용자가 존재하지 않습니다."));
-        followedMember.deleteFollower();
+        follower.deleteFollower();
+
     }
 
 

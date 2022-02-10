@@ -1,9 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,9 +9,19 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
+@Data
 @Table(name = "tb_follow")
 public class FollowInfo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "follow_seq")
+    private Long followSeq;
 
-    @EmbeddedId
-    private Follow follow;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "followee_seq")
+    private Member followee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "follower_seq")
+    private Member follower;
 }

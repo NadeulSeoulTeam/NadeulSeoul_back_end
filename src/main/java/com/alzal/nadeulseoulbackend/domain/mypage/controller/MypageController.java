@@ -90,7 +90,7 @@ public class MypageController {
     public ResponseEntity<Response> follow(@PathVariable("member_seq") Long followedMemberSeq) {
         Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
-        // 이미 팔로우된 사람인지 확인
+        // 이미 팔로우된 사람인지 확인 (일단 프론트에서 확인하기로 함 추후 예외처리)
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
