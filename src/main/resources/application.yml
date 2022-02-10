@@ -15,6 +15,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+      use-new-id-generator-mappings: true
 
   redis:
     host: localhost
@@ -27,5 +28,5 @@ spring:
 
 app:
   auth:
-    tokenSecret: [Secret Token]
+    tokenSecret:
     tokenExpirationMsec: 864000000
