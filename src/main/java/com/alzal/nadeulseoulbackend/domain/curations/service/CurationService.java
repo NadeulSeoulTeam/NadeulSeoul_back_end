@@ -50,7 +50,8 @@ public class CurationService {
     }
 
     public List<CurationHotResponseDto> getHotCurationList() {
-        List<Curation> curationList = curationRepository.findAll();
+        List<Curation> curationList = curationRepository.findTop10ByOrderByViewsDesc();
+//        List<Curation> curationList = curationRepository.findAll();
         return curationList.stream().map(CurationHotResponseDto::fromEntity).collect(Collectors.toList());
 
     }
