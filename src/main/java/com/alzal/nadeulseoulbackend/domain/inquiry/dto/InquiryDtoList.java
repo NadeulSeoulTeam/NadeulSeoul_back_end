@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.inqury.dto;
+package com.alzal.nadeulseoulbackend.domain.inquiry.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @Builder
 @ApiModel("문의 사항 목록")
-public class InquryDtoList {
-    private List<InquryDto> inquryDtoList;
+public class InquiryDtoList {
+    private List<InquiryDto> inquiryDtoList;
 }

@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.inqury.entity;
+package com.alzal.nadeulseoulbackend.domain.inquiry.entity;
 
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Builder
 @Table(name = "tb_inqury")
-public class Inqury {
+public class Inquiry {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
