@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 
 // TODO:
 //  각 Domain에서 처리할 exception 정리 필요
@@ -25,7 +27,6 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(ErrorStatusEnum.BAD_REQUEST);
         errorResponse.setMessage(e.getClass().getName());
-        errorResponse.setData("");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -45,6 +46,14 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(errorStatusEnum);
         errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorStatusEnum.getCode()));
+    }
+
+    @ExceptionHandler(value = {IOException.class, SQLException.class})
+    public ResponseEntity handleException(Exception e){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setStatus(ErrorStatusEnum.BAD_REQUEST);
+        errorResponse.setMessage(e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
