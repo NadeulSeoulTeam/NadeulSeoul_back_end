@@ -19,9 +19,9 @@ public class FollowInfo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee_seq")
-    private Member followee;
+    private User followee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_seq")
-    private Member follower;
+    private User follower;
 }

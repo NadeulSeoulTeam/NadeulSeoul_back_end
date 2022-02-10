@@ -7,11 +7,11 @@ import java.util.Set;
 
 @Entity
 @Getter
-public class Member {
+public class User {
 
     @Id
     @GeneratedValue
-    private Long memberSeq;
+    private Long userSeq;
     private String nickName;
     private String email;
     private String name;

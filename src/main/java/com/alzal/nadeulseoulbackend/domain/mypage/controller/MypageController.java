@@ -29,72 +29,72 @@ public class MypageController {
     /*
     * 마이페이지 정보 가져오기
     * */
-    @ApiOperation(value = "member_seq에 해당하는 마이페이지 정보를 반환한다.", response = Response.class)
+    @ApiOperation(value = "user_seq에 해당하는 마이페이지 정보를 반환한다.", response = Response.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "마이페이지 정보 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
     @GetMapping
     public ResponseEntity<Response> getMyInfo() {
-        Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
+        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("마이페이지 정보 가져오기 성공");
-        response.setData(mypageService.getMypageInfo(memberSeq));
+        response.setData(mypageService.getMypageInfo(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
     /*
-     * member_seq 해당 멤버의 팔로잉 리스트 가져오기
+     * user_seq 해당 멤버의 팔로잉 리스트 가져오기
      * */
-    @ApiOperation(value = "member_seq에 해당하는 멤버의 팔로잉 리스트를 반환한다.", response = Response.class)
+    @ApiOperation(value = "user_seq에 해당하는 멤버의 팔로잉 리스트를 반환한다.", response = Response.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "팔로잉 리스트 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/{member_seq}/followee")
-    public ResponseEntity<Response> getFolloweeList(@PathVariable("member_seq") Long memberSeq) {
+    @GetMapping("/{user_seq}/followee")
+    public ResponseEntity<Response> getFolloweeList(@PathVariable("user_seq") Long userSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("팔로잉 리스트 가져오기 성공");
-        response.setData(mypageService.getFollowingList(memberSeq));
+        response.setData(mypageService.getFollowingList(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
     /*
-     * member_seq 해당 멤버의 팔로워 리스트 가져오기
+     * user_seq 해당 멤버의 팔로워 리스트 가져오기
      * */
-    @ApiOperation(value = "member_seq에 해당하는 멤버의 팔로워 리스트를 반환한다.", response = Response.class)
+    @ApiOperation(value = "user_seq 해당하는 멤버의 팔로워 리스트를 반환한다.", response = Response.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "팔로워 리스트 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/{member_seq}/follower")
-    public ResponseEntity<Response> getFollowerList(@PathVariable("member_seq") Long memberSeq) {
+    @GetMapping("/{user_seq}/follower")
+    public ResponseEntity<Response> getFollowerList(@PathVariable("user_seq") Long userSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("팔로워 리스트 가져오기 성공");
-        response.setData(mypageService.getFollowerList(memberSeq));
+        response.setData(mypageService.getFollowerList(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
     /*
      * 팔로우 하기
      * */
-    @ApiOperation(value = "토큰에 저장된 사용자와 member_seq 해당 멤버를 팔로우한다.", response = Response.class)
+    @ApiOperation(value = "토큰에 저장된 사용자와 user_seq 해당 멤버를 팔로우한다.", response = Response.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "팔로우 하기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @PostMapping("/{member_seq}/follow")
-    public ResponseEntity<Response> follow(@PathVariable("member_seq") Long followedMemberSeq) {
-        Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
+    @PostMapping("/{user_seq}/follow")
+    public ResponseEntity<Response> follow(@PathVariable("user_seq") Long followedUserSeq) {
+        Long userSeq = 2L; //임시 : 사용자 토큰으로 가져와야함
 
         // 이미 팔로우된 사람인지 확인 (일단 프론트에서 확인하기로 함 추후 예외처리)
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-        mypageService.insertFollow(memberSeq, followedMemberSeq);
+        mypageService.insertFollow(userSeq, followedUserSeq);
         response.setStatus(StatusEnum.OK);
         response.setMessage("팔로우 하기 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
@@ -103,19 +103,19 @@ public class MypageController {
     /*
      * 언팔로우 하기
      * */
-    @ApiOperation(value = "토큰에 저장된 사용자와 member_seq 해당 멤버를 언팔로우한다..", response = Response.class)
+    @ApiOperation(value = "토큰에 저장된 사용자와 user_seq 해당 멤버를 언팔로우한다..", response = Response.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "언팔로우 하기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @DeleteMapping("/{member_seq}/unfollow")
-    public ResponseEntity<Response> unfollow(@PathVariable("member_seq") Long followedMemberSeq) {
-        Long memberSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
+    @DeleteMapping("/{user_seq}/unfollow")
+    public ResponseEntity<Response> unfollow(@PathVariable("user_seq") Long followedUserSeq) {
+        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
         // 이미 언팔로우된사람인지 확인
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-        mypageService.deleteFollow(memberSeq, followedMemberSeq);
+        mypageService.deleteFollow(userSeq, followedUserSeq);
         response.setStatus(StatusEnum.OK);
         response.setMessage("언팔로우 하기 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);

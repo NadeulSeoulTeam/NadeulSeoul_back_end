@@ -14,12 +14,12 @@ public class Follow implements Serializable {
     // 팔로우를 요청한 유저
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_seq")
-    private Member followee;
+    private User followee;
 
     // 팔로우를 요청받은 유저
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_seq")
-    private Member follower;
+    private User follower;
 
     public Follow() {}
 
