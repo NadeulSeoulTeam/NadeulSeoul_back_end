@@ -1,11 +1,9 @@
 package com.alzal.nadeulseoulbackend.domain.tag.exception;
 
-import com.alzal.nadeulseoulbackend.global.common.ErrorStatusEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.alzal.nadeulseoulbackend.global.exception.EntityNotFoundException;
 
-@Getter
-@AllArgsConstructor
-public class TagCustomException extends RuntimeException {
-    private ErrorStatusEnum errorStatusEnum;
+public class TagCustomException extends EntityNotFoundException {
+    public TagCustomException(String name){
+        super(name+" 존재하지 않습니다");
+    }
 }
