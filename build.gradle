@@ -36,6 +36,8 @@ dependencies {
 
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
 
+    implementation('commons-io:commons-io:2.6')
+
 }
 
 test {

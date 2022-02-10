@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "tb_store_info")
 public class StoreInfo {
 
     @Id
-    private Long sotreSeq;
+    private Long storeSeq;
     private String placeName;
     private String categoryName;
     private String addressName;
@@ -23,9 +23,9 @@ public class StoreInfo {
     private String lng;
 
     @Builder
-    public StoreInfo(Long sotreSeq, String placeName, String categoryName, String addressName,
+    public StoreInfo(Long storeSeq, String placeName, String categoryName, String addressName,
                      String placeUrl, String phone, String lat, String lng) {
-        this.sotreSeq = sotreSeq;
+        this.storeSeq = storeSeq;
         this.placeName = placeName;
         this.categoryName = categoryName;
         this.addressName = addressName;
