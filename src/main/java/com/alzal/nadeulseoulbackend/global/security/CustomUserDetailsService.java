@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.global.security;
 
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
-import com.alzal.nadeulseoulbackend.domain.users.entity.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

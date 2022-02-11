@@ -3,26 +3,18 @@ package com.alzal.nadeulseoulbackend.global.config.auth.service;
 
 import com.alzal.nadeulseoulbackend.domain.users.dto.OAuth2UserInfo;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
-import com.alzal.nadeulseoulbackend.domain.users.entity.UserRepository;
-import com.alzal.nadeulseoulbackend.global.config.auth.dto.*;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.global.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.security.AuthProvider;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -70,11 +62,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             // throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
             user = updateExistingUser(optionalUser.get(),oAuth2UserInfo);
             System.out.println("이미 있는 사용자 입니다.");
-
-            if(optionalUser.get().getEmoji()==""){
-                //회원가입으로 이동
-                System.out.println("회원가입으로 이동해야 하는 유저정보 입니다.");
-            }
+            
         }else{
             System.out.println("없는 사용자 입니다.");
             user = registerNewUser(oAuth2UserRequest,oAuth2UserInfo);

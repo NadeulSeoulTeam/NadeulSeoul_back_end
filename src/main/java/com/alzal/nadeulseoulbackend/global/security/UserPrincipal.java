@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.global.security;
 
 import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +14,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class UserPrincipal implements OAuth2User, UserDetails {
     private Long id;
     private String name;
     private String email;
+    private String emoji;
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String name,String email, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String name,String email,String emoji,Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.emoji = emoji;
         this.authorities = authorities;
     }
 
@@ -35,6 +39,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
+                user.getEmoji(),
                 authorities
         );
     }
@@ -45,14 +50,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return userPrincipal;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
+//    public Long getId() {
+//        return id;
+//    }
+//    public String getEmoji(){ return emoji;}
+//    public String getEmail() {
+//        return email;
+//    }
+//
 
     @Override
     public String getUsername() {

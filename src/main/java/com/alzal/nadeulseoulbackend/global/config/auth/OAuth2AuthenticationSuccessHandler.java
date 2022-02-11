@@ -1,15 +1,11 @@
 package com.alzal.nadeulseoulbackend.global.config.auth;
 
 import com.alzal.nadeulseoulbackend.global.config.AppProperties;
-import com.alzal.nadeulseoulbackend.global.config.auth.Exception.BadRequestException;
 import com.alzal.nadeulseoulbackend.global.config.util.CookieUtils;
 import com.alzal.nadeulseoulbackend.global.security.TokenProvider;
+import com.alzal.nadeulseoulbackend.global.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.core.OAuth2RefreshToken;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -26,28 +22,25 @@ import static com.alzal.nadeulseoulbackend.global.config.auth.HttpCookieOAuth2Au
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private TokenProvider tokenProvider;
-    private AppProperties appProperties;
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
-    private OAuth2AuthorizedClientService authorizedClientService;
-
+    private AppProperties appProperties;
+    private TokenProvider tokenProvider;
     @Autowired
-    public OAuth2AuthenticationSuccessHandler(
-            TokenProvider tokenProvider,
-                                              AppProperties appProperties,
-                                              HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
-        this.tokenProvider = tokenProvider;
-        this.appProperties = appProperties;
+    public OAuth2AuthenticationSuccessHandler(TokenProvider tokenProvider,AppProperties appProperties,HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository) {
         this.httpCookieOAuth2AuthorizationRequestRepository = httpCookieOAuth2AuthorizationRequestRepository;
+        this.appProperties = appProperties;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
+
         String targetUrl = determineTargetUrl(request, response, authentication);
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication : "+authentication.getName());
+        System.out.println("targetUrl : "+targetUrl);
+
+
 //        System.out.println("clientInfo : "+authorizedClientService.loadAuthorizedClient("google",authentication.getName()));
 //        OAuth2AuthorizedClient clientInfo = authorizedClientService.loadAuthorizedClient("google",authentication.getName());
 //        OAuth2RefreshToken refreshToken = clientInfo.getRefreshToken();
@@ -57,7 +50,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             logger.debug("응답이 이미 커밋되었습니다. " + targetUrl + "로 리다이렉션 할 수 없습니다.");
             return;
         }
-
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -67,19 +59,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) {
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
-
 //        if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
 //            throw new BadRequestException("승인되지 않은 리디렉션 URI가 있어 인증을 진행할 수 없습니다.");
 //        }
-
-
+        UserPrincipal userPrincipal= (UserPrincipal)authentication.getPrincipal();
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
-
         String token = tokenProvider.createToken(authentication);
 
-        return UriComponentsBuilder.fromUriString(targetUrl+"/main")
-                .queryParam("token", token)
-                .build().toString();
+        if(userPrincipal.getEmoji()==null){
+            return UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("token",token)
+                    .queryParam("flag",true)
+                    .build().toString();
+        }else{
+            return UriComponentsBuilder.fromUriString(targetUrl)
+                    .queryParam("token",token)
+                    .queryParam("flag",false)
+                    .build().toString();
+        }
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request,

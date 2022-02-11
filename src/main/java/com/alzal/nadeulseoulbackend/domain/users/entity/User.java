@@ -49,8 +49,9 @@ public class User{
     }
 
 
-    public User update(String name) {
-        this.name = name;
+    public User update(String nickname,String emoji) {
+        this.nickname = nickname;
+        this.emoji = emoji;
         return this;
     }
 
