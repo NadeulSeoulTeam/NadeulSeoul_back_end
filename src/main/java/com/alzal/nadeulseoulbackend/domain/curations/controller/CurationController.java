@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationHotResponseDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationRequestDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.curations.service.ImageService;
@@ -44,34 +45,23 @@ public class CurationController {
 
         response.setStatus(StatusEnum.OK);
         response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
-        CurationDto curationDto = null;
+        CurationResponseDto curationResponseDto = null;
         List<Long> imageSeqList = new ArrayList<>();
         try {
-            curationDto = curationService.getCuration(curationSeq);
+            curationResponseDto = curationService.getCuration(curationSeq);
             imageSeqList = imageService.getImageByCuration(curationSeq);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CurationResponseDto responseDto = CurationResponseDto.builder()
-                .budget(curationDto.getBudget())
-                .date(curationDto.getDate())
-                .description(curationDto.getDescription())
-                .fileList(imageSeqList)
-                .curationSeq(curationSeq)
-                .good(curationDto.getGood())
-                .title(curationDto.getTitle())
-                .personnel(curationDto.getPersonnel())
-                .views(curationDto.getViews())
-                .memberSeq(curationDto.getMemberSeq())
-                .photoCount(curationDto.getPhotoCount())
-                .build();
-        response.setData(responseDto);
+
+        curationResponseDto.changeFileList(imageSeqList);
+        response.setData(curationResponseDto);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "큐레이션 목록 불러오기", notes = "큐레이션 불러오기")
+    @ApiOperation(value = "HOT한 코스 목록 불러오기", notes = "조회수로 정렬한 코스 목록 top 10 불러오기")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
+            @ApiResponse(code = 200, message = "HOT한 코스 목록 불러오기가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
     @GetMapping("/statics/courses")
@@ -94,14 +84,14 @@ public class CurationController {
             @ApiResponse(code = 404, message = "page not found")
     })
     @PostMapping
-    public ResponseEntity<Response> insertCuration(final CurationDto curationDto) {
+    public ResponseEntity<Response> insertCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
         response.setStatus(StatusEnum.OK);
         response.setMessage("큐레이션 작성이 완료되었습니다.");
         try {
-            curationService.insertCuration(curationDto);
+            curationService.insertCuration(curationRequestDto);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,20 +105,17 @@ public class CurationController {
             @ApiResponse(code = 404, message = "page not found")
     })
     @PutMapping
-    public ResponseEntity<Response> updateCuration(final CurationDto curationDto) {
+    public ResponseEntity<Response> updateCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-
-        System.out.println(curationDto.getFileList());
-        response.setMessage("큐레이션 수정이 완료되었습니다.");
-
         try {
-            curationService.updateCuration(curationDto);
+            curationService.updateCuration(curationRequestDto);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        response.setMessage("큐레이션 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

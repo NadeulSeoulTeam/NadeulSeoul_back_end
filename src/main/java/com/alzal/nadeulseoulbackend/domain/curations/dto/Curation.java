@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -49,6 +50,13 @@ public class Curation {
     @OneToMany(mappedBy = "curation")
     private List<Image> imageList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "curation")
+    Set<LocalCuration> localCuration;
+
+    @OneToMany(mappedBy = "curation")
+    Set<ThemeCuration> themeCuration;
+
+
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,
                     String description, LocalDateTime date, Integer good, Integer views,
@@ -70,6 +78,7 @@ public class Curation {
     public void changeHidden(Boolean flag) {
         this.hidden = flag;
     }
+
     public void addImage(Image image) {
         this.imageList.add(image);
     }
@@ -85,4 +94,12 @@ public class Curation {
         this.description = description;
         this.photoCount = photoCount;
     }
+
+    public void addLocalTag(LocalCuration localCuration) {
+        this.localCuration.add(localCuration);
+    }
+    public void addThemeTag(ThemeCuration themeCuration) {
+        this.themeCuration.add(themeCuration);
+    }
+
 }

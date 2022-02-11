@@ -5,17 +5,25 @@ import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundE
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.LocalRepository;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.ThemeRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
+import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
+import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
+import com.alzal.nadeulseoulbackend.domain.tag.exception.TagNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.tag.repository.CodeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+// TODO :
+//      멤버 seq 수정 및 값 불러오기 새로 작성 필요
 
 @Service
 @RequiredArgsConstructor
@@ -29,13 +37,27 @@ public class CurationService {
     private ImageRepositoroy imageRepositoroy;
 
     @Autowired
+    private CodeRepository codeRepository;
+
+    @Autowired
+    private LocalRepository localRepository;
+
+    @Autowired
+    private ThemeRepository themeRepository;
+
+    @Autowired
     private ImageHandler imageHandler;
 
-    public CurationDto getCuration(Long curationSeq) {
+    public CurationResponseDto getCuration(Long curationSeq) {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
-        CurationDto curationDto = CurationDto.builder()
+        List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
+                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+        List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
+                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+
+        CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
                 .title(curation.getTitle())
                 .budget(curation.getBudget())
@@ -45,9 +67,11 @@ public class CurationService {
                 .views(curation.getViews())
                 .memberSeq(curation.getMemberSeq())
                 .photoCount(curation.getPhotoCount())
+                .local(localDtoList)
+                .theme(themeDtoList)
                 .build();
 
-        return curationDto;
+        return curationResponseDto;
     }
 
     public List<CurationHotResponseDto> getHotCurationList() {
@@ -56,21 +80,47 @@ public class CurationService {
 
     }
 
-    public void insertCuration(CurationDto curationDto) throws ImageIOException {
-        List<MultipartFile> multipartFileList = curationDto.getFileList();
+    public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
+        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
+        System.out.println(multipartFileList.size());
         Curation curation = Curation.builder()
-                .title(curationDto.getTitle())
-                .budget(curationDto.getBudget())
-                .personnel(curationDto.getPersonnel())
-                .description(curationDto.getDescription())
+                .title(curationRequestDto.getTitle())
+                .budget(curationRequestDto.getBudget())
+                .personnel(curationRequestDto.getPersonnel())
+                .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
-                .memberSeq(curationDto.getMemberSeq())
+                .memberSeq(1L) // 멤버 변수 확인 필요
                 .photoCount(multipartFileList.size())
                 .hidden(Boolean.FALSE)
                 .build();
 
         curationRepository.save(curation);
+
+        for(Long localSeq : curationRequestDto.getLocal()) {
+            Code localTag = codeRepository.findById(localSeq)
+                    .orElseThrow(()-> new TagNotFoundException("지역 태그가"));
+
+            localRepository.save(
+                    LocalCuration.builder()
+                            .curation(curation)
+                            .code(localTag)
+                            .build()
+            );
+        }
+
+        for(Long themeSeq : curationRequestDto.getTheme()) {
+            Code themeTag = codeRepository.findById(themeSeq)
+                    .orElseThrow(()->new TagNotFoundException("테마 태그가 "));
+
+            themeRepository.save(
+                    ThemeCuration.builder()
+                            .curation(curation)
+                            .code(themeTag)
+                            .build()
+            );
+        }
+
         List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
         if (!imageList.isEmpty()) {
             for (Image image : imageList) {
@@ -80,10 +130,13 @@ public class CurationService {
         } else {
             curation.changeThumnail(0L);
         }
+
+
+
     }
 
-    public void updateCuration(CurationDto curationDto) throws ImageIOException {
-        Curation curation = curationRepository.findById(curationDto.getCurationSeq())
+    public void updateCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
+        Curation curation = curationRepository.findById(curationRequestDto.getCurationSeq())
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
         List<String> pathList = new ArrayList<>();
@@ -93,7 +146,7 @@ public class CurationService {
         }
         imageHandler.deleteImageInfo(pathList);
 
-        List<MultipartFile> multipartFileList = curationDto.getFileList();
+        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
         List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
 
         if (!imageList.isEmpty()) {
@@ -106,9 +159,36 @@ public class CurationService {
         }
 
         curation.changeCuration(
-                curationDto.getTitle(), curationDto.getBudget(), curationDto.getPersonnel(),
-                curationDto.getDescription(), imageList.size()
+                curationRequestDto.getTitle(), curationRequestDto.getBudget(), curationRequestDto.getPersonnel(),
+                curationRequestDto.getDescription(), imageList.size()
         );
+
+        localRepository.deleteByCuration(curation);
+        themeRepository.deleteByCuration(curation);
+
+        for(Long localSeq : curationRequestDto.getLocal()) {
+            Code localTag = codeRepository.findById(localSeq)
+                    .orElseThrow(()-> new TagNotFoundException("지역 태그가"));
+
+            localRepository.save(
+                    LocalCuration.builder()
+                            .curation(curation)
+                            .code(localTag)
+                            .build()
+            );
+        }
+
+        for(Long themeSeq : curationRequestDto.getTheme()) {
+            Code themeTag = codeRepository.findById(themeSeq)
+                    .orElseThrow(()->new TagNotFoundException("테마 태그가 "));
+
+            themeRepository.save(
+                    ThemeCuration.builder()
+                            .curation(curation)
+                            .code(themeTag)
+                            .build()
+            );
+        }
     }
 
     public void deleteCuration(Long curationSeq) {
