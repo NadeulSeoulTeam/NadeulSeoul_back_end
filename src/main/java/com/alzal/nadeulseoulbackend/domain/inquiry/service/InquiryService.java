@@ -4,6 +4,9 @@ import com.alzal.nadeulseoulbackend.domain.inquiry.dto.*;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.InquiryNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.repository.InquiryRepository;
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +22,27 @@ public class InquiryService {
     @Autowired
     private InquiryRepository inquiryRepository;
 
-    // 문의 사항 목록 가져오기
-    public InquiryDtoList getInquiryList(Long memberSeq) {
-        List<Inquiry> inquiryList = inquiryRepository.findByMemberSeqAndHiddenIsFalse(memberSeq)
-                .orElseThrow(() -> new InquiryNotFoundException("문의 사항이"));
+    @Autowired
+    private UserRepository userRepository;
 
-        List<InquiryDto> inquiryDtos = new ArrayList<>();
-        for (int i = 0; i < inquiryList.size(); i++) {
-                inquiryDtos.add(new InquiryDto(inquiryList.get(i).getQuestionSeq(), inquiryList.get(i).getQuestionTitle(), inquiryList.get(i).getQuestionDate()));
+    // 문의 사항 목록 가져오기
+    public InquiryDtoList getInquiryList(Long userSeq) {
+        User user = userRepository.findByUserSeq(userSeq)
+                .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+
+        List<Inquiry> inquiryList = user.getInquiryList();
+        List<InquiryDto> inquiryDtoList = new ArrayList<>();
+
+        for (Inquiry inquiry : inquiryList) {
+            inquiryDtoList.add(InquiryDto.builder()
+                            .questionSeq(inquiry.getQuestionSeq())
+                            .questionTitle(inquiry.getQuestionTitle())
+                            .questionDate(inquiry.getQuestionDate())
+                            .build());
         }
 
         return InquiryDtoList.builder()
-                .inquiryDtoList(inquiryDtos)
+                .inquiryDtoList(inquiryDtoList)
                 .build();
     }
 
@@ -50,12 +62,12 @@ public class InquiryService {
 
     //문의 사항 작성하기
     @Transactional
-    public void insertInquiry(InquiryInfoDto inquiryInfoDto) {
-
-        // 글자 수 예외 처리
+    public void insertInquiry(Long userSeq,InquiryInfoDto inquiryInfoDto) {
+        User user = userRepository.findByUserSeq(userSeq)
+                .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Inquiry inquiryEntity = inquiryRepository.save(Inquiry.builder()
-                                            .memberSeq(inquiryInfoDto.getMemberSeq())
+                                            .user(user)
                                             .questionTitle(inquiryInfoDto.getQuestionTitle())
                                             .question(inquiryInfoDto.getQuestion())
                                             .questionDate(LocalDateTime.now())
@@ -128,6 +140,4 @@ public class InquiryService {
         // 삭제대신 null 처리
         inquiry.updateAnswer(null);
     }
-
-
 }

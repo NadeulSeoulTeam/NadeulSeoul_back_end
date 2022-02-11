@@ -34,20 +34,20 @@ public class InquiryController {
     /*
     * 문의사항 목록 가져오기
     * */
-    @ApiOperation(value = "member_seq에 해당하는 문의사항 목록 반환한다.", response = List.class)
+    @ApiOperation(value = "user_seq에 해당하는 문의사항 목록 반환한다.", response = List.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "문의 사항 목록가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/questions/list/{member_seq}")
-    public ResponseEntity<Response> getInquiryList(@PathVariable("member_seq") Long memberSeq) {
+    @GetMapping("/questions/list/{user_seq}")
+    public ResponseEntity<Response> getInquiryList(@PathVariable("user_seq") Long userSeq) {
         // 사용자 정보 토큰으로 가져옴 -> url 변경하고 pathvariable 없애기!!!!!!!! (실험하려고 작성)
 //        Member member = new Member();
-//        Long memberSeq = member.getMemberSeq();
+//        Long userSeq = member.getMemberSeq();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 목록가져오기 성공");
-        response.setData(inquiryService.getInquiryList(memberSeq));
+        response.setData(inquiryService.getInquiryList(userSeq)); //data 타입 확인해보기
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -80,11 +80,9 @@ public class InquiryController {
             @ApiResponse(code= 404, message = "page not found")})
     @PostMapping("/questions")
     public ResponseEntity<Response> insertInquiry(@RequestBody InquiryInfoDto inquiryInfoDto) {
-
-        System.out.println("title : " + inquiryInfoDto.getQuestionTitle());
-        System.out.println("content : " + inquiryInfoDto.getQuestion());
-        inquiryService.insertInquiry(inquiryInfoDto);
-
+        //사용자 토큰 가져오기
+        Long userSeq = 1L;
+        inquiryService.insertInquiry(userSeq, inquiryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -133,7 +131,7 @@ public class InquiryController {
             response.setMessage("답글이 있는 문의 사항은 삭제할 수 없습니다.");
         }else {
             response.setStatus(StatusEnum.OK);
-            response.setMessage("문의 사항 수정하기 완료");
+            response.setMessage("문의 사항 숨기처리(삭재) 완료");
         }
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }

@@ -1,8 +1,10 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
+import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +28,10 @@ public class User {
     //팔로워 리스트 (사용자를 팔로우한 사람)
     @OneToMany(mappedBy = "follower")
     private Set<FollowInfo> followerList;
+
+    //문의 사항 리스트
+    @OneToMany(mappedBy = "user")
+    private List<Inquiry> inquiryList;
 
     // MemberEntity에 추가
     public void addFollowee() {

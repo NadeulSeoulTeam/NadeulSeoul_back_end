@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @ApiModel("문의 사항 세부내용")
 public class InquiryInfoDto {
-    //private Long questionSeq;
-    private Long memberSeq;
+    private Long userSeq;
     private String questionTitle;
     private String question;
     private LocalDateTime questionDate;

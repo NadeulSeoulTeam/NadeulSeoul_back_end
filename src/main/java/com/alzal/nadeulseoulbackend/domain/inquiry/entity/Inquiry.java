@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.inquiry.entity;
 
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,14 +12,16 @@ import java.time.LocalDateTime;
 @Getter
 @Entity
 @Builder
-@Table(name = "tb_inqury")
+@Table(name = "tb_inquiry")
 public class Inquiry {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long questionSeq;
 
-    private Long memberSeq; // 회원 아이디 foreign key 설정해야함
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_seq")
+    private User user; // 회원 아이디 foreign key 설정해야함
 
     @Column(nullable = false)
     private String questionTitle;
