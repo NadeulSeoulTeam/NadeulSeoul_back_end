@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.inqury.dto;
+package com.alzal.nadeulseoulbackend.domain.inquiry.dto;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
