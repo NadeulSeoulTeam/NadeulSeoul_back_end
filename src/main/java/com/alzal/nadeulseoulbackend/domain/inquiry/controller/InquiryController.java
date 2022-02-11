@@ -1,8 +1,8 @@
-package com.alzal.nadeulseoulbackend.domain.inqury.controller;
+package com.alzal.nadeulseoulbackend.domain.inquiry.controller;
 
-import com.alzal.nadeulseoulbackend.domain.inqury.dto.*;
-import com.alzal.nadeulseoulbackend.domain.inqury.entity.Inqury;
-import com.alzal.nadeulseoulbackend.domain.inqury.service.InquryService;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
+import com.alzal.nadeulseoulbackend.domain.inquiry.service.InquiryService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -24,47 +24,50 @@ import java.util.List;
 * */
 
 @RestController
-@RequestMapping("api/v1/inqurys")
-@Api(value = "InquryController")
-public class InquryController {
+@RequestMapping("api/v1/inquirys")
+@Api(value = "InquiryController")
+public class InquiryController {
 
     @Autowired
-    private InquryService inquryService;
+    private InquiryService inquiryService;
 
     /*
     * 문의사항 목록 가져오기
     * */
-    @ApiOperation(value = "member_seq에 해당하는 문의사항 목록 반환한다.", response = List.class)
+    @ApiOperation(value = "user_seq에 해당하는 문의사항 목록 반환한다.", response = List.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "문의 사항 목록가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/questions/list/{member_seq}")
-    public ResponseEntity<Response> getInquryList(@PathVariable("member_seq") Long memberSeq) {
+    @GetMapping("/questions/list/{user_seq}")
+    public ResponseEntity<Response> getInquiryList(@PathVariable("user_seq") Long userSeq) {
         // 사용자 정보 토큰으로 가져옴 -> url 변경하고 pathvariable 없애기!!!!!!!! (실험하려고 작성)
 //        Member member = new Member();
-//        Long memberSeq = member.getMemberSeq();
+//        Long userSeq = member.getMemberSeq();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 목록가져오기 성공");
-        response.setData(inquryService.getInquryList(memberSeq));
+        response.setData(inquiryService.getInquiryList(userSeq)); //data 타입 확인해보기
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
     /*
      * 문의사항 내용 가져오기
      * */
-    @ApiOperation(value = "question_seq에 해당하는 문의사항 세부내용을 반환한다.", response = Inqury.class)
+    @ApiOperation(value = "question_seq에 해당하는 문의사항 세부내용을 반환한다.", response = Inquiry.class)
     @ApiResponses({
             @ApiResponse(code= 200, message = "문의 사항 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
     @GetMapping("/questions/{question_seq}")
-    public ResponseEntity<Response> getInqury(@PathVariable("question_seq") Long questionSeq) {
+    public ResponseEntity<Response> getInquiry(@PathVariable("question_seq") Long questionSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 가져오기 성공");
-        response.setData(inquryService.getInqury(questionSeq));
+        InquiryInfoDto inquiryInfoDto = inquiryService.getInquiry(questionSeq);
+        System.out.println("title : " + inquiryInfoDto.getQuestionTitle());
+        System.out.println("content : " + inquiryInfoDto.getQuestion());
+        response.setData(inquiryService.getInquiry(questionSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -76,9 +79,10 @@ public class InquryController {
             @ApiResponse(code= 200, message = "문의 사항 작성 성공"),
             @ApiResponse(code= 404, message = "page not found")})
     @PostMapping("/questions")
-    public ResponseEntity<Response> insertInqury(@RequestBody InquryInfoDto inquryInfoDto) {
-        inquryService.insertInqury(inquryInfoDto);
-
+    public ResponseEntity<Response> insertInquiry(@RequestBody InquiryInfoDto inquiryInfoDto) {
+        //사용자 토큰 가져오기
+        Long userSeq = 1L;
+        inquiryService.insertInquiry(userSeq, inquiryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -94,8 +98,11 @@ public class InquryController {
             @ApiResponse(code= 200, message = "문의 사항 수정 성공"),
             @ApiResponse(code= 404, message = "page not found")})
     @PutMapping("/questions/{question_seq}")
-    public ResponseEntity<Response> updateInqury(@PathVariable("question_seq") Long questionSeq, @RequestBody InquryInfoDto inquryInfoDto) {
-        inquryService.updateInqury(questionSeq, inquryInfoDto);
+    public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq, @RequestBody InquiryInfoDto inquiryInfoDto) {
+        System.out.println("questionSeq" + questionSeq);
+        System.out.println(inquiryInfoDto.toString());
+
+        inquiryService.updateInquiry(questionSeq, inquiryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -112,8 +119,8 @@ public class InquryController {
             @ApiResponse(code= 200, message = "문의 사항 삭제 성공"),
             @ApiResponse(code= 404, message = "page not found")})
     @DeleteMapping("/questions/{question_seq}")
-    public ResponseEntity<Response> updateInqury(@PathVariable("question_seq") Long questionSeq) {
-        int result = inquryService.hiddenInqury(questionSeq);
+    public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq) {
+        int result = inquiryService.hiddenInquiry(questionSeq);
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -124,7 +131,7 @@ public class InquryController {
             response.setMessage("답글이 있는 문의 사항은 삭제할 수 없습니다.");
         }else {
             response.setStatus(StatusEnum.OK);
-            response.setMessage("문의 사항 수정하기 완료");
+            response.setMessage("문의 사항 숨기처리(삭재) 완료");
         }
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
@@ -136,12 +143,14 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 작성 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @PostMapping("/answer")
+    @PostMapping("/answers")
     public ResponseEntity<Response> insertAnswer(@RequestBody AnswerDto answerDto) {
-        int result = inquryService.insertAnswer(answerDto);
+        int result = inquiryService.insertAnswer(answerDto);
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+
+        //answer이 null 일때 예외 처리!!!!!
 
         if(result == 0){
             response.setMessage("이미 작성된 답변이 있습니다.");
@@ -159,9 +168,9 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 수정 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @PutMapping("/answer")
+    @PutMapping("/answers")
     public ResponseEntity<Response> updateAnswer(@RequestBody AnswerDto answerDto) {
-        inquryService.updateAnswer(answerDto);
+        inquiryService.updateAnswer(answerDto);
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -177,9 +186,9 @@ public class InquryController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "답변 삭제 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @DeleteMapping("/answer/{/question_seq}")
+    @DeleteMapping("/answers/{question_seq}")
     public ResponseEntity<Response> deleteAnswer(@PathVariable("question_seq") Long questionSeq) {
-        inquryService.deleteAnswer(questionSeq);
+        inquiryService.deleteAnswer(questionSeq);
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();

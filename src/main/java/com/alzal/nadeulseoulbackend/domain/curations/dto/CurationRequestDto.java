@@ -2,15 +2,13 @@ package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class CurationDto {
+public class CurationRequestDto {
     private Long curationSeq;
     private Long memberSeq;
     private String title;
@@ -22,11 +20,15 @@ public class CurationDto {
     private Integer views;
     private Integer photoCount;
     private List<MultipartFile> fileList;
+    private List<Long> theme;
+    private List<Long> local;
 
     @Builder
-    public CurationDto(Long curationSeq, Long memberSeq, String title, String description,
-                       Integer personnel, Integer budget, LocalDateTime date, Integer good,
-                       Integer views, Integer photoCount, List<MultipartFile> fileList) {
+    public CurationRequestDto(Long curationSeq, Long memberSeq, String title, String description,
+                              Integer personnel, Integer budget, LocalDateTime date, Integer good,
+                              Integer views, Integer photoCount, List<MultipartFile> fileList,
+                              List<Long> theme, List<Long> local
+                              ) {
         this.curationSeq = curationSeq;
         this.memberSeq = memberSeq;
         this.title = title;
@@ -38,5 +40,7 @@ public class CurationDto {
         this.views = views;
         this.photoCount = photoCount;
         this.fileList = fileList;
+        this.theme = theme;
+        this.local = local;
     }
 }

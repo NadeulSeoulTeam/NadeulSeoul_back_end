@@ -2,25 +2,29 @@ package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
 @Getter
 public class Follow implements Serializable {
+    @Id
+    private Long Id;
+
     // 팔로우를 요청한 유저
-    @Column(name = "followee_seq")
-    private Long followeeSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_seq")
+    private User followee;
 
     // 팔로우를 요청받은 유저
-    @Column(name = "follower_seq")
-    private Long followerSeq;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_seq")
+    private User follower;
 
     public Follow() {}
 
-    public Follow(Long followeeSeq, Long followerSeq) {
-        this.followeeSeq = followeeSeq;
-        this.followerSeq = followerSeq;
-    }
+//    public Follow(Long followeeSeq, Long followerSeq) {
+//        this.followeeSeq = followeeSeq;
+//        this.followerSeq = followerSeq;
+//    }
 }

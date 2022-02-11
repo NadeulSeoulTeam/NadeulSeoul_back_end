@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class MypageInfoDto {
-    private Long memberSeq;
+    private Long userSeq;
     private String nickName;
     private String emoji;
     private Long followeeCount;
