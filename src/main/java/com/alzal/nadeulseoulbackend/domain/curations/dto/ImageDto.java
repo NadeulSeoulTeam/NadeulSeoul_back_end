@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -16,14 +15,14 @@ public class ImageDto {
     private Long imageSize;
 
     @Builder
-    public ImageDto(String origFileName, String imagePath, Long imageSize){
+    public ImageDto(String origFileName, String imagePath, Long imageSize) {
         this.originName = origFileName;
         this.imagePath = imagePath;
         this.imageSize = imageSize;
     }
 
-    public Image toEntity(){
-        return  Image.builder()
+    public Image toEntity() {
+        return Image.builder()
                 .originName(originName)
                 .imagePath(imagePath)
                 .imageSize(imageSize)

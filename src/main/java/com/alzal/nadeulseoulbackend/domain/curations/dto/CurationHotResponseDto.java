@@ -3,9 +3,6 @@ package com.alzal.nadeulseoulbackend.domain.curations.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Data
 public class CurationHotResponseDto {
     private Long curationSeq;

@@ -16,7 +16,7 @@ public class StoreInfoDto {
     private String phone;
     private String y;
     private String x;
-    
+
     @Builder
     public StoreInfoDto(Long storeSeq, String placeName, String categoryName,
                         String addressName, String placeUrl, String phone,
@@ -31,7 +31,7 @@ public class StoreInfoDto {
         this.x = x;
     }
 
-    public StoreInfo toEntyty(){
+    public StoreInfo toEntyty() {
         return StoreInfo.builder()
                 .storeSeq(storeSeq)
                 .placeName(placeName)

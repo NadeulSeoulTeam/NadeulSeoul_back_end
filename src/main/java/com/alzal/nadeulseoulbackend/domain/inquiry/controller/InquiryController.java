@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.inquiry.controller;
 
-import com.alzal.nadeulseoulbackend.domain.inquiry.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.AnswerDto;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryInfoDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.service.InquiryService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -20,8 +21,8 @@ import java.util.List;
 // http://localhost:8080/swagger-ui/index.html
 
 /*
-* 1:1 문의사항 관련 API
-* */
+ * 1:1 문의사항 관련 API
+ * */
 
 @RestController
 @RequestMapping("api/v1/inquirys")
@@ -32,12 +33,12 @@ public class InquiryController {
     private InquiryService inquiryService;
 
     /*
-    * 문의사항 목록 가져오기
-    * */
+     * 문의사항 목록 가져오기
+     * */
     @ApiOperation(value = "user_seq에 해당하는 문의사항 목록 반환한다.", response = List.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "문의 사항 목록가져오기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "문의 사항 목록가져오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/questions/list/{user_seq}")
     public ResponseEntity<Response> getInquiryList(@PathVariable("user_seq") Long userSeq) {
         // 사용자 정보 토큰으로 가져옴 -> url 변경하고 pathvariable 없애기!!!!!!!! (실험하려고 작성)
@@ -56,8 +57,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "question_seq에 해당하는 문의사항 세부내용을 반환한다.", response = Inquiry.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "문의 사항 가져오기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "문의 사항 가져오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/questions/{question_seq}")
     public ResponseEntity<Response> getInquiry(@PathVariable("question_seq") Long questionSeq) {
         Response response = new Response();
@@ -72,12 +73,12 @@ public class InquiryController {
     }
 
     /*
-    * 문의사항 작성하기
-   * */
+     * 문의사항 작성하기
+     * */
     @ApiOperation(value = "문의 사항을 작성한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "문의 사항 작성 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "문의 사항 작성 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/questions")
     public ResponseEntity<Response> insertInquiry(@RequestBody InquiryInfoDto inquiryInfoDto) {
         //사용자 토큰 가져오기
@@ -95,8 +96,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "문의 사항을 수정한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "문의 사항 수정 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "문의 사항 수정 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PutMapping("/questions/{question_seq}")
     public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq, @RequestBody InquiryInfoDto inquiryInfoDto) {
         System.out.println("questionSeq" + questionSeq);
@@ -116,8 +117,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "문의 사항을 삭제한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "문의 사항 삭제 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "문의 사항 삭제 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @DeleteMapping("/questions/{question_seq}")
     public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq) {
         int result = inquiryService.hiddenInquiry(questionSeq);
@@ -125,11 +126,11 @@ public class InquiryController {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
 
-        if(result == 0) { // 이미 삭제 처리된 문의 사항인 경우 (hidden = true)
+        if (result == 0) { // 이미 삭제 처리된 문의 사항인 경우 (hidden = true)
             response.setMessage("해당 문의 사항이 존재하지 않습니다.");
-        }else if(result == 1){
+        } else if (result == 1) {
             response.setMessage("답글이 있는 문의 사항은 삭제할 수 없습니다.");
-        }else {
+        } else {
             response.setStatus(StatusEnum.OK);
             response.setMessage("문의 사항 숨기처리(삭재) 완료");
         }
@@ -141,8 +142,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "답변을 작성한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "답변 작성 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "답변 작성 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/answers")
     public ResponseEntity<Response> insertAnswer(@RequestBody AnswerDto answerDto) {
         int result = inquiryService.insertAnswer(answerDto);
@@ -152,9 +153,9 @@ public class InquiryController {
 
         //answer이 null 일때 예외 처리!!!!!
 
-        if(result == 0){
+        if (result == 0) {
             response.setMessage("이미 작성된 답변이 있습니다.");
-        }else {
+        } else {
             response.setStatus(StatusEnum.OK);
             response.setMessage("답변이 작성이 완료되었습니다.");
         }
@@ -166,8 +167,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "답변을 수정한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "답변 수정 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "답변 수정 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PutMapping("/answers")
     public ResponseEntity<Response> updateAnswer(@RequestBody AnswerDto answerDto) {
         inquiryService.updateAnswer(answerDto);
@@ -184,8 +185,8 @@ public class InquiryController {
      * */
     @ApiOperation(value = "답변을 삭제한다.", response = String.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "답변 삭제 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "답변 삭제 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @DeleteMapping("/answers/{question_seq}")
     public ResponseEntity<Response> deleteAnswer(@PathVariable("question_seq") Long questionSeq) {
         inquiryService.deleteAnswer(questionSeq);

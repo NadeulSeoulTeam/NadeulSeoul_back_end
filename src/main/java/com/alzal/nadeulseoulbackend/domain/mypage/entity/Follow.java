@@ -21,7 +21,8 @@ public class Follow implements Serializable {
     @JoinColumn(name = "member_seq")
     private User follower;
 
-    public Follow() {}
+    public Follow() {
+    }
 
 //    public Follow(Long followeeSeq, Long followerSeq) {
 //        this.followeeSeq = followeeSeq;
