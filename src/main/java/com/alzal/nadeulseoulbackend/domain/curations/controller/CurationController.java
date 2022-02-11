@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationHotResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationRequestDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;

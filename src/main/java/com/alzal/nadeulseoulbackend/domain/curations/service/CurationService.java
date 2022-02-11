@@ -1,6 +1,10 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.LocalCuration;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.ThemeCuration;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
@@ -8,6 +12,9 @@ import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy
 import com.alzal.nadeulseoulbackend.domain.curations.repository.LocalRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ThemeRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
 import com.alzal.nadeulseoulbackend.domain.tag.exception.TagNotFoundException;
@@ -24,7 +31,6 @@ import java.util.stream.Collectors;
 
 // TODO :
 //      멤버 seq 수정 및 값 불러오기 새로 작성 필요
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -46,6 +52,9 @@ public class CurationService {
     private ThemeRepository themeRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ImageHandler imageHandler;
 
     public CurationResponseDto getCuration(Long curationSeq) {
@@ -65,7 +74,6 @@ public class CurationService {
                 .description(curation.getDescription())
                 .good(curation.getGood())
                 .views(curation.getViews())
-                .memberSeq(curation.getMemberSeq())
                 .photoCount(curation.getPhotoCount())
                 .local(localDtoList)
                 .theme(themeDtoList)
@@ -82,7 +90,10 @@ public class CurationService {
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
-        System.out.println(multipartFileList.size());
+
+        User user = userRepository.findByUserSeq(1L) // 멤버 변수 토큰으로 받아오기
+                .orElseThrow(()->new UserNotFoundException("사용자가 "));
+
         Curation curation = Curation.builder()
                 .title(curationRequestDto.getTitle())
                 .budget(curationRequestDto.getBudget())
@@ -90,9 +101,9 @@ public class CurationService {
                 .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
-                .memberSeq(1L) // 멤버 변수 확인 필요
                 .photoCount(multipartFileList.size())
                 .hidden(Boolean.FALSE)
+                .user(user)
                 .build();
 
         curationRepository.save(curation);

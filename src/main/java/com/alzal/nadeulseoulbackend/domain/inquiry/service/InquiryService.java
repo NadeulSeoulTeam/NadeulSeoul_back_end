@@ -1,6 +1,9 @@
 package com.alzal.nadeulseoulbackend.domain.inquiry.service;
 
-import com.alzal.nadeulseoulbackend.domain.inquiry.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.AnswerDto;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryDto;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryDtoList;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryInfoDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.InquiryNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.repository.InquiryRepository;
@@ -35,10 +38,10 @@ public class InquiryService {
 
         for (Inquiry inquiry : inquiryList) {
             inquiryDtoList.add(InquiryDto.builder()
-                            .questionSeq(inquiry.getQuestionSeq())
-                            .questionTitle(inquiry.getQuestionTitle())
-                            .questionDate(inquiry.getQuestionDate())
-                            .build());
+                    .questionSeq(inquiry.getQuestionSeq())
+                    .questionTitle(inquiry.getQuestionTitle())
+                    .questionDate(inquiry.getQuestionDate())
+                    .build());
         }
 
         return InquiryDtoList.builder()
@@ -62,16 +65,16 @@ public class InquiryService {
 
     //문의 사항 작성하기
     @Transactional
-    public void insertInquiry(Long userSeq,InquiryInfoDto inquiryInfoDto) {
+    public void insertInquiry(Long userSeq, InquiryInfoDto inquiryInfoDto) {
         User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Inquiry inquiryEntity = inquiryRepository.save(Inquiry.builder()
-                                            .user(user)
-                                            .questionTitle(inquiryInfoDto.getQuestionTitle())
-                                            .question(inquiryInfoDto.getQuestion())
-                                            .questionDate(LocalDateTime.now())
-                                            .build()); // answer값 들어가지 않아서 자동 null로 저장
+                .user(user)
+                .questionTitle(inquiryInfoDto.getQuestionTitle())
+                .question(inquiryInfoDto.getQuestion())
+                .questionDate(LocalDateTime.now())
+                .build()); // answer값 들어가지 않아서 자동 null로 저장
     }
 
     // 문의 사항 수정하기
@@ -90,13 +93,13 @@ public class InquiryService {
     public int hiddenInquiry(Long questionSeq) {
 
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(questionSeq)
-                .orElseThrow(() -> new IllegalArgumentException ("문의 사항이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("문의 사항이 존재하지 않습니다."));
 
         // 이미 삭제 처리된 문의 사항일 경우
-        if(inquiry.isHidden()) return 0;
+        if (inquiry.isHidden()) return 0;
 
         // 답글이 있는 경우 삭제 불가
-        if(inquiry.getAnswer() != null) return 1;
+        if (inquiry.getAnswer() != null) return 1;
 
         inquiry.setHidden(true);
         return 2;
@@ -109,7 +112,7 @@ public class InquiryService {
                 .orElseThrow(() -> new InquiryNotFoundException("문의 사항이"));
 
         // 이미 답변이 있다면 더이상 답변 불가 -> 이걸 어떻게 처리하는게 좋을지 따로 exception을 만들지 or string으로 보내줄지?
-        if(inquiry.getAnswer() != null) {
+        if (inquiry.getAnswer() != null) {
             return 0;
         }
 

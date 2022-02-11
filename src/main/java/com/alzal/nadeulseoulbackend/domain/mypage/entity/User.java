@@ -1,9 +1,14 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import lombok.Getter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +37,12 @@ public class User {
     //문의 사항 리스트
     @OneToMany(mappedBy = "user")
     private List<Inquiry> inquiryList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Curation> curationList;
 
     // MemberEntity에 추가
     public void addFollowee() {
