@@ -22,13 +22,13 @@ public class UserInfoService {
     private TokenProvider tokenProvider;
 
     //User정보 등록하기
+    @Transactional
     public void updateSignupInfo (SignupInfo signupInfo){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> user = userRepository.findByEmail(email).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji()));
-//        if(user==null){
-//            throw NotExistedUserException();
-//        }
-        userRepository.save(user.get());
+        User user = userRepository.findByEmail(email).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji())).orElseGet(User::new);
+        System.out.println(user.getNickname());
+
+        userRepository.save(user);
     }
 
 }
