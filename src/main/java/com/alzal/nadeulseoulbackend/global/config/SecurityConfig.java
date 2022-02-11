@@ -4,9 +4,12 @@ import com.alzal.nadeulseoulbackend.global.config.auth.HttpCookieOAuth2Authoriza
 import com.alzal.nadeulseoulbackend.global.config.auth.OAuth2AuthenticationSuccessHandler;
 import com.alzal.nadeulseoulbackend.global.config.auth.service.CustomOAuth2UserService;
 import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
+import com.alzal.nadeulseoulbackend.global.security.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,6 +19,7 @@ import org.springframework.security.oauth2.client.web.DefaultOAuth2Authorization
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
@@ -37,6 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter(){
+        return new TokenAuthenticationFilter();
+    }
+
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -44,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Session 비활성화
                 .and()
+                .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable() //csrf 비활성화
                 .formLogin().disable() //로그인폼 비활성화
                 .httpBasic().disable() //기본 로그인 창 비활성화

@@ -12,13 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @Api(value = "UserController")
-@RequestMapping("api/v1/users")
+@RequestMapping("api/v1")
 public class UserController {
 
     @Autowired
     private TokenProvider tokenProvider;
+    @Autowired
     private UserInfoService userInfoService;
 
     @ApiOperation(value="회원 가입",notes="닉네임,이모지 세팅")
@@ -27,11 +30,12 @@ public class UserController {
             @ApiResponse(code=404,message = "page not found")
     })
     @PostMapping("/member/signup")
-    public ResponseEntity<Response> getExtraUserInfo(@RequestHeader(value="token") String token,
-                                                     @RequestBody @ApiParam(value = "회원가입 정보",required = true) SignupInfo signupInfo){
+    public ResponseEntity<Response> getExtraUserInfo(@Valid @RequestBody @ApiParam(value = "회원가입 정보",required = true) SignupInfo signupInfo){
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-        userInfoService.updateSignupInfo(signupInfo,token);
+        userInfoService = new UserInfoService();
+
+        userInfoService.updateSignupInfo(signupInfo);
 
         response.setStatus(StatusEnum.OK);
         response.setMessage("회원 가입 성공");
