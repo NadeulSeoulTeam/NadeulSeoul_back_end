@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.global.config.auth.service;
 
 
 import com.alzal.nadeulseoulbackend.domain.users.dto.OAuth2UserInfo;
+import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.global.security.UserPrincipal;
@@ -74,6 +75,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             User user = User.builder()
                     .name(oAuth2UserInfo.getName())
                     .email(oAuth2UserInfo.getEmail())
+                    .role(Role.MEMBER)
                     .build();
             return userRepository.save(user);
     }

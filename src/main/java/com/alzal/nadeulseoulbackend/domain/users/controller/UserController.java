@@ -33,7 +33,6 @@ public class UserController {
     public ResponseEntity<Response> getExtraUserInfo(@Valid @RequestBody @ApiParam(value = "회원가입 정보",required = true) SignupInfo signupInfo){
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-        userInfoService = new UserInfoService();
 
         userInfoService.updateSignupInfo(signupInfo);
 

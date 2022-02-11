@@ -24,9 +24,11 @@ public class UserInfoService {
     //User정보 등록하기
     public void updateSignupInfo (SignupInfo signupInfo){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        Optional<User> user = userRepository.findByEmail();
-
-//        userRepository.save(user.get());
+        Optional<User> user = userRepository.findByEmail(email).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji()));
+//        if(user==null){
+//            throw NotExistedUserException();
+//        }
+        userRepository.save(user.get());
     }
 
 }
