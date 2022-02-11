@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CodeDto {
 
+    private Long codeSeq;
     private String codeName;
 
     @Builder
-    public CodeDto(String codeName) {
+    public CodeDto(Long codeSeq, String codeName) {
+        this.codeSeq = codeSeq;
         this.codeName = codeName;
     }
 
@@ -23,6 +25,7 @@ public class CodeDto {
 
     public static CodeDto fromEntity(Code code) {
         return CodeDto.builder()
+                .codeSeq(code.getCodeSeq())
                 .codeName(code.getCodeName())
                 .build();
     }
