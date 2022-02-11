@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.curations.util;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;

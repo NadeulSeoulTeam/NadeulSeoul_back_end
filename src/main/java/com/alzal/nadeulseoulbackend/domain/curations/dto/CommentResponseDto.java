@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

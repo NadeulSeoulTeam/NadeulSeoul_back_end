@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Comment;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import lombok.Getter;
 

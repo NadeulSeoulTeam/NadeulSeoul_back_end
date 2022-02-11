@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.domain.curations.dto;
+package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import lombok.Builder;

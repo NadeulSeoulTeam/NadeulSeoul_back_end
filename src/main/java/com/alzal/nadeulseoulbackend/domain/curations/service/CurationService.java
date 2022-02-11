@@ -1,10 +1,10 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.LocalCuration;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.ThemeCuration;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.LocalCuration;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.ThemeCuration;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
