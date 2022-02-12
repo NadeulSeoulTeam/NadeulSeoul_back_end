@@ -61,6 +61,8 @@ public class CurationService {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
+        curation.addViews(); // 조회수 추가
+        
         List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
                                             .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())

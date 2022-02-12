@@ -107,4 +107,12 @@ public class Curation {
         this.themeCuration.add(themeCuration);
     }
 
+    public void addViews() {
+        this.views++;
+    }
+
+    public void changeGood(boolean status) {
+        this.good = status ? this.good++ : this.good--;
+    }
+
 }
