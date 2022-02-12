@@ -24,7 +24,7 @@ import java.util.List;
 * */
 
 @RestController
-@RequestMapping("api/v1/inquirys")
+@RequestMapping("api/v1/inquiries")
 @Api(value = "InquiryController")
 public class InquiryController {
 
