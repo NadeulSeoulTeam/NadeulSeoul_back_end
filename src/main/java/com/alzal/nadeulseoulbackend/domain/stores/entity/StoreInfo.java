@@ -14,7 +14,7 @@ public class StoreInfo {
 
     @Id
     private Long storeSeq; //카카오 api 상가id
-    private String placeName;
+    private String storeName;
     private String categoryName;
     private String addressName;
     private String placeUrl;
@@ -23,10 +23,10 @@ public class StoreInfo {
     private String lng;
 
     @Builder
-    public StoreInfo(Long storeSeq, String placeName, String categoryName, String addressName,
+    public StoreInfo(Long storeSeq, String storeName, String categoryName, String addressName,
                      String placeUrl, String phone, String lat, String lng) {
         this.storeSeq = storeSeq;
-        this.placeName = placeName;
+        this.storeName = storeName;
         this.categoryName = categoryName;
         this.addressName = addressName;
         this.placeUrl = placeUrl;

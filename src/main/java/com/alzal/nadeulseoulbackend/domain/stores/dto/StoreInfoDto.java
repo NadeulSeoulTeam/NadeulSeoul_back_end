@@ -10,49 +10,49 @@ import lombok.NoArgsConstructor;
 public class StoreInfoDto {
 
     private Long storeSeq;
-    private String placeName;
+    private String storeName;
     private String categoryName;
     private String addressName;
     private String placeUrl;
     private String phone;
-    private String y;
-    private String x;
+    private String lat;
+    private String lng;
     
     @Builder
-    public StoreInfoDto(Long storeSeq, String placeName, String categoryName,
+    public StoreInfoDto(Long storeSeq, String storeName, String categoryName,
                         String addressName, String placeUrl, String phone,
-                        String y, String x) {
+                        String lat, String lng) {
         this.storeSeq = storeSeq;
-        this.placeName = placeName;
+        this.storeName = storeName;
         this.categoryName = categoryName;
         this.addressName = addressName;
         this.placeUrl = placeUrl;
         this.phone = phone;
-        this.y = y;
-        this.x = x;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public StoreInfo toEntyty(){
         return StoreInfo.builder()
                 .storeSeq(storeSeq)
-                .placeName(placeName)
+                .storeName(storeName)
                 .categoryName(categoryName)
                 .placeUrl(placeUrl)
                 .phone(phone)
-                .lat(y)
-                .lng(x)
+                .lat(lat)
+                .lng(lng)
                 .build();
     }
 
     public StoreInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
-                .placeName(storeInfo.getPlaceName())
+                .storeName(storeInfo.getStoreName())
                 .categoryName(storeInfo.getCategoryName())
                 .placeUrl(storeInfo.getPlaceUrl())
                 .phone(storeInfo.getPhone())
-                .y(storeInfo.getLat())
-                .x(storeInfo.getLng())
+                .lat(storeInfo.getLat())
+                .lng(storeInfo.getLng())
                 .build();
     }
 }
