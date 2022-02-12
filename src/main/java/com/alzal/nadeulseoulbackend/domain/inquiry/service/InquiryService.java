@@ -34,6 +34,10 @@ public class InquiryService {
         List<InquiryDto> inquiryDtoList = new ArrayList<>();
 
         for (Inquiry inquiry : inquiryList) {
+            if(inquiry.isHidden()) {
+                continue;
+            }
+
             inquiryDtoList.add(InquiryDto.builder()
                             .questionSeq(inquiry.getQuestionSeq())
                             .questionTitle(inquiry.getQuestionTitle())
