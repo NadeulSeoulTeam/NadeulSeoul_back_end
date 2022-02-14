@@ -47,10 +47,10 @@ public class User{
     @Column(nullable = false)
     private Role role;
 
-    @Column(columnDefinition = "Integer default 0")
+    @ColumnDefault("0")
     private Integer followeeCount;
 
-    @Column(columnDefinition = "Integer default 0")
+    @ColumnDefault("0")
     private Integer followerCount ;
 
     @Builder

@@ -18,7 +18,7 @@ public enum  ErrorStatusEnum {
     INVALID_TOKEN(400,"비정상적인 토큰입니다."),
     NULL_TOKEN(400,"토큰값이 비어있습니다."),
     EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
-    NICKNAME_DUPLICATION(400,"DUPLICATED NICKNAME"),
+    NICKNAME_DUPLICATION(409,"DUPLICATED NICKNAME"),
     ALREADY_LOGGED_IN_USER(403,"이미 로그인된 사용자입니다."),
 
     //curation
