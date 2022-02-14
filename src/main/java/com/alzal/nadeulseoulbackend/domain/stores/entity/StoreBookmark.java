@@ -17,6 +17,7 @@ import javax.persistence.*;
 public class StoreBookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "store_bookmark_seq")
     private Long storeBookmarkSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)

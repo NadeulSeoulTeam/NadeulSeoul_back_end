@@ -1,8 +1,10 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
+import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.List;
@@ -35,8 +37,9 @@ public class User {
     private List<Inquiry> inquiryList;
 
     //찜한 장소 리스트
-    @OneToMany(mappedBy = "")
-    private List<StoreInfo> storeInfoList;
+    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 8)
+    private List<StoreBookmark> storeBookmarkList;
 
     // MemberEntity에 추가
     public void addFollowee() {

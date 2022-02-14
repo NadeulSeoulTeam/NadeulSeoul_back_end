@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.stores.entity;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,10 +22,11 @@ public class StoreInfo {
     private String phone;
     private String lat;
     private String lng;
+    private Long bookmarkCount;
 
     @Builder
     public StoreInfo(Long storeSeq, String storeName, String categoryName, String addressName,
-                     String placeUrl, String phone, String lat, String lng) {
+                     String placeUrl, String phone, String lat, String lng, Long bookmarkCount) {
         this.storeSeq = storeSeq;
         this.storeName = storeName;
         this.categoryName = categoryName;
@@ -33,5 +35,14 @@ public class StoreInfo {
         this.phone = phone;
         this.lat = lat;
         this.lng = lng;
+        this.bookmarkCount = bookmarkCount;
+    }
+
+    public void updateBookmarkCount() {
+        this.bookmarkCount++;
+    }
+
+    public void deleteBookmarkCount() {
+        this.bookmarkCount--;
     }
 }
