@@ -1,34 +1,76 @@
-package com.alzal.nadeulseoulbackend.domain.mypage.entity;
+package com.alzal.nadeulseoulbackend.domain.users.entity;
 
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.FollowInfo;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
-import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Entity
 @Getter
-public class User {
+@NoArgsConstructor
+@Entity
+@Table(name="tb_user")
+public class User{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="userSeq")
     private Long userSeq;
-    private String nickName;
-    private String email;
-    private String name;
-    private String emoji;
-    private Long followeeCount = 0L;
-    private Long followerCount = 0L;
 
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column
+    private String name;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column
+    @ColumnDefault("0")
+    private int curationCount;
+
+    @Column
+    private String emoji;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @ColumnDefault("DEFAULT LONG 0")
+    private Long followeeCount;
+
+    @ColumnDefault("DEFAULT LONG 0")
+    private Long followerCount ;
+
+    @Builder
+    public User(String nickname,String name, String email, Role role) {
+        this.nickname = name;
+        this.name = name;
+        this.email = email;
+        this.role = role;
+    }
+
+
+    public User update(String nickname,String emoji) {
+        this.nickname = nickname;
+        this.emoji = emoji;
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
     //팔로잉 리스트 (사용자가 팔로우한 사람)
     @OneToMany(mappedBy = "followee")
     private Set<FollowInfo> followeeList;
@@ -67,5 +109,6 @@ public class User {
     public void deleteFollower() {
         this.followerCount--;
     }
+
 
 }

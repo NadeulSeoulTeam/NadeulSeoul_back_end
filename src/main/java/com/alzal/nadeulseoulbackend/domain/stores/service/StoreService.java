@@ -1,8 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.service;
 
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
@@ -11,6 +9,8 @@ import com.alzal.nadeulseoulbackend.domain.stores.exception.StoreBookmarkNotFoun
 import com.alzal.nadeulseoulbackend.domain.stores.exception.StoreInfoNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreBookmarkRepository;
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +35,7 @@ public class StoreService {
 
     // 찜한 장소 정보 리스트 가져오기
     public Page<StoreBookmarkInfoDto> getStoreBookmarkInfoDto(Long userSeq, int page, int size) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         // pagination 구현
@@ -63,7 +63,7 @@ public class StoreService {
     // 장소 찜하기
     @Transactional
     public void insertStoreBookmark(Long userSeq, Long storeSeq, StoreInfoDto storeInfoDto) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         // 없을 경우 새로 만들어서 데이터를 넣어줌
@@ -96,7 +96,7 @@ public class StoreService {
     // 장소 찜하기 취소
     @Transactional
     public void deleteStoreBookmark(Long userSeq, Long storeSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
@@ -114,7 +114,7 @@ public class StoreService {
 
     // 장소가 이미 찜한 장소인지 확인하기
     public Map<String, Boolean> getIsBookmark(Long userSeq, Long storeSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)

@@ -1,6 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ public class UserCommentDto {
     public static UserCommentDto fromEntity(User user) {
         return UserCommentDto.builder()
                 .userSeq(user.getUserSeq())
-                .nickname(user.getNickName())
+                .nickname(user.getNickname())
                 .emoji(user.getEmoji())
                 .build();
     }

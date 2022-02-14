@@ -7,9 +7,9 @@ import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryInfoDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.InquiryNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.repository.InquiryRepository;
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +30,7 @@ public class InquiryService {
 
     // 문의 사항 목록 가져오기
     public InquiryDtoList getInquiryList(Long userSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         List<Inquiry> inquiryList = user.getInquiryList();
@@ -66,7 +66,7 @@ public class InquiryService {
     //문의 사항 작성하기
     @Transactional
     public void insertInquiry(Long userSeq, InquiryInfoDto inquiryInfoDto) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Inquiry inquiryEntity = inquiryRepository.save(Inquiry.builder()
