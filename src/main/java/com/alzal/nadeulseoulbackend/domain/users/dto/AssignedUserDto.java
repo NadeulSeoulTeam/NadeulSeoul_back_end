@@ -9,14 +9,14 @@ public class AssignedUserDto {
     String nickname;
     String role;
     Integer followeeCount;
-    Integer follwerCount;
+    Integer followerCount;
 
     @Builder
-    public AssignedUserDto(Long userSeq, String nickname, String role, Integer followeeCount, Integer follwerCount) {
+    public AssignedUserDto(Long userSeq, String nickname, String role, Integer followeeCount, Integer followerCount) {
         this.userSeq = userSeq;
         this.nickname = nickname;
         this.role = role;
         this.followeeCount = followeeCount;
-        this.follwerCount = follwerCount;
+        this.followerCount = followerCount;
     }
 }
