@@ -93,7 +93,7 @@ public class CurationService {
     public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
 
-        User user = userRepository.findByUserSeq(1L) // 멤버 변수 토큰으로 받아오기
+        User user = userRepository.findByUserSeq(3L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
 
         Curation curation = Curation.builder()

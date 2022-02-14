@@ -12,10 +12,13 @@ import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundExceptio
 import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -37,10 +40,20 @@ public class CommentService {
     private UserRepository userRepository;
 
     public List<CommentResponseDto> getCommentList(Long curationSeq) {
-        List<Comment> commentList = curationRepository.findById(curationSeq)
+//        List<Comment> commentList = curationRepository.findById(curationSeq)
+//                .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
+//                .getCommentList();
+//        return commentList.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
+
+        Set<Comment> commentSet = curationRepository.findById(curationSeq)
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
                 .getCommentList();
-        return commentList.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
+        return commentSet.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
+    }
+
+    public Page<CommentResponseDto> getCommentListByPage(Long curationSeq, Pageable pageable){
+        Page<Comment> commentPage = commentRepository.findByCurationSeq(curationSeq, pageable);
+        return commentPage.map(CommentResponseDto::fromEntity);
     }
 
     public void insertComment(CommentRequestDto commentRequestDto) {
