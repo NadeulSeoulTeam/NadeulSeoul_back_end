@@ -4,13 +4,12 @@ import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -47,8 +46,9 @@ public class Curation {
     @JoinColumn(name = "user_seq")
     private User user;
 
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "curation")
-    private List<Comment> commentList = new ArrayList<>();
+    private Set<Comment> commentList = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "curation")
     private List<Image> imageList = new ArrayList<>();
