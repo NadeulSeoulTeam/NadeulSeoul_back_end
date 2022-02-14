@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.stores.controller;
 
-import com.alzal.nadeulseoulbackend.domain.stores.dto.PageRequestDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.service.StoreService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 // http://localhost:8080/swagger-ui/index.html
 
@@ -119,11 +116,9 @@ public class StoreController {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 찜하기 성공");
+        response.setMessage("장소 찜한 여부 확인 성공");
         response.setData(storeService.getIsBookmark(userSeq, storeSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
-
-
 
 }

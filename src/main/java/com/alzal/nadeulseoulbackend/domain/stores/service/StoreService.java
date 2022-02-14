@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.stores.service;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.stores.dto.BookmarkDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
@@ -11,6 +12,7 @@ import com.alzal.nadeulseoulbackend.domain.stores.exception.StoreBookmarkNotFoun
 import com.alzal.nadeulseoulbackend.domain.stores.exception.StoreInfoNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreBookmarkRepository;
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
+import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,14 +42,10 @@ public class StoreService {
 
         // pagination 구현
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<StoreInfo> pageStoreInfo = storeInfoRepository.findAll(pageRequest);
+        Page<StoreBookmark> pageStoreInfo = storeBookmarkRepository.findByUser(pageRequest, user);
+
         Page<StoreBookmarkInfoDto> pageStoreInfoDto
-                = pageStoreInfo.map(StoreInfo -> StoreBookmarkInfoDto.builder()
-                                                                    .storeSeq(StoreInfo.getStoreSeq())
-                                                                    .storeName(StoreInfo.getStoreName())
-                                                                    .addressName(StoreInfo.getAddressName())
-                                                                    .categoryName(StoreInfo.getCategoryName())
-                                                                    .build());
+                = pageStoreInfo.map(StoreBookmark::getStoreInfo).map(StoreBookmarkInfoDto::fromEntity);
 
         return pageStoreInfoDto;
     }
@@ -113,28 +111,34 @@ public class StoreService {
     }
 
     // 장소가 이미 찜한 장소인지 확인하기
-    public boolean getIsBookmark(Long userSeq, Long storeSeq) {
+    public BookmarkDto getIsBookmark(Long userSeq, Long storeSeq) {
         User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
-        // 해당 장소가 없을 때
+        // 해당 장소가 없을 때 -> 찜하기 0, false
         Optional<StoreInfo> storeInfo = storeInfoRepository.findById(storeSeq);
-        if(storeInfo == null){
-            return false;
+        if(storeInfo.isEmpty()){
+            return BookmarkDto.builder()
+                    .BookmarkCount(0L)
+                    .IsBookmark(false)
+                    .build();
         }
 
-        // 찜한적이 없을 때
+        // 찜한적이 없을 때 -> 상가정보의 bookmarkCount, false
         Optional<StoreBookmark> storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo.get());
-        if(storeBookmark == null){
-            return false;
+        if(storeBookmark.isEmpty()){
+            return BookmarkDto.builder()
+                    .BookmarkCount(storeInfo.get().getBookmarkCount())
+                    .IsBookmark(false) //true??
+                    .build();
         }
 
         // 찜한적이 있으면 true
-        return true;
+        return BookmarkDto.builder()
+                .BookmarkCount(storeInfo.get().getBookmarkCount())
+                .IsBookmark(true)
+                .build();
     }
-
-
-
 
 
 }

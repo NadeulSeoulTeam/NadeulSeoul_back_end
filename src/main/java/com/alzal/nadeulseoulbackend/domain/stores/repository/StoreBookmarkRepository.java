@@ -11,4 +11,6 @@ import java.util.Optional;
 
 public interface StoreBookmarkRepository extends JpaRepository<StoreBookmark, Long> {
     Optional<StoreBookmark> findByUserAndStoreInfo(User user, StoreInfo storeInfo);
+
+    Page<StoreBookmark> findByUser(Pageable pageable, User user);
 }

@@ -2,7 +2,6 @@ package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
-import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import lombok.Getter;
 import org.hibernate.annotations.BatchSize;
 
