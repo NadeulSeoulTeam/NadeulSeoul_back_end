@@ -120,8 +120,7 @@ public class StoreController {
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("장소 찜하기 성공");
-        Map<String, Boolean> map = storeService.getIsBookmark(userSeq, storeSeq);
-        response.setData(map);
+        response.setData(storeService.getIsBookmark(userSeq, storeSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 

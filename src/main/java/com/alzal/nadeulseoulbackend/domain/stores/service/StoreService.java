@@ -113,7 +113,7 @@ public class StoreService {
     }
 
     // 장소가 이미 찜한 장소인지 확인하기
-    public Map<String, Boolean> getIsBookmark(Long userSeq, Long storeSeq) {
+    public boolean getIsBookmark(Long userSeq, Long storeSeq) {
         User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
@@ -123,12 +123,9 @@ public class StoreService {
         // 찜한적이 없으면 예외 발생
         StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
                 .orElseThrow(() -> new StoreBookmarkNotFoundException("사용자가 해당 장소를 찜한적이 없습니다."));
-
-        Map<String, Boolean> map = new HashMap<>();
-        map.put("isBookmark", true);
-
+        
         // 찜한적이 있으면 true
-        return map;
+        return true;
     }
 
 
