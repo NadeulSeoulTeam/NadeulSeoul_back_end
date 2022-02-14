@@ -9,6 +9,6 @@ public class MypageInfoDto {
     private Long userSeq;
     private String nickName;
     private String emoji;
-    private Long followeeCount;
-    private Long followerCount;
+    private Integer followeeCount;
+    private Integer followerCount;
 }

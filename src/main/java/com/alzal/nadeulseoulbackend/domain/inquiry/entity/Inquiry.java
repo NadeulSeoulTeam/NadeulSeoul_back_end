@@ -42,7 +42,7 @@ public class Inquiry {
     @UpdateTimestamp
     private LocalDateTime answerDate;
 
-    @ColumnDefault("DEFAULT BOOLEAN false")
+    @Column(columnDefinition="boolean default false")
     private boolean hidden;
 
     public void update(String questionTitle, String question) {
