@@ -14,6 +14,7 @@ public enum  ErrorStatusEnum {
 
 
     // member
+    User_Not_Found(400,"유저를 찾을 수 없습니다."),
     INVALID_TOKEN(400,"비정상적인 토큰입니다."),
     NULL_TOKEN(400,"토큰값이 비어있습니다."),
     EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
