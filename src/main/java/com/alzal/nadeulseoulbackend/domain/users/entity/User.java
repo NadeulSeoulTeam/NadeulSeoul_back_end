@@ -48,10 +48,10 @@ public class User{
     private Role role;
 
     @ColumnDefault("0")
-    private Integer followeeCount;
+    private int followeeCount;
 
     @ColumnDefault("0")
-    private Integer followerCount ;
+    private int followerCount;
 
     @Builder
     public User(String nickname,String name, String email, Role role) {
