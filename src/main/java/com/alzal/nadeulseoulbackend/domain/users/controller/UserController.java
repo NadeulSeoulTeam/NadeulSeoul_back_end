@@ -77,4 +77,23 @@ public class UserController {
 
         return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
     }
+
+    @ApiOperation(value="메인에서 사용자 정보 받기",notes="메인에서 사용자 정보 받기")
+    @ApiResponses({
+            @ApiResponse(code=200,message="사용가능한 닉네임 입니다."),
+            @ApiResponse(code=404,message = "page not found")
+    })
+    @PostMapping("/users")
+    public ResponseEntity<Response> getUserInfo(){
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        AssignedUserDto assignedUserDto = userInfoService.getAssignedUserInfo();
+
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("유저 정보를 성공적으로 받아왔습니다.");
+        response.setData(assignedUserDto);
+
+        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
+    }
 }

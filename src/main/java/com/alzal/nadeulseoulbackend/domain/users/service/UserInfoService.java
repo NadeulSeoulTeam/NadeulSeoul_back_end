@@ -4,6 +4,7 @@ import com.alzal.nadeulseoulbackend.domain.users.dto.AssignedUserDto;
 import com.alzal.nadeulseoulbackend.domain.users.dto.SignupInfoDto;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.exception.DuplicatedNicknameException;
+import com.alzal.nadeulseoulbackend.domain.users.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.global.auth.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,28 @@ public class UserInfoService {
     @Transactional
     public AssignedUserDto updateSignupInfo (SignupInfoDto signupInfo){
 
-        UserPrincipal userPrincipal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        id = userPrincipal.getId();
+        Long id = getId();
         User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji())).orElseGet(User::new);
         userRepository.save(user);
+        AssignedUserDto assignedUserDto = getAssignedUserInfo();
+        return assignedUserDto;
+    }
 
+
+    public Long getId(){
+        UserPrincipal userPrincipal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        id = userPrincipal.getId();
+        return id;
+    }
+
+    public AssignedUserDto getAssignedUserInfo() {
+
+        Long id = getId();
+        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
         AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).role(user.getRoleKey()).build();
         return assignedUserDto;
     }
+
 
     public void checkNicknameDuplication(String nickname){
         System.out.println(userRepository.existsByNickname(nickname));
