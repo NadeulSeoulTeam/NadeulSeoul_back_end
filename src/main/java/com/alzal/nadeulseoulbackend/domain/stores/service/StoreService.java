@@ -117,13 +117,18 @@ public class StoreService {
         User user = userRepository.findByUserSeq(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
-        StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
-                .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소가 존재하지 않습니다."));
+        // 해당 장소가 없을 때
+        Optional<StoreInfo> storeInfo = storeInfoRepository.findById(storeSeq);
+        if(storeInfo == null){
+            return false;
+        }
 
-        // 찜한적이 없으면 예외 발생
-        StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
-                .orElseThrow(() -> new StoreBookmarkNotFoundException("사용자가 해당 장소를 찜한적이 없습니다."));
-        
+        // 찜한적이 없을 때
+        Optional<StoreBookmark> storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo.get());
+        if(storeBookmark == null){
+            return false;
+        }
+
         // 찜한적이 있으면 true
         return true;
     }
