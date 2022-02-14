@@ -1,10 +1,9 @@
 package com.alzal.nadeulseoulbackend.global.config;
 
-import com.alzal.nadeulseoulbackend.global.config.auth.HttpCookieOAuth2AuthorizationRequestRepository;
-import com.alzal.nadeulseoulbackend.global.config.auth.OAuth2AuthenticationSuccessHandler;
-import com.alzal.nadeulseoulbackend.global.config.auth.service.CustomOAuth2UserService;
-import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
-import com.alzal.nadeulseoulbackend.global.security.TokenAuthenticationFilter;
+import com.alzal.nadeulseoulbackend.global.auth.HttpCookieOAuth2AuthorizationRequestRepository;
+import com.alzal.nadeulseoulbackend.global.auth.security.OAuth2AuthenticationSuccessHandler;
+import com.alzal.nadeulseoulbackend.global.auth.CustomOAuth2UserService;
+import com.alzal.nadeulseoulbackend.global.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

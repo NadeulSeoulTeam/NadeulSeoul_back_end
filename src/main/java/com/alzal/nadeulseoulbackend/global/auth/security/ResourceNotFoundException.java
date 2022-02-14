@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.security;
+package com.alzal.nadeulseoulbackend.global.auth.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

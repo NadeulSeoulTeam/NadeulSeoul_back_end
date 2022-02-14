@@ -16,7 +16,7 @@ public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="userSeq")
-    private Long id;
+    private Long userSeq;
 
     @Column(nullable = false)
     private String nickname;

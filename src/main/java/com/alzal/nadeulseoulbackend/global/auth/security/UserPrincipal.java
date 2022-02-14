@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.security;
+package com.alzal.nadeulseoulbackend.global.auth.security;
 
 
 import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
@@ -36,7 +36,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 singletonList(new SimpleGrantedAuthority(Role.MEMBER.getKey()));
 
         return new UserPrincipal(
-                user.getId(),
+                user.getUserSeq(),
                 user.getName(),
                 user.getEmail(),
                 user.getEmoji(),
@@ -60,9 +60,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 //
 
     @Override
-    public String getUsername() {
-        return email;
-    }
+    public String getUsername() { return email;}
 
     @Override
     public boolean isAccountNonExpired() {

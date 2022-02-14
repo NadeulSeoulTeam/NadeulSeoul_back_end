@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.dto;
+package com.alzal.nadeulseoulbackend.global.auth.dto;
 
 import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;

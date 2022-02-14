@@ -1,9 +1,10 @@
-package com.alzal.nadeulseoulbackend.global.config.auth;
+package com.alzal.nadeulseoulbackend.global.auth.security;
 
+import com.alzal.nadeulseoulbackend.global.auth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.alzal.nadeulseoulbackend.global.config.AppProperties;
-import com.alzal.nadeulseoulbackend.global.config.util.CookieUtils;
-import com.alzal.nadeulseoulbackend.global.security.TokenProvider;
-import com.alzal.nadeulseoulbackend.global.security.UserPrincipal;
+import com.alzal.nadeulseoulbackend.global.auth.util.CookieUtils;
+import com.alzal.nadeulseoulbackend.global.auth.security.TokenProvider;
+import com.alzal.nadeulseoulbackend.global.auth.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
 
-import static com.alzal.nadeulseoulbackend.global.config.auth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
+import static com.alzal.nadeulseoulbackend.global.auth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

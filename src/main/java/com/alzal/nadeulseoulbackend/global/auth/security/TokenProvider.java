@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.security;
+package com.alzal.nadeulseoulbackend.global.auth.security;
 
 import com.alzal.nadeulseoulbackend.global.config.AppProperties;
 import io.jsonwebtoken.*;

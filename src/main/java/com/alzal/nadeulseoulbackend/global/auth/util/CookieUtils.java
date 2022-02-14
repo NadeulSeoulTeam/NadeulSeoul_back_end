@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.config.util;
+package com.alzal.nadeulseoulbackend.global.auth.util;
 
 import org.springframework.util.SerializationUtils;
 

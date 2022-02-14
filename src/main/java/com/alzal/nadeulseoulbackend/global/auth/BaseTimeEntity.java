@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.config.auth;
+package com.alzal.nadeulseoulbackend.global.auth;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

@@ -4,11 +4,11 @@ import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public class SignupInfo {
+public class SignupInfoDto {
     private String nickname;
     private String emoji;
 
-    public SignupInfo(String nickname, String emoji) {
+    public SignupInfoDto(String nickname, String emoji) {
         this.nickname = nickname;
         this.emoji = emoji;
     }

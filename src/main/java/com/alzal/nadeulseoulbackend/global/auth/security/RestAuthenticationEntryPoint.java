@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.security;
+package com.alzal.nadeulseoulbackend.global.auth.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

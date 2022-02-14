@@ -1,6 +1,6 @@
-package com.alzal.nadeulseoulbackend.global.config.auth;
+package com.alzal.nadeulseoulbackend.global.auth;
 
-import com.alzal.nadeulseoulbackend.global.config.util.CookieUtils;
+import com.alzal.nadeulseoulbackend.global.auth.util.CookieUtils;
 import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;

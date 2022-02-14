@@ -1,11 +1,11 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.service;
+package com.alzal.nadeulseoulbackend.global.auth;
 
 
 import com.alzal.nadeulseoulbackend.domain.users.dto.OAuth2UserInfo;
 import com.alzal.nadeulseoulbackend.domain.users.entity.Role;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
-import com.alzal.nadeulseoulbackend.global.security.UserPrincipal;
+import com.alzal.nadeulseoulbackend.global.auth.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -63,7 +63,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             // throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
             user = updateExistingUser(optionalUser.get(),oAuth2UserInfo);
             System.out.println("이미 있는 사용자 입니다.");
-            
+
         }else{
             System.out.println("없는 사용자 입니다.");
             user = registerNewUser(oAuth2UserRequest,oAuth2UserInfo);

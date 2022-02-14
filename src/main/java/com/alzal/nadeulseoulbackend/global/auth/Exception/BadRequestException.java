@@ -1,4 +1,4 @@
-package com.alzal.nadeulseoulbackend.global.config.auth.Exception;
+package com.alzal.nadeulseoulbackend.global.auth.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
