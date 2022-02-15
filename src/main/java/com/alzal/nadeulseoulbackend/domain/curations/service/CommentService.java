@@ -6,7 +6,9 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
+
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
@@ -35,7 +37,7 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private CurationRepository curationRepository;
+    private CurationTagRepository curationRepository;
 
     @Autowired
     private UserRepository userRepository;

@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
 import lombok.Builder;
 import lombok.Data;
@@ -41,6 +42,13 @@ public class CurationResponseDto {
         this.photoCount = photoCount;
         this.local = local;
         this.theme = theme;
+    }
+
+    public static CurationResponseDto fromEntity(Curation curation) {
+        return CurationResponseDto.builder()
+                .curationSeq(curation.getCurationSeq())
+                .title(curation.getTitle())
+                .build();
     }
 
     public void changeFileList(List<Long> fileList){

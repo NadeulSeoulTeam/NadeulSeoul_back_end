@@ -7,7 +7,7 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.LocalCuration;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.ThemeCuration;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.LocalRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ThemeRepository;
@@ -15,12 +15,16 @@ import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
+import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeRequestDto;
 import com.alzal.nadeulseoulbackend.domain.tag.exception.TagNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.tag.repository.CodeRepository;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,7 +41,7 @@ import java.util.stream.Collectors;
 public class CurationService {
 
     @Autowired
-    private CurationRepository curationRepository;
+    private CurationTagRepository curationRepository;
 
     @Autowired
     private ImageRepositoroy imageRepositoroy;
@@ -61,6 +65,8 @@ public class CurationService {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
+        curation.addViews(); // 조회수 추가
+        
         List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
                                             .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
@@ -82,9 +88,15 @@ public class CurationService {
         return curationResponseDto;
     }
 
-    public List<CurationHotResponseDto> getHotCurationList() {
+    public List<CurationSearchResponseDto> getHotCurationList() {
         List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
-        return curationList.stream().map(CurationHotResponseDto::fromEntity).collect(Collectors.toList());
+        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
+
+    }
+
+    public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
+        Page<Curation> curationPage = curationRepository.findByUserSeq(userSeq, pageable);
+        return curationPage.map(CurationSearchResponseDto::fromEntity);
 
     }
 
@@ -206,5 +218,11 @@ public class CurationService {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
         curation.changeHidden(Boolean.TRUE);
+    }
+
+
+    public Page<CurationSearchResponseDto> getCurationListByPageWithCode(CodeRequestDto codeRequestDto, Pageable pageable){
+        Page<Curation> curationPage = curationRepository.searchByTag(codeRequestDto, pageable);
+        return curationPage.map(CurationSearchResponseDto::fromEntity);
     }
 }

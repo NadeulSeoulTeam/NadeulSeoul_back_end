@@ -46,6 +46,9 @@ public class Curation {
     @JoinColumn(name = "user_seq")
     private User user;
 
+    @Column(name = "user_seq", insertable = false, updatable = false)
+    private Long userSeq;
+
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "curation")
     private Set<Comment> commentList = new LinkedHashSet<>();
@@ -105,6 +108,14 @@ public class Curation {
 
     public void addThemeTag(ThemeCuration themeCuration) {
         this.themeCuration.add(themeCuration);
+    }
+
+    public void addViews() {
+        this.views++;
+    }
+
+    public void changeGood(boolean status) {
+        this.good = status ? this.good++ : this.good--;
     }
 
 }
