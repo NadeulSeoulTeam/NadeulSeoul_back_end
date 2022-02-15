@@ -89,11 +89,7 @@ public class CurationService {
         return curationResponseDto;
     }
 
-    public List<CurationSearchResponseDto> getHotCurationList() {
-        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
-        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
 
-    }
 
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.findByUserSeq(userSeq, pageable);
@@ -104,7 +100,7 @@ public class CurationService {
     public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
 
-        User user = userRepository.findById(3L) // 멤버 변수 토큰으로 받아오기
+        User user = userRepository.findById(1L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
 
         Curation curation = Curation.builder()
@@ -155,7 +151,7 @@ public class CurationService {
             curation.changeThumnail(0L);
         }
 
-
+        user.addMyCurationCount();
 
     }
 
@@ -219,6 +215,7 @@ public class CurationService {
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
         curation.changeHidden(Boolean.TRUE);
+        curation.getUser().removeMyCurationCount();
     }
 
 

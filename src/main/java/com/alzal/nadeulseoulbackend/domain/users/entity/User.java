@@ -37,7 +37,7 @@ public class User{
 
     @Column
     @ColumnDefault("0")
-    private int curationCount;
+    private int myCurationCount;
 
     @Column
     private String emoji;
@@ -108,6 +108,14 @@ public class User{
 
     public void deleteFollower() {
         this.followerCount--;
+    }
+
+    public void addMyCurationCount(){
+        this.myCurationCount++;
+    }
+
+    public void removeMyCurationCount(){
+        this.myCurationCount--;
     }
 
 
