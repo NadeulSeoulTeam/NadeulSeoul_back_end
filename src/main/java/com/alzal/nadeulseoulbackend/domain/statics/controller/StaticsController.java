@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.statics.controller;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.statics.dto.NadeulerDto;
 import com.alzal.nadeulseoulbackend.domain.statics.service.StaticsService;
+import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -48,7 +49,7 @@ public class StaticsController {
 
     @ApiOperation(value = "열정적인 나들러 목록 불러오기", notes = "큐레이션 생성 개수 많은 순으로 불러오기")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "열정적인 나들럭 불러오기가 완료되었습니다."),
+            @ApiResponse(code = 200, message = "열정적인 나들러 불러오기가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
     @GetMapping("/nadeulers")
@@ -57,11 +58,27 @@ public class StaticsController {
         HttpHeaders headers = new HttpHeaders();
 
         response.setStatus(StatusEnum.OK);
-        response.setMessage("열정적인 나들럭 불러오기가 완료되었습니다.");
+        response.setMessage("열정적인 나들러 불러오기가 완료되었습니다.");
         List<NadeulerDto> nadeulerDtoList = staticsService.getNadeulerList();
         response.setData(nadeulerDtoList);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
+    @ApiOperation(value = "나들러가 많이 찜한 장소 목록 불러오기", notes = "좋아요가 많은 순으로 불러오기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "나들러가 많이 찜한 장소 불러오기가 완료되었습니다."),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping("/stores")
+    public ResponseEntity<Response> getStoreBookmarkList() {
+        Response response = new Response();
+        HttpHeaders headers = new HttpHeaders();
+
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("나들러가 많이 찜한 장소 불러오기가 완료되었습니다.");
+        List<StoreBookmarkInfoDto> storeBookmarkInfoDtoList = staticsService.getStoreBookmarkList();
+        response.setData(storeBookmarkInfoDtoList);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
 
 }

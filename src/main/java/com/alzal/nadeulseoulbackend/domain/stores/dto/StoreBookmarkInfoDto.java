@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.dto;
 
+import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,4 +11,13 @@ public class StoreBookmarkInfoDto {
     private String storeName;
     private String addressName;
     private String categoryName;
+
+    public static StoreBookmarkInfoDto fromEntity(StoreInfo storeInfo){
+        return StoreBookmarkInfoDto.builder()
+                .storeSeq(storeInfo.getStoreSeq())
+                .storeName(storeInfo.getStoreName())
+                .addressName(storeInfo.getAddressName())
+                .categoryName(storeInfo.getCategoryName())
+                .build();
+    }
 }
