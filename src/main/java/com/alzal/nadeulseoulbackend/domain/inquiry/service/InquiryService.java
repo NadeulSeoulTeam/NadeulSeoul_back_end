@@ -73,7 +73,7 @@ public class InquiryService {
     //문의 사항 작성하기
     @Transactional
     public void insertInquiry(Long userSeq, InquiryInfoDto inquiryInfoDto) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         inquiryRepository.save(Inquiry.builder()

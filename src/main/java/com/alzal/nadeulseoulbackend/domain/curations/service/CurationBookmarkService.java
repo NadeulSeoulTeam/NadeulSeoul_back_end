@@ -8,10 +8,10 @@ import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationBookmarkN
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.MyCurationBookmarkException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationBookmarkRepository;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +29,7 @@ public class CurationBookmarkService {
     UserRepository userRepository;
 
     @Autowired
-    CurationRepository curationRepository;
+    CurationTagRepository curationRepository;
 
     @Autowired
     CurationBookmarkRepository curationBookmarkRepository;
@@ -37,7 +37,7 @@ public class CurationBookmarkService {
     // 큐레이션 스크랩하기
     @Transactional
     public void insertCurationBookmark(Long userSeq, Long curationSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Curation curation = curationRepository.findById(curationSeq)
@@ -61,7 +61,7 @@ public class CurationBookmarkService {
     // 큐레이션 스크랩 취소하기
     @Transactional
     public void deleteCurationBookmark(Long userSeq, Long curationSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Curation curation = curationRepository.findById(curationSeq)
@@ -75,7 +75,7 @@ public class CurationBookmarkService {
 
     // 큐레이션 스크랩 여부
     public boolean isCurationBookmark(Long userSeq, Long curationSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Curation curation = curationRepository.findById(curationSeq)
@@ -87,7 +87,7 @@ public class CurationBookmarkService {
 
     // 스크랩한 큐레이션 나열
     public Page<CurationBookmarkDto> getCurationBookmarkList(Long userSeq, int page, int size){
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         Pageable pageRequest = PageRequest.of(page, size);

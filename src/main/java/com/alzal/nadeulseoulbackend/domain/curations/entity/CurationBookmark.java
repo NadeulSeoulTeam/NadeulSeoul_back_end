@@ -1,6 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
