@@ -5,7 +5,7 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/nadeulseoul
+    url: jdbc:mariadb://localhost:3306/nadeulseoul
     username: root
     password: root
 
@@ -28,6 +28,11 @@ spring:
         max-idle: 2
         min-idle: 0
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   main:
     allow-bean-definition-overriding: true
 
@@ -45,3 +50,4 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+
