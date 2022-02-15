@@ -6,6 +6,7 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.CurationBookmark;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationBookmarkExistenceException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationBookmarkNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.MyCurationBookmarkException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationBookmarkRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
@@ -41,6 +42,11 @@ public class CurationBookmarkService {
 
         Curation curation = curationRepository.findById(curationSeq)
                 .orElseThrow(() -> new CurationNotFoundException("해당 큐레이션이"));
+
+        // 본인이 만든 큐레이션 찜하기 금지 예외처리
+        if(curation.getUser().getUserSeq() == userSeq) {
+            throw new MyCurationBookmarkException("사용자가 만든 큐레이션은 스크랩 할 수 없습니다.");
+        }
 
         // 스크랩 여부 확인 api 미장동시 예외처리
         Optional<CurationBookmark> curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation);
