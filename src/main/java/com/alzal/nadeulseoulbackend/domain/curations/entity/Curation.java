@@ -46,6 +46,9 @@ public class Curation {
     @JoinColumn(name = "user_seq")
     private User user;
 
+    @Column(name = "user_seq", insertable = false, updatable = false)
+    private Long userSeq;
+
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "curation")
     private Set<Comment> commentList = new LinkedHashSet<>();
