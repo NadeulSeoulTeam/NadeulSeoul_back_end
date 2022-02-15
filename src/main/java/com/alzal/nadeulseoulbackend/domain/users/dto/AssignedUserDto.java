@@ -8,11 +8,15 @@ public class AssignedUserDto {
     Long userSeq;
     String nickname;
     String role;
+    Integer followeeCount;
+    Integer followerCount;
 
     @Builder
-    public AssignedUserDto(Long userSeq, String nickname,String role) {
-        this.nickname = nickname;
+    public AssignedUserDto(Long userSeq, String nickname, String role, Integer followeeCount, Integer followerCount) {
         this.userSeq = userSeq;
+        this.nickname = nickname;
         this.role = role;
+        this.followeeCount = followeeCount;
+        this.followerCount = followerCount;
     }
 }

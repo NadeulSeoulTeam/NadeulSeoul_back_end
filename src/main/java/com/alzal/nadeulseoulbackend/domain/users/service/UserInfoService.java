@@ -3,11 +3,13 @@ package com.alzal.nadeulseoulbackend.domain.users.service;
 import com.alzal.nadeulseoulbackend.domain.users.dto.AssignedUserDto;
 import com.alzal.nadeulseoulbackend.domain.users.dto.SignupInfoDto;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.exception.CannotDeleteUserTokenInRedisException;
 import com.alzal.nadeulseoulbackend.domain.users.exception.DuplicatedNicknameException;
 import com.alzal.nadeulseoulbackend.domain.users.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.global.auth.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class UserInfoService {
     @Autowired
     private UserRepository userRepository;
     private Long id;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     //User정보 등록하기
     @Transactional
@@ -43,7 +48,7 @@ public class UserInfoService {
 
         Long id = getId();
         User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
-        AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).role(user.getRoleKey()).build();
+        AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).role(user.getRoleKey()).followeeCount(user.getFolloweeCount()).followerCount(user.getFollowerCount()).build();
         return assignedUserDto;
     }
 
@@ -55,4 +60,12 @@ public class UserInfoService {
         }
     }
 
+    public void signoutUserfromRedis() {
+        String userId = Long.toString(getId());
+        stringRedisTemplate.delete(userId);
+        String valueForCheck = stringRedisTemplate.opsForValue().get(userId);
+        if(valueForCheck!=null){
+            throw new CannotDeleteUserTokenInRedisException("유저 토큰을 레디스에서 삭제할 수 없습니다.");
+        }
+    }
 }
