@@ -1,15 +1,18 @@
 package com.alzal.nadeulseoulbackend.domain.inquiry.service;
 
-import com.alzal.nadeulseoulbackend.domain.inquiry.dto.*;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.AnswerDto;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryDto;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryDtoList;
+import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryInfoDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.AlreadyDeletedInquiryException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.AnswerExistenceException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.AnswerNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.exception.InquiryNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.inquiry.repository.InquiryRepository;
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +33,7 @@ public class InquiryService {
 
     // 문의 사항 목록 가져오기
     public InquiryDtoList getInquiryList(Long userSeq) {
-        User user = userRepository.findByUserSeq(userSeq)
+        User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         List<Inquiry> inquiryList = user.getInquiryList();
@@ -116,9 +119,11 @@ public class InquiryService {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(answerDto.getQuestionSeq())
                 .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
 
+
         if (inquiry.getAnswer() != null) {
             throw new AnswerExistenceException("잘 못된 요청입니다.");
         }
+      
         inquiry.updateAnswer(answerDto.getAnswer());
     }
 

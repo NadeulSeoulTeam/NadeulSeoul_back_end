@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationHotResponseDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationRequestDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.curations.service.ImageService;
@@ -12,6 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,22 @@ public class CurationController {
     @Autowired
     private ImageService imageService;
 
+    @ApiOperation(value = "큐레이션 목록", notes = "큐레이션 목록 불러오기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "큐레이션 목록 불러오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping()
+    public ResponseEntity<Response> getCurationListPage(@PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC ) Pageable pageable) {
+        Response response = new Response();
+        HttpHeaders headers = new HttpHeaders();
+        Page<CurationSearchResponseDto> curationSearchResponseDtoPage = curationService.getCurationListByPage(3L, pageable);
+        response.setMessage("큐레이션 목록을 불러왔습니다.");
+        response.setData(curationSearchResponseDtoPage);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+
     @ApiOperation(value = "큐레이션 불러오기", notes = "큐레이션 불러오기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
@@ -44,47 +64,17 @@ public class CurationController {
 
         response.setStatus(StatusEnum.OK);
         response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
-        CurationDto curationDto = null;
+        CurationResponseDto curationResponseDto = null;
         List<Long> imageSeqList = new ArrayList<>();
         try {
-            curationDto = curationService.getCuration(curationSeq);
+            curationResponseDto = curationService.getCuration(curationSeq);
             imageSeqList = imageService.getImageByCuration(curationSeq);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CurationResponseDto responseDto = CurationResponseDto.builder()
-                .budget(curationDto.getBudget())
-                .date(curationDto.getDate())
-                .description(curationDto.getDescription())
-                .fileList(imageSeqList)
-                .curationSeq(curationSeq)
-                .good(curationDto.getGood())
-                .title(curationDto.getTitle())
-                .personnel(curationDto.getPersonnel())
-                .views(curationDto.getViews())
-                .memberSeq(curationDto.getMemberSeq())
-                .photoCount(curationDto.getPhotoCount())
-                .build();
-        response.setData(responseDto);
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
 
-    @ApiOperation(value = "큐레이션 목록 불러오기", notes = "큐레이션 불러오기")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
-            @ApiResponse(code = 404, message = "page not found")
-    })
-    @GetMapping("/statics/courses")
-    public ResponseEntity<Response> getHostCurationList() {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
-
-        List<CurationHotResponseDto> curationHotResponseDtoList = curationService.getHotCurationList();
-        response.setData(curationHotResponseDtoList);
-
+        curationResponseDto.changeFileList(imageSeqList);
+        response.setData(curationResponseDto);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -94,14 +84,14 @@ public class CurationController {
             @ApiResponse(code = 404, message = "page not found")
     })
     @PostMapping
-    public ResponseEntity<Response> insertCuration(final CurationDto curationDto) {
+    public ResponseEntity<Response> insertCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
         response.setStatus(StatusEnum.OK);
         response.setMessage("큐레이션 작성이 완료되었습니다.");
         try {
-            curationService.insertCuration(curationDto);
+            curationService.insertCuration(curationRequestDto);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,20 +105,17 @@ public class CurationController {
             @ApiResponse(code = 404, message = "page not found")
     })
     @PutMapping
-    public ResponseEntity<Response> updateCuration(final CurationDto curationDto) {
+    public ResponseEntity<Response> updateCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-
-        System.out.println(curationDto.getFileList());
-        response.setMessage("큐레이션 수정이 완료되었습니다.");
-
         try {
-            curationService.updateCuration(curationDto);
+            curationService.updateCuration(curationRequestDto);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        response.setMessage("큐레이션 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

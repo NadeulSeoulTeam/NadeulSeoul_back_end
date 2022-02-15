@@ -1,10 +1,11 @@
 spring:
   profiles:
     active: local
+    include: oauth
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/nadeulseoul
+    url: jdbc:mariadb://localhost:3306/nadeulseoul
     username: root
     password: root
 
@@ -27,6 +28,11 @@ spring:
         max-idle: 2
         min-idle: 0
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
   main:
     allow-bean-definition-overriding: true
 
@@ -37,3 +43,11 @@ logging:
         type:
           descriptor:
             sql: trace
+app:
+  auth:
+    tokenSecret: nes0610ljy
+    tokenExpirationMsec: 864000000
+  oauth2:
+    authorizedRedirectUris:
+      - http://localhost:3000/oauth/redirect
+

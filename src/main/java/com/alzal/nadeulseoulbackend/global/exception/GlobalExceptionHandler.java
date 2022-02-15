@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.global.exception;
 
+import com.alzal.nadeulseoulbackend.domain.users.exception.InvalidTokenException;
 import com.alzal.nadeulseoulbackend.global.common.ErrorResponse;
 import com.alzal.nadeulseoulbackend.global.common.ErrorStatusEnum;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -39,6 +40,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity customException(CustomException e){
         ErrorResponse errorResponse = new ErrorResponse();
@@ -46,14 +48,6 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(errorStatusEnum);
         errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorStatusEnum.getCode()));
-    }
-
-    @ExceptionHandler(value = {IOException.class, SQLException.class})
-    public ResponseEntity handleException(Exception e){
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setStatus(ErrorStatusEnum.BAD_REQUEST);
-        errorResponse.setMessage(e.getMessage());
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
