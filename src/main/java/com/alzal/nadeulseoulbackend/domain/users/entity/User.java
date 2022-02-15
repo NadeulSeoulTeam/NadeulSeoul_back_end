@@ -47,11 +47,11 @@ public class User{
     @Column(nullable = false)
     private Role role;
 
-    @Column(columnDefinition = "Integer default 0")
-    private Integer followeeCount;
+    @ColumnDefault("0")
+    private int followeeCount;
 
-    @Column(columnDefinition = "Integer default 0")
-    private Integer followerCount ;
+    @ColumnDefault("0")
+    private int followerCount;
 
     @Builder
     public User(String nickname,String name, String email, Role role) {

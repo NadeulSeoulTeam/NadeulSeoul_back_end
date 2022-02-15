@@ -9,6 +9,8 @@ import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import com.alzal.nadeulseoulbackend.global.auth.security.TokenProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisKeyValueTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +42,23 @@ public class UserController {
 //        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
 //
 //    }
+
+    @ApiOperation(value="토큰 제거",notes="로그아웃")
+    @ApiResponses({
+            @ApiResponse(code=200,message="회원 가입 성공"),
+            @ApiResponse(code=404,message = "page not found")
+    })
+    @PostMapping("/users/signout")
+    public ResponseEntity<Response> signoutUser(){
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        userInfoService.signoutUserfromRedis();
+
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("로그아웃 성공");
+        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
+    }
 
     @ApiOperation(value="회원 가입",notes="닉네임,이모지 세팅")
     @ApiResponses({
