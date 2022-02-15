@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.global.exception;
 
+import com.alzal.nadeulseoulbackend.domain.users.exception.InvalidTokenException;
 import com.alzal.nadeulseoulbackend.global.common.ErrorResponse;
 import com.alzal.nadeulseoulbackend.global.common.ErrorStatusEnum;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 
 // TODO:
 //  각 Domain에서 처리할 exception 정리 필요
@@ -25,7 +28,6 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(ErrorStatusEnum.BAD_REQUEST);
         errorResponse.setMessage(e.getClass().getName());
-        errorResponse.setData("");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -37,6 +39,7 @@ public class GlobalExceptionHandler {
         errorResponse.setData("핸들러 없음");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(value = CustomException.class)
     public ResponseEntity customException(CustomException e){

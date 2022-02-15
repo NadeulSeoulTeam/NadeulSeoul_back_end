@@ -1,10 +1,11 @@
 HELP.md
 build/
-.gradle
+.gradle/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
 /src/main/resources/
+/src/main/generated/
 
 ### STS ###
 .apt_generated
@@ -24,6 +25,7 @@ bin/
 *.iml
 *.ipr
 out/
+resources/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
