@@ -83,6 +83,7 @@ public class CurationService {
                 .photoCount(curation.getPhotoCount())
                 .local(localDtoList)
                 .theme(themeDtoList)
+                .date(curation.getDate())
                 .build();
 
         return curationResponseDto;

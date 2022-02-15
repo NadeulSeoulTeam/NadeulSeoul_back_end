@@ -28,6 +28,7 @@ public class CommentResponseDto {
 
     public static CommentResponseDto fromEntity(Comment comment) {
         return CommentResponseDto.builder()
+                .commentSeq(comment.getCommentSeq())
                 .curationSeq(comment.getCurationSeq())
                 .user(UserCommentDto.fromEntity(comment.getUser()))
                 .content(comment.getContent())
