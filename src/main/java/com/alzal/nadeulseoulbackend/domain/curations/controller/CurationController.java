@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @Api(value = "CurationController")
-@RequestMapping("api/v1/curations")
+@RequestMapping("api/v1/auth/curations")
 public class CurationController {
 
     @Autowired
@@ -97,9 +97,9 @@ public class CurationController {
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
+    @ApiOperation(value = "큐레이션 생성", notes = "큐레이션 생성하기")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "큐레이션 작성이 완료되었습니다."),
+            @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
     @PostMapping
@@ -117,6 +117,7 @@ public class CurationController {
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
+
 
     @ApiOperation(value = "큐레이션 수정", notes = "큐레이션 수정하기")
     @ApiResponses({

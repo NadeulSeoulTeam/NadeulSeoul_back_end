@@ -1,18 +1,14 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
-import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
-import com.alzal.nadeulseoulbackend.domain.curations.entity.LocalCuration;
-import com.alzal.nadeulseoulbackend.domain.curations.entity.ThemeCuration;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.*;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.LocalRepository;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.ThemeRepository;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.*;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
+import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeRequestDto;
@@ -31,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 // TODO :
@@ -42,6 +39,12 @@ public class CurationService {
 
     @Autowired
     private CurationTagRepository curationRepository;
+
+    @Autowired
+    private StoreInfoRepository storeInfoRepository;
+
+    @Autowired
+    private StoreInCurationRepository storeInCurationRepository;
 
     @Autowired
     private ImageRepositoroy imageRepositoroy;
@@ -89,6 +92,7 @@ public class CurationService {
         return curationResponseDto;
     }
 
+
     public List<CurationSearchResponseDto> getHotCurationList() {
         List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
         return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
@@ -103,6 +107,7 @@ public class CurationService {
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
+//        List<StoreInfo> storeInfos = curationRequestDto.getCourseRoute();
 
         User user = userRepository.findById(3L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
@@ -120,6 +125,17 @@ public class CurationService {
                 .build();
 
         curationRepository.save(curation);
+
+//        storeInfos.stream().forEach((store) ->
+//                storeInCurationRepository.save(
+//                        StoreInCuration.builder()
+//                                .storeOrder(storeInfos.indexOf(store))
+//                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(store)))
+//                                .curation(curation)
+//                                .build()
+//                )
+//        );
+
 
         for(Long localSeq : curationRequestDto.getLocal()) {
             Code localTag = codeRepository.findById(localSeq)
@@ -154,20 +170,21 @@ public class CurationService {
         } else {
             curation.changeThumnail(0L);
         }
-
-
-
     }
+
+
 
     public void updateCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         Curation curation = curationRepository.findById(curationRequestDto.getCurationSeq())
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
         List<String> pathList = new ArrayList<>();
+
         for (Image image : curation.getImageList()) {
             pathList.add(image.getImagePath());
             imageRepositoroy.delete(image);
         }
+
         imageHandler.deleteImageInfo(pathList);
 
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
@@ -226,4 +243,5 @@ public class CurationService {
         Page<Curation> curationPage = curationRepository.searchByTag(codeRequestDto, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
     }
+
 }
