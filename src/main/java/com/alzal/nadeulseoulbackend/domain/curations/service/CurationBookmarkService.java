@@ -48,11 +48,9 @@ public class CurationBookmarkService {
             throw new MyCurationBookmarkException("사용자가 만든 큐레이션은 스크랩 할 수 없습니다.");
         }
 
-        // 스크랩 여부 확인 api 미장동시 예외처리
+        // 스크랩 여부 확인 api 미작동시 예외처리
         Optional<CurationBookmark> curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation);
-        if(!curationBookmark.isEmpty()) {
-            throw new CurationBookmarkExistenceException("이미 사용자가 해당 큐레이션을 스크랩하였습니다.");
-        }
+        curationBookmark.ifPresent(c -> {throw new CurationBookmarkExistenceException("이미 사용자가 해당 큐레이션을 스크랩하였습니다.");});
 
         curationBookmarkRepository.save(CurationBookmark.builder()
                         .user(user)
@@ -84,10 +82,7 @@ public class CurationBookmarkService {
                 .orElseThrow(() -> new CurationNotFoundException("해당 큐레이션이"));
 
         Optional<CurationBookmark> curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation);
-        if(curationBookmark.isEmpty()){
-            return false;
-        }
-        return true;
+        return curationBookmark.isPresent();
     }
 
     // 스크랩한 큐레이션 나열
