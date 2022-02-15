@@ -42,11 +42,6 @@ public class CommentService {
     private UserRepository userRepository;
 
     public List<CommentResponseDto> getCommentList(Long curationSeq) {
-//        List<Comment> commentList = curationRepository.findById(curationSeq)
-//                .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
-//                .getCommentList();
-//        return commentList.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
-
         Set<Comment> commentSet = curationRepository.findById(curationSeq)
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
                 .getCommentList();
