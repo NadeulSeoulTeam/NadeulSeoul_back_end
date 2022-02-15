@@ -9,6 +9,8 @@ import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import com.alzal.nadeulseoulbackend.global.auth.security.TokenProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisKeyValueTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
