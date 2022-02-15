@@ -41,12 +41,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = determineTargetUrl(request, response, authentication);
         System.out.println("targetUrl : "+targetUrl);
 
-
-//        System.out.println("clientInfo : "+authorizedClientService.loadAuthorizedClient("google",authentication.getName()));
-//        OAuth2AuthorizedClient clientInfo = authorizedClientService.loadAuthorizedClient("google",authentication.getName());
-//        OAuth2RefreshToken refreshToken = clientInfo.getRefreshToken();
-//        System.out.println(refreshToken);
-
         if (response.isCommitted()) {
             logger.debug("응답이 이미 커밋되었습니다. " + targetUrl + "로 리다이렉션 할 수 없습니다.");
             return;
