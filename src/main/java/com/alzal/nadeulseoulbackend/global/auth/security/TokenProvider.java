@@ -4,10 +4,15 @@ import com.alzal.nadeulseoulbackend.global.config.AppProperties;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 
 @Service
 public class TokenProvider {
@@ -16,22 +21,34 @@ public class TokenProvider {
 
     private AppProperties appProperties;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
     }
 
     public String createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        Long expiration = appProperties.getAuth().getTokenExpirationMsec();
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
 
-        return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
-                .compact();
+        String userId = Long.toString(userPrincipal.getId());
+
+       String jwt = Jwts.builder()
+               .setSubject(Long.toString(userPrincipal.getId()))
+               .setIssuedAt(new Date())
+               .setExpiration(expiryDate)
+               .signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret())
+               .compact();
+
+        final ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
+        valueOperations.set(userId,jwt); // redis set 명령어
+        stringRedisTemplate.expire(userId,expiration,TimeUnit.MILLISECONDS);
+
+        return jwt;
     }
 
     public Long getUserIdFromToken(String token) {
