@@ -37,7 +37,7 @@ public class StoreController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "찜한 장소 리스트 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/bookmarks/")
+    @GetMapping("/bookmarks")
     public ResponseEntity<Response> getStoreBookmarkList(@RequestParam("page") int page, @RequestParam("size") int size) {
         Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
