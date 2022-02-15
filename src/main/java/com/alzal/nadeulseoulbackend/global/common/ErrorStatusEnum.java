@@ -20,6 +20,8 @@ public enum  ErrorStatusEnum {
     //comment
     COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
 
+    // mypage
+    FOLLOWINFO_EXISTENCE(400,"FOLLOWINFO EXISTENCE"),
 
     // tag
     CODE_EXCEPTION(400, "CODE EXCEPTION")
