@@ -80,10 +80,10 @@ public class StoreService {
                         .build());
 
         storeInfo.updateBookmarkCount();
-        StoreInfo storeInfoEntity = storeInfoRepository.save(storeInfo);
+        storeInfoRepository.save(storeInfo);
 
         // 유저가 상가를 찜한 정보 테이블에 insert
-        StoreBookmark storeBookmarkEntity = storeBookmarkRepository.save(
+        storeBookmarkRepository.save(
                 StoreBookmark.builder()
                         .user(user)
                         .storeInfo(storeInfo)
@@ -129,7 +129,7 @@ public class StoreService {
         if(storeBookmark.isEmpty()){
             return BookmarkDto.builder()
                     .BookmarkCount(storeInfo.get().getBookmarkCount())
-                    .IsBookmark(false) //true??
+                    .IsBookmark(false)
                     .build();
         }
 
@@ -148,7 +148,10 @@ public class StoreService {
         List<StoreInfoDto> storeInfoDtoList = new ArrayList<>();
         for (Long storeSeq : storeSeqList) {
             StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
-                    .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소를 찜한적이 없습니다."));
+                    .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소가 존재하지 않습니다."));
+
+            StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
+                    .orElseThrow(() -> new StoreBookmarkNotFoundException("해당 장소를 찜한적이 없습니다."));
 
             storeInfoDtoList.add(StoreInfoDto.fromEntity(storeInfo));
         }

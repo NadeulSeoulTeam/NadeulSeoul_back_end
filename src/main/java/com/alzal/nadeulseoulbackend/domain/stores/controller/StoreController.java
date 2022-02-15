@@ -130,7 +130,7 @@ public class StoreController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/bookmarks/courses")
+    @PostMapping("/bookmarks/courses")
     public ResponseEntity<Response> getIsBookmark(@RequestParam("store_seq") List<Long> storeSeqList) {
         Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
