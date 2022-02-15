@@ -30,6 +30,9 @@ public enum  ErrorStatusEnum {
     //comment
     COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
 
+    // inquiry
+    ANSWER_EXISTENCE(400,"ANSWER EXISTENCE"),
+
     // mypage
     FOLLOWINFO_EXISTENCE(400,"FOLLOWINFO EXISTENCE"),
 

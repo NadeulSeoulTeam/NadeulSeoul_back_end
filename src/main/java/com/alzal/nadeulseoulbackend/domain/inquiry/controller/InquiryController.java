@@ -25,7 +25,7 @@ import java.util.List;
  * */
 
 @RestController
-@RequestMapping("api/v1/inquirys")
+@RequestMapping("api/v1/inquiries")
 @Api(value = "InquiryController")
 public class InquiryController {
 
@@ -65,9 +65,6 @@ public class InquiryController {
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 가져오기 성공");
-        InquiryInfoDto inquiryInfoDto = inquiryService.getInquiry(questionSeq);
-        System.out.println("title : " + inquiryInfoDto.getQuestionTitle());
-        System.out.println("content : " + inquiryInfoDto.getQuestion());
         response.setData(inquiryService.getInquiry(questionSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
@@ -83,9 +80,9 @@ public class InquiryController {
     public ResponseEntity<Response> insertInquiry(@RequestBody InquiryInfoDto inquiryInfoDto) {
         //사용자 토큰 가져오기
         Long userSeq = 1L;
-        inquiryService.insertInquiry(userSeq, inquiryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        inquiryService.insertInquiry(userSeq, inquiryInfoDto);
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 작성 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
@@ -100,12 +97,9 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @PutMapping("/questions/{question_seq}")
     public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq, @RequestBody InquiryInfoDto inquiryInfoDto) {
-        System.out.println("questionSeq" + questionSeq);
-        System.out.println(inquiryInfoDto.toString());
-
-        inquiryService.updateInquiry(questionSeq, inquiryInfoDto);
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        inquiryService.updateInquiry(questionSeq, inquiryInfoDto);
         response.setStatus(StatusEnum.OK);
         response.setMessage("문의 사항 수정 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
@@ -121,19 +115,11 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @DeleteMapping("/questions/{question_seq}")
     public ResponseEntity<Response> updateInquiry(@PathVariable("question_seq") Long questionSeq) {
-        int result = inquiryService.hiddenInquiry(questionSeq);
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-
-        if (result == 0) { // 이미 삭제 처리된 문의 사항인 경우 (hidden = true)
-            response.setMessage("해당 문의 사항이 존재하지 않습니다.");
-        } else if (result == 1) {
-            response.setMessage("답글이 있는 문의 사항은 삭제할 수 없습니다.");
-        } else {
-            response.setStatus(StatusEnum.OK);
-            response.setMessage("문의 사항 숨기처리(삭재) 완료");
-        }
+        inquiryService.hiddenInquiry(questionSeq);
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("문의 사항 숨기처리(삭제) 완료");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -146,19 +132,11 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/answers")
     public ResponseEntity<Response> insertAnswer(@RequestBody AnswerDto answerDto) {
-        int result = inquiryService.insertAnswer(answerDto);
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
-
-        //answer이 null 일때 예외 처리!!!!!
-
-        if (result == 0) {
-            response.setMessage("이미 작성된 답변이 있습니다.");
-        } else {
-            response.setStatus(StatusEnum.OK);
-            response.setMessage("답변이 작성이 완료되었습니다.");
-        }
+        inquiryService.insertAnswer(answerDto);
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("답변이 작성이 완료되었습니다.");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -171,10 +149,9 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @PutMapping("/answers")
     public ResponseEntity<Response> updateAnswer(@RequestBody AnswerDto answerDto) {
-        inquiryService.updateAnswer(answerDto);
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        inquiryService.updateAnswer(answerDto);
         response.setStatus(StatusEnum.OK);
         response.setMessage("답변 수정 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
@@ -189,10 +166,9 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @DeleteMapping("/answers/{question_seq}")
     public ResponseEntity<Response> deleteAnswer(@PathVariable("question_seq") Long questionSeq) {
-        inquiryService.deleteAnswer(questionSeq);
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        inquiryService.deleteAnswer(questionSeq);
         response.setStatus(StatusEnum.OK);
         response.setMessage("답변 삭제 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
