@@ -109,8 +109,6 @@ public class MypageController {
     public ResponseEntity<Response> unfollow(@PathVariable("user_seq") Long followedUserSeq) {
         Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
-        // 이미 언팔로우된사람인지 확인
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.deleteFollow(userSeq, followedUserSeq);

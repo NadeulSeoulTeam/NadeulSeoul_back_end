@@ -50,8 +50,6 @@ public class MypageService {
         Iterator<FollowInfo> iter = followeeList.iterator();
         while (iter.hasNext()){
             User follower = iter.next().getFollower();
-            System.out.println("========================");
-            System.out.println(follower.getUserSeq());
             followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickName(),follower.getEmoji()));
         }
 
@@ -117,14 +115,11 @@ public class MypageService {
         FollowInfo followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower)
                 .orElseThrow(() -> new FollowInfoNotFoundException("팔로우 내역이 존재하지 않습니다."));
         mypageRepository.delete(followInfo);
-        System.out.println(followInfo.toString());
+
         // 회원테이블에 팔로잉 수 업데이트 (감소)
         followee.deleteFollowee();
 
         // 팔로우한 사람의 회원테이블에 팔로워 수 업데이트 (감소)
         follower.deleteFollower();
-
     }
-
-
 }
