@@ -6,7 +6,8 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
+
+import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
@@ -35,17 +36,12 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
-    private CurationRepository curationRepository;
+    private CurationTagRepository curationRepository;
 
     @Autowired
     private UserRepository userRepository;
 
     public List<CommentResponseDto> getCommentList(Long curationSeq) {
-//        List<Comment> commentList = curationRepository.findById(curationSeq)
-//                .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
-//                .getCommentList();
-//        return commentList.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
-
         Set<Comment> commentSet = curationRepository.findById(curationSeq)
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
                 .getCommentList();
