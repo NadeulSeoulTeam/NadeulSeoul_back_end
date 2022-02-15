@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 // http://localhost:8080/swagger-ui/index.html
 
 /*
@@ -121,4 +123,22 @@ public class StoreController {
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
+    /*
+     * 찜한 장소 목록에서 선택한 순서대로 장소 정보 가져오기
+     * */
+    @ApiOperation(value = "찜한 장소 목록에서 선택한 순서대로 장소 정보 가져온다.", response = Response.class)
+    @ApiResponses({
+            @ApiResponse(code= 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
+            @ApiResponse(code= 404, message = "page not found")})
+    @GetMapping("/bookmarks/courses")
+    public ResponseEntity<Response> getIsBookmark(@RequestParam("store_seq") List<Long> storeSeqList) {
+        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
+
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("선택한 순서대로 장소 정보 가져오기 성공");
+        response.setData(storeService.getStoreInfoListInOrder(userSeq, storeSeqList));
+        return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
+    }
 }

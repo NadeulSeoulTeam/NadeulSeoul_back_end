@@ -140,5 +140,19 @@ public class StoreService {
                 .build();
     }
 
+    // 찜한 장소 목록에서 선택한 순서대로 장소 정보 가져오기
+    public List<StoreInfoDto> getStoreInfoListInOrder(Long userSeq, List<Long> storeSeqList) {
+        User user = userRepository.findByUserSeq(userSeq)
+                .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        List<StoreInfoDto> storeInfoDtoList = new ArrayList<>();
+        for (Long storeSeq : storeSeqList) {
+            StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
+                    .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소를 찜한적이 없습니다."));
+
+            storeInfoDtoList.add(StoreInfoDto.fromEntity(storeInfo));
+        }
+        return storeInfoDtoList;
+    }
 
 }
