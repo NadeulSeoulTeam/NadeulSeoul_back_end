@@ -90,8 +90,6 @@ public class MypageController {
     public ResponseEntity<Response> follow(@PathVariable("user_seq") Long followedUserSeq) {
         Long userSeq = 2L; //임시 : 사용자 토큰으로 가져와야함
 
-        // 이미 팔로우된 사람인지 확인 (일단 프론트에서 확인하기로 함 추후 예외처리)
-
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.insertFollow(userSeq, followedUserSeq);
@@ -110,8 +108,6 @@ public class MypageController {
     @DeleteMapping("/{user_seq}/unfollow")
     public ResponseEntity<Response> unfollow(@PathVariable("user_seq") Long followedUserSeq) {
         Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
-
-        // 이미 언팔로우된사람인지 확인
 
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();

@@ -27,7 +27,9 @@ public enum  ErrorStatusEnum {
 
     //comment
     COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
-    DUPLICATED_NICKNAME(400,"중복된 닉네임입니다."),
+
+    // mypage
+    FOLLOWINFO_EXISTENCE(400,"FOLLOWINFO EXISTENCE"),
 
     // tag
     CODE_EXCEPTION(400, "CODE EXCEPTION")

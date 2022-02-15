@@ -3,6 +3,8 @@ package com.alzal.nadeulseoulbackend.domain.mypage.service;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.FollowDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.MypageInfoDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.FollowInfo;
+import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.mypage.exception.FollowInfoExistenceException;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.FollowInfoNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.repository.MypageRepository;
@@ -12,12 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
-;
+import java.util.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -54,9 +51,7 @@ public class MypageService {
         Iterator<FollowInfo> iter = followeeList.iterator();
         while (iter.hasNext()) {
             User follower = iter.next().getFollower();
-            System.out.println("========================");
-            System.out.println(follower.getUserSeq());
-            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickname(), follower.getEmoji()));
+            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickName(),follower.getEmoji()));
         }
 
         return followDtoList;
@@ -89,6 +84,10 @@ public class MypageService {
         User follower = UserRepository.findById(followedUserSeq)
                 .orElseThrow(() -> new UserNotFoundException("follower 가 존재하지 않습니다."));
 
+        // 이미 팔로우된 사람인지 확인
+        Optional<FollowInfo> followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower);
+        followInfo.ifPresent(f -> {throw new FollowInfoExistenceException("이미 팔로우한 사용자 입니다.");});
+
         //팔로우 테이블에 저장
         FollowInfo followInfoEntity = mypageRepository.save(
                 FollowInfo.builder()
@@ -117,14 +116,11 @@ public class MypageService {
         FollowInfo followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower)
                 .orElseThrow(() -> new FollowInfoNotFoundException("팔로우 내역이 존재하지 않습니다."));
         mypageRepository.delete(followInfo);
-        System.out.println(followInfo.toString());
+
         // 회원테이블에 팔로잉 수 업데이트 (감소)
         followee.deleteFollowee();
 
         // 팔로우한 사람의 회원테이블에 팔로워 수 업데이트 (감소)
         follower.deleteFollower();
-
     }
-
-
 }
