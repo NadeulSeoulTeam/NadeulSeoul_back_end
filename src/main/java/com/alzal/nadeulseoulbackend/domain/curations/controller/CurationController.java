@@ -107,11 +107,11 @@ public class CurationController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 작성이 완료되었습니다.");
         try {
             curationService.insertCuration(curationRequestDto);
-        } catch (IOException e) {
+            response.setStatus(StatusEnum.OK);
+            response.setMessage("큐레이션 작성이 완료되었습니다.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

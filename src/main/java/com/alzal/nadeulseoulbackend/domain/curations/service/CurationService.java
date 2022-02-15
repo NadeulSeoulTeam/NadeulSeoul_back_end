@@ -7,6 +7,7 @@ import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.*;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
+import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
@@ -105,11 +106,11 @@ public class CurationService {
 
     }
 
-    public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
+    public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
-//        List<StoreInfo> storeInfos = curationRequestDto.getCourseRoute();
+        List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
 
-        User user = userRepository.findById(3L) // 멤버 변수 토큰으로 받아오기
+        User user = userRepository.findById(5L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
 
         Curation curation = Curation.builder()
@@ -126,15 +127,16 @@ public class CurationService {
 
         curationRepository.save(curation);
 
-//        storeInfos.stream().forEach((store) ->
-//                storeInCurationRepository.save(
-//                        StoreInCuration.builder()
-//                                .storeOrder(storeInfos.indexOf(store))
-//                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(store)))
-//                                .curation(curation)
-//                                .build()
-//                )
-//        );
+
+        storeInfos.stream().forEach((store) ->
+                storeInCurationRepository.save(
+                        StoreInCuration.builder()
+                                .storeOrder(storeInfos.indexOf(store))
+                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(StoreInfo.builder().addressName(store.getAddressName()).categoryName(store.getCategoryName()).placeUrl(store.getPlaceUrl()).x(store.getX()).y(store.getY()).phone(store.getPhone()).build())))
+                                .curation(curation)
+                                .build()
+                )
+        );
 
 
         for(Long localSeq : curationRequestDto.getLocal()) {

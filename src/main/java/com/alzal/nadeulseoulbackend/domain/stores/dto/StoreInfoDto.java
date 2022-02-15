@@ -2,11 +2,10 @@ package com.alzal.nadeulseoulbackend.domain.stores.dto;
 
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class StoreInfoDto {
 
@@ -33,7 +32,7 @@ public class StoreInfoDto {
         this.y = y;
     }
 
-    public StoreInfo toEntyty() {
+    public StoreInfo toEntity() {
         return StoreInfo.builder()
                 .storeSeq(storeSeq)
                 .storeName(storeName)
