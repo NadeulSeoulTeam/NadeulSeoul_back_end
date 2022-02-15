@@ -6,10 +6,12 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
+
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,7 +62,7 @@ public class CommentService {
     public void insertComment(CommentRequestDto commentRequestDto) {
         Curation curation = curationRepository.findById(commentRequestDto.getCurationSeq())
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "));
-        User user = userRepository.findByUserSeq(1L) // 현재 임의 값
+        User user = userRepository.findById(1L) // 현재 임의 값
                 .orElseThrow(()-> new UserNotFoundException("사용자가 "));
 
         Comment comment = Comment.builder()

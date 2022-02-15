@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.entity;
 
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Getter;
 
 import javax.persistence.*;

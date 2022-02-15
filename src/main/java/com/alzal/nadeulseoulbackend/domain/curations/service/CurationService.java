@@ -12,14 +12,14 @@ import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy
 import com.alzal.nadeulseoulbackend.domain.curations.repository.LocalRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ThemeRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.Code;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeRequestDto;
 import com.alzal.nadeulseoulbackend.domain.tag.exception.TagNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.tag.repository.CodeRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -103,7 +103,7 @@ public class CurationService {
     public void insertCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
 
-        User user = userRepository.findByUserSeq(3L) // 멤버 변수 토큰으로 받아오기
+        User user = userRepository.findById(3L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
 
         Curation curation = Curation.builder()

@@ -3,11 +3,11 @@ package com.alzal.nadeulseoulbackend.domain.mypage.service;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.FollowDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.MypageInfoDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.FollowInfo;
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.FollowInfoNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.repository.MypageRepository;
-import com.alzal.nadeulseoulbackend.domain.mypage.repository.UserRepository;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
+import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +27,16 @@ public class MypageService {
     MypageRepository mypageRepository;
 
     @Autowired
-    UserRepository UserRepository;
+    com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository UserRepository;
 
     // 마이페이지 정보 가져오기
     public MypageInfoDto getMypageInfo(Long userSeq) {
-        User user = UserRepository.findByUserSeq(userSeq)
+        User user = UserRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 사용자가 존재하지 않습니다."));
 
         return MypageInfoDto.builder()
                 .userSeq(userSeq)
-                .nickName(user.getNickName())
+                .nickName(user.getNickname())
                 .emoji(user.getEmoji())
                 .followeeCount(user.getFolloweeCount())
                 .followerCount(user.getFollowerCount())
@@ -45,7 +45,7 @@ public class MypageService {
 
     // 팔로잉 리스트 가져오기
     public List<FollowDto> getFollowingList(Long userSeq) {
-        User user = UserRepository.findByUserSeq(userSeq)
+        User user = UserRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 사용자가 존재하지 않습니다."));
 
         Set<FollowInfo> followeeList = user.getFolloweeList();
@@ -56,7 +56,7 @@ public class MypageService {
             User follower = iter.next().getFollower();
             System.out.println("========================");
             System.out.println(follower.getUserSeq());
-            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickName(), follower.getEmoji()));
+            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickname(), follower.getEmoji()));
         }
 
         return followDtoList;
@@ -64,7 +64,7 @@ public class MypageService {
 
     // 팔로워 리스트 가져오기
     public List<FollowDto> getFollowerList(Long userSeq) {
-        User user = UserRepository.findByUserSeq(userSeq)
+        User user = UserRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 사용자가 존재하지 않습니다."));
 
         Set<FollowInfo> followerList = user.getFollowerList();
@@ -73,7 +73,7 @@ public class MypageService {
         Iterator<FollowInfo> iter = followerList.iterator();
         while (iter.hasNext()) {
             User followee = iter.next().getFollowee();
-            followDtoList.add(new FollowDto(followee.getUserSeq(), followee.getNickName(), followee.getEmoji()));
+            followDtoList.add(new FollowDto(followee.getUserSeq(), followee.getNickname(), followee.getEmoji()));
         }
 
         return followDtoList;
@@ -83,10 +83,10 @@ public class MypageService {
     @Transactional
     public void insertFollow(Long userSeq, Long followedUserSeq) {
         //followee와 follower seq에 해당하는 User를 조회 한 후 tb_follow 에 저장
-        User followee = UserRepository.findByUserSeq(userSeq)
+        User followee = UserRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("followee 가 존재하지 않습니다."));
 
-        User follower = UserRepository.findByUserSeq(followedUserSeq)
+        User follower = UserRepository.findById(followedUserSeq)
                 .orElseThrow(() -> new UserNotFoundException("follower 가 존재하지 않습니다."));
 
         //팔로우 테이블에 저장
@@ -107,10 +107,10 @@ public class MypageService {
     @Transactional
     public void deleteFollow(Long userSeq, Long followedUserSeq) {
         //followee와 follower seq에 해당하는 User 조회 한 후 tb_follow 에 저장
-        User followee = UserRepository.findByUserSeq(userSeq)
+        User followee = UserRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("followee 가 존재하지 않습니다."));
 
-        User follower = UserRepository.findByUserSeq(followedUserSeq)
+        User follower = UserRepository.findById(followedUserSeq)
                 .orElseThrow(() -> new UserNotFoundException("follower 가 존재하지 않습니다."));
 
         //팔로우 테이블에서 삭제
