@@ -12,7 +12,7 @@ public class StoreBookmarkInfoDto {
     private String addressName;
     private String categoryName;
 
-    public static StoreBookmarkInfoDto fromEntity(StoreInfo storeInfo){
+    static public StoreBookmarkInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreBookmarkInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
                 .storeName(storeInfo.getStoreName())
