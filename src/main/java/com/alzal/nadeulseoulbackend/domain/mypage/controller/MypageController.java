@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.controller;
 
 import com.alzal.nadeulseoulbackend.domain.mypage.service.MypageService;
+import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -19,12 +20,15 @@ import org.springframework.web.bind.annotation.*;
  * 마이페이지 정보, 팔로우 기능 API
  * */
 @RestController
-@RequestMapping("api/v1/mypage")
+@RequestMapping("api/v1")
 @Api(value = "MypageController")
 public class MypageController {
 
     @Autowired
     MypageService mypageService;
+
+    @Autowired
+    UserInfoService userInfoService;
 
     /*
      * 마이페이지 정보 가져오기
@@ -33,10 +37,8 @@ public class MypageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "마이페이지 정보 가져오기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @GetMapping
-    public ResponseEntity<Response> getMyInfo() {
-        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
-
+    @GetMapping("/mypage/{user_seq}")
+    public ResponseEntity<Response> getMyInfo(@PathVariable("user_seq") Long userSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -52,7 +54,7 @@ public class MypageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "팔로잉 리스트 가져오기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @GetMapping("/{user_seq}/followee")
+    @GetMapping("/mypage/{user_seq}/followee")
     public ResponseEntity<Response> getFolloweeList(@PathVariable("user_seq") Long userSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -69,7 +71,7 @@ public class MypageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "팔로워 리스트 가져오기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @GetMapping("/{user_seq}/follower")
+    @GetMapping("/mypage/{user_seq}/follower")
     public ResponseEntity<Response> getFollowerList(@PathVariable("user_seq") Long userSeq) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -86,10 +88,9 @@ public class MypageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "팔로우 하기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @PostMapping("/{user_seq}/follow")
+    @PostMapping("/auth/mypage/{user_seq}/follow")
     public ResponseEntity<Response> follow(@PathVariable("user_seq") Long followedUserSeq) {
-        Long userSeq = 2L; //임시 : 사용자 토큰으로 가져와야함
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.insertFollow(userSeq, followedUserSeq);
@@ -105,10 +106,9 @@ public class MypageController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "언팔로우 하기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @DeleteMapping("/{user_seq}/unfollow")
+    @DeleteMapping("/auth/mypage/{user_seq}/unfollow")
     public ResponseEntity<Response> unfollow(@PathVariable("user_seq") Long followedUserSeq) {
-        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.deleteFollow(userSeq, followedUserSeq);

@@ -79,10 +79,10 @@ public class MypageService {
     public void insertFollow(Long userSeq, Long followedUserSeq) {
         //followee와 follower seq에 해당하는 User를 조회 한 후 tb_follow 에 저장
         User followee = userRepository.findById(userSeq)
-                .orElseThrow(() -> new UserNotFoundException("followee 가 존재하지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException("사용자가 존재하지 않습니다."));
 
         User follower = userRepository.findById(followedUserSeq)
-                .orElseThrow(() -> new UserNotFoundException("follower 가 존재하지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException("사용자가 존재하지 않습니다."));
 
         // 이미 팔로우된 사람인지 확인
         Optional<FollowInfo> followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower);
