@@ -103,7 +103,7 @@ public class CurationService {
     }
   
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
-        Page<Curation> curationPage = curationRepository.findByUserSeq(userSeq, pageable);
+        Page<Curation> curationPage = curationRepository.findByUserSeqAndHiddenIsFalse(userSeq, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
 
     }
