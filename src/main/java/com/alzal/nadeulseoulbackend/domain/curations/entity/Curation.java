@@ -27,10 +27,6 @@ import java.util.Set;
 )
 public class Curation {
 
-    @OneToMany(mappedBy = "curation")
-    Set<LocalCuration> localCuration;
-    @OneToMany(mappedBy = "curation")
-    Set<ThemeCuration> themeCuration;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long curationSeq;

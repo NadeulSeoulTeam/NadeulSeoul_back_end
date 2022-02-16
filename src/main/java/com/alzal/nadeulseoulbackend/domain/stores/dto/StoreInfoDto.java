@@ -56,15 +56,4 @@ public class StoreInfoDto {
                 .build();
     }
 
-    public StoreInfo toEntity() {
-        return StoreInfo.builder()
-                .storeSeq(storeSeq)
-                .storeName(storeName)
-                .categoryName(categoryName)
-                .placeUrl(placeUrl)
-                .phone(phone)
-                .lat(lat)
-                .lng(lng)
-                .build();
-    }
 }
