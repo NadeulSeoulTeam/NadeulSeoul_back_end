@@ -36,7 +36,7 @@ public class UserInfoService {
         Long id = getId();
         User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseGet(User::new);
         userRepository.save(user);
-        AssignedUserDto assignedUserDto = getAssignedUserInfo();git
+        AssignedUserDto assignedUserDto = getAssignedUserInfo();
         return assignedUserDto;
     }
 
