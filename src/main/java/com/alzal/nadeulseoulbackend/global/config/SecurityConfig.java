@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().configurationSource(corsConfigurationSource()) //cors 허용
                 .and()
+                .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Session 비활성화
                 .and()
                 .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)

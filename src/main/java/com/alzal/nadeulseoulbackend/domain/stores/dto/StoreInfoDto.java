@@ -44,7 +44,7 @@ public class StoreInfoDto {
                 .build();
     }
 
-    public StoreInfoDto fromEntity(StoreInfo storeInfo) {
+    static public StoreInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
                 .storeName(storeInfo.getStoreName())

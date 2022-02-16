@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.stores.service;
 
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
+import com.alzal.nadeulseoulbackend.domain.stores.dto.BookmarkDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
@@ -11,6 +12,7 @@ import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreBookmarkReposi
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
+import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -113,26 +115,51 @@ public class StoreService {
     }
 
     // 장소가 이미 찜한 장소인지 확인하기
-    public Map<String, Boolean> getIsBookmark(Long userSeq, Long storeSeq) {
+    public BookmarkDto getIsBookmark(Long userSeq, Long storeSeq) {
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
-        StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
-                .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소가 존재하지 않습니다."));
+        // 해당 장소가 없을 때 -> 찜하기 0, false
+        Optional<StoreInfo> storeInfo = storeInfoRepository.findById(storeSeq);
+        if(storeInfo.isEmpty()){
+            return BookmarkDto.builder()
+                    .BookmarkCount(0L)
+                    .IsBookmark(false)
+                    .build();
+        }
 
-        // 찜한적이 없으면 예외 발생
-        StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
-                .orElseThrow(() -> new StoreBookmarkNotFoundException("사용자가 해당 장소를 찜한적이 없습니다."));
-
-        Map<String, Boolean> map = new HashMap<>();
-        map.put("isBookmark", true);
+        // 찜한적이 없을 때 -> 상가정보의 bookmarkCount, false
+        Optional<StoreBookmark> storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo.get());
+        if(storeBookmark.isEmpty()){
+            return BookmarkDto.builder()
+                    .BookmarkCount(storeInfo.get().getBookmarkCount())
+                    .IsBookmark(false)
+                    .build();
+        }
 
         // 찜한적이 있으면 true
-        return map;
+        return BookmarkDto.builder()
+                .BookmarkCount(storeInfo.get().getBookmarkCount())
+                .IsBookmark(true)
+                .build();
     }
 
+    // 찜한 장소 목록에서 선택한 순서대로 장소 정보 가져오기
+    public List<StoreInfoDto> getStoreInfoListInOrder(Long userSeq, List<Long> storeSeqList) {
+        User user = userRepository.findById(userSeq)
+                .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
+        List<StoreInfoDto> storeInfoDtoList = new ArrayList<>();
+        for (Long storeSeq : storeSeqList) {
+            StoreInfo storeInfo = storeInfoRepository.findById(storeSeq)
+                    .orElseThrow(() -> new StoreInfoNotFoundException("해당 장소가 존재하지 않습니다."));
 
+            StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
+                    .orElseThrow(() -> new StoreBookmarkNotFoundException("해당 장소를 찜한적이 없습니다."));
 
+            storeInfoDtoList.add(StoreInfoDto.fromEntity(storeInfo));
+        }
+        return storeInfoDtoList;
+    }
 
 }

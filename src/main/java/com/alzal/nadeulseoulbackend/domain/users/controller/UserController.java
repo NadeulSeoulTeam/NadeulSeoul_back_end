@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 @RestController
 @Api(value = "UserController")
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/auth")
 public class UserController {
 
     @Autowired
@@ -48,7 +48,7 @@ public class UserController {
             @ApiResponse(code=200,message="회원 가입 성공"),
             @ApiResponse(code=404,message = "page not found")
     })
-    @PostMapping("/users/signout")
+    @GetMapping("/users/signout")
     public ResponseEntity<Response> signoutUser(){
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -102,7 +102,7 @@ public class UserController {
             @ApiResponse(code=200,message="사용가능한 닉네임 입니다."),
             @ApiResponse(code=404,message = "page not found")
     })
-    @PostMapping("/users")
+    @GetMapping("/users")
     public ResponseEntity<Response> getUserInfo(){
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();

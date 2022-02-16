@@ -38,21 +38,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String jwt = getJwtFromRequest(request);
-        if(jwt==null){
-            logger.error("Invalid Token");
+        if(request.getRequestURL().toString().contains("/auth")) {
+            if (jwt == null) {
+                logger.error("Invalid Token");
 //            throw new InvalidTokenException("유효하지 않은 토큰입니다.");
+            }
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+
+                Long userId = tokenProvider.getUserIdFromToken(jwt);
+                UserPrincipal userDetails = (UserPrincipal) customUserDetailsService.loadUserById(userId);
+
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-
-            Long userId = tokenProvider.getUserIdFromToken(jwt);
-            UserPrincipal userDetails = (UserPrincipal)customUserDetailsService.loadUserById(userId);
-
-
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-
         filterChain.doFilter(request, response);
     }
 
