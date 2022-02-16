@@ -34,7 +34,7 @@ public class UserInfoService {
     public AssignedUserDto updateSignupInfo(SignupInfoDto signupInfo) {
 
         Long id = getId();
-        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseGet(User::new);
+        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(()->new UserNotFoundException("구글에서 유저 정보를 받을 수 없습니다."));
         userRepository.save(user);
         AssignedUserDto assignedUserDto = getAssignedUserInfo();
         return assignedUserDto;
