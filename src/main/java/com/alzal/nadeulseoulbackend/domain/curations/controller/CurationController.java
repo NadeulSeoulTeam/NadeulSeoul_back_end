@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @Api(value = "CurationController")
-@RequestMapping("api/v1/auth/curations")
+@RequestMapping("api/v1")
 public class CurationController {
 
     @Autowired
@@ -41,7 +41,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 목록 불러오기 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/{user_seq}")
+    @GetMapping("/curations/{user_seq}")
     public ResponseEntity<Response> getCurationListPage(@PathVariable("user_seq") Long userSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -57,7 +57,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/{id}")
+    @GetMapping("/auth/curations/{id}")
     public ResponseEntity<Response> getCuration(@PathVariable("id") final Long curationSeq) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -83,7 +83,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping
+    @PostMapping("/auth/curations")
     public ResponseEntity<Response> insertCuration(@RequestBody CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -104,7 +104,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping("/images")
+    @PostMapping("/auth/curations/images")
     public ResponseEntity<Response> insertImageInCuration(final List<MultipartFile> fileList) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -127,7 +127,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 수정이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PutMapping
+    @PutMapping("/auth/curations")
     public ResponseEntity<Response> updateCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -147,7 +147,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 삭제가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/auth/curations/{id}")
     public ResponseEntity<Response> deleteCuration(@PathVariable("id") final Long curationSeq) {
 
         curationService.deleteCuration(curationSeq);
