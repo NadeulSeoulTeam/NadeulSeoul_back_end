@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "BookmarkController")
-@RequestMapping("api/v1/curations/bookmarks")
+@RequestMapping("api/v1/auth/curations/bookmarks")
 public class CurationBookmarkController {
 
     @Autowired
