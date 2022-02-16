@@ -64,7 +64,7 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 작성 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping("")
+    @PostMapping("/auth")
     public ResponseEntity<Response> insertComment(@RequestBody final CommentRequestDto commentRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -79,7 +79,7 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 수정 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PutMapping("")
+    @PutMapping("/auth")
     public ResponseEntity<Response> updateComment(@RequestBody final CommentRequestDto commentRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -93,7 +93,7 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 삭제 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/auth")
     public ResponseEntity<Response> deleteComment(@PathVariable("id") final Long commentSeq) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
