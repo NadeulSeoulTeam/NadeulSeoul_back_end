@@ -4,6 +4,7 @@ import com.alzal.nadeulseoulbackend.domain.inquiry.dto.AnswerDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.dto.InquiryInfoDto;
 import com.alzal.nadeulseoulbackend.domain.inquiry.entity.Inquiry;
 import com.alzal.nadeulseoulbackend.domain.inquiry.service.InquiryService;
+import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -25,12 +26,15 @@ import java.util.List;
  * */
 
 @RestController
-@RequestMapping("api/v1/inquiries")
+@RequestMapping("api/v1/auth/inquiries")
 @Api(value = "InquiryController")
 public class InquiryController {
 
     @Autowired
     private InquiryService inquiryService;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     /*
      * 문의사항 목록 가져오기
@@ -39,11 +43,9 @@ public class InquiryController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "문의 사항 목록가져오기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
-    @GetMapping("/questions/list/{user_seq}")
-    public ResponseEntity<Response> getInquiryList(@PathVariable("user_seq") Long userSeq) {
-        // 사용자 정보 토큰으로 가져옴 -> url 변경하고 pathvariable 없애기!!!!!!!! (실험하려고 작성)
-//        Member member = new Member();
-//        Long userSeq = member.getMemberSeq();
+    @GetMapping("/questions")
+    public ResponseEntity<Response> getInquiryList() {
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -78,8 +80,7 @@ public class InquiryController {
             @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/questions")
     public ResponseEntity<Response> insertInquiry(@RequestBody InquiryInfoDto inquiryInfoDto) {
-        //사용자 토큰 가져오기
-        Long userSeq = 1L;
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         inquiryService.insertInquiry(userSeq, inquiryInfoDto);
