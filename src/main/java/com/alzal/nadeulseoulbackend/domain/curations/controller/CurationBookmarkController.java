@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationBookmarkService;
+import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -21,11 +22,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "BookmarkController")
-@RequestMapping("api/v1/curations/bookmarks")
+@RequestMapping("api/v1/auth/curations/bookmarks")
 public class CurationBookmarkController {
 
     @Autowired
     CurationBookmarkService curationBookmarkService;
+
+    @Autowired
+    UserInfoService userInfoService;
 
     /*
     * 큐레이션 스크랩하기
@@ -37,8 +41,7 @@ public class CurationBookmarkController {
     })
     @PostMapping("/{curation_seq}")
     public ResponseEntity<Response> insertCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
-        Long userSeq = 1L;
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         curationBookmarkService.insertCurationBookmark(userSeq, curationSeq);
@@ -57,8 +60,7 @@ public class CurationBookmarkController {
     })
     @DeleteMapping("/{curation_seq}")
     public ResponseEntity<Response> deleteCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
-        Long userSeq = 1L;
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         curationBookmarkService.deleteCurationBookmark(userSeq, curationSeq);
@@ -77,8 +79,7 @@ public class CurationBookmarkController {
     })
     @GetMapping("/{curation_seq}")
     public ResponseEntity<Response> isCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
-        Long userSeq = 1L;
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -97,8 +98,7 @@ public class CurationBookmarkController {
     })
     @GetMapping
     public ResponseEntity<Response> getCurationBookmarkList(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Long userSeq = 1L;
-
+        Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
