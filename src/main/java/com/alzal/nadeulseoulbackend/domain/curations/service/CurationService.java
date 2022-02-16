@@ -27,13 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO :
-//      멤버 seq 수정 및 값 불러오기 새로 작성 필요
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -131,7 +128,6 @@ public class CurationService {
     }
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
-//        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
         List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
         User user = userRepository.findById(userInfoService.getId()) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
@@ -196,15 +192,6 @@ public class CurationService {
 
         user.addMyCurationCount();
 
-//        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
-//        if (!imageList.isEmpty()) {
-//            for (Image image : imageList) {
-//                curation.addImage(imageRepositoroy.save(image));
-//            }
-//            curation.changeThumnail(imageList.get(0).getImageSeq());
-//        } else {
-//            curation.changeThumnail(0L);
-//        }
     }
 
 

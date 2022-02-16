@@ -1,7 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.users.dto;
 
-import lombok.Getter;
-
 import java.util.Map;
 
 public class OAuth2UserInfo {
@@ -15,15 +13,15 @@ public class OAuth2UserInfo {
         return attributes;
     }
 
-    public String getId(){
+    public String getId() {
         return (String) attributes.get("sub");
     }
 
-    public String getName(){
+    public String getName() {
         return (String) attributes.get("name");
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return (String) attributes.get("email");
     }
 

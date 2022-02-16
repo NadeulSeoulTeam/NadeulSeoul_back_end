@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CustomException extends RuntimeException {
-    private ErrorStatusEnum errorStatusEnum;
+    private final ErrorStatusEnum errorStatusEnum;
 
     public CustomException(ErrorStatusEnum errorStatusEnum, String message) {
         super(message);
