@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.service;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentAuthorizationMismatchException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
@@ -22,8 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// TODO :
-//  Exception 처리 하기
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -70,7 +69,7 @@ public class CommentService {
                 .orElseThrow(() -> new CommentNotFoundException("댓글이"));
 
         if(!id.equals(comment.getUser().getUserSeq())){
-            // 예외 날리기
+            throw new CommentAuthorizationMismatchException("해당 댓글의 사용자가 아닙니다.");
         }
         comment.change(commentRequestDto.getContent());
     }
@@ -79,7 +78,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentSeq)
                 .orElseThrow(() -> new CommentNotFoundException("댓글이"));
         if(!id.equals(comment.getUser().getUserSeq())){
-            // 예외를 날린다
+            throw new CommentAuthorizationMismatchException("해당 댓글의 사용자가 아닙니다.");
         }
         commentRepository.deleteById(commentSeq);
     }
