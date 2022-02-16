@@ -23,7 +23,7 @@ public class CurationRequestDto {
     private Integer good;
     private Integer views;
     private Integer photoCount;
-    private List<MultipartFile> fileList;
+//    private List<MultipartFile> fileList;
     private List<Long> theme;
     private List<Long> local;
     private List<StoreInfoDto> courseRoute;
@@ -31,7 +31,7 @@ public class CurationRequestDto {
     @Builder
     public CurationRequestDto(Long curationSeq, String title, String description,
                               Integer personnel, Integer budget, LocalDateTime date, Integer good,
-                              Integer views, Integer photoCount, List<MultipartFile> fileList,
+                              Integer views, Integer photoCount, /*List<MultipartFile> fileList,*/
                               List<Long> theme, List<Long> local,List<StoreInfoDto>courseRoute
                               ) {
         this.curationSeq = curationSeq;
@@ -43,7 +43,7 @@ public class CurationRequestDto {
         this.good = good;
         this.views = views;
         this.photoCount = photoCount;
-        this.fileList = fileList;
+//        this.fileList = fileList;
         this.courseRoute = courseRoute;
         this.theme = theme;
         this.local = local;

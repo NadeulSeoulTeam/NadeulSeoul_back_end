@@ -70,7 +70,7 @@ public class CurationService {
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
         curation.addViews(); // 조회수 추가
-        
+
         List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
                                             .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
@@ -107,7 +107,7 @@ public class CurationService {
     }
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
-        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
+//        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
 //        List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
 
         User user = userRepository.findById(5L) // 멤버 변수 토큰으로 받아오기
@@ -120,7 +120,7 @@ public class CurationService {
                 .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
-                .photoCount(multipartFileList.size())
+//                .photoCount(multipartFileList.size())
                 .hidden(Boolean.FALSE)
                 .user(user)
                 .build();
@@ -163,15 +163,15 @@ public class CurationService {
             );
         }
 
-        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
-        if (!imageList.isEmpty()) {
-            for (Image image : imageList) {
-                curation.addImage(imageRepositoroy.save(image));
-            }
-            curation.changeThumnail(imageList.get(0).getImageSeq());
-        } else {
-            curation.changeThumnail(0L);
-        }
+//        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
+//        if (!imageList.isEmpty()) {
+//            for (Image image : imageList) {
+//                curation.addImage(imageRepositoroy.save(image));
+//            }
+//            curation.changeThumnail(imageList.get(0).getImageSeq());
+//        } else {
+//            curation.changeThumnail(0L);
+//        }
     }
 
 
@@ -189,22 +189,22 @@ public class CurationService {
 
         imageHandler.deleteImageInfo(pathList);
 
-        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
-        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
+//        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
+//        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
 
-        if (!imageList.isEmpty()) {
-            for (Image image : imageList) {
-                curation.addImage(imageRepositoroy.save(image));
-            }
-            curation.changeThumnail(imageList.get(0).getImageSeq());
-        } else {
-            curation.changeThumnail(0L);
-        }
-
-        curation.changeCuration(
-                curationRequestDto.getTitle(), curationRequestDto.getBudget(), curationRequestDto.getPersonnel(),
-                curationRequestDto.getDescription(), imageList.size()
-        );
+//        if (!imageList.isEmpty()) {
+//            for (Image image : imageList) {
+//                curation.addImage(imageRepositoroy.save(image));
+//            }
+//            curation.changeThumnail(imageList.get(0).getImageSeq());
+//        } else {
+//            curation.changeThumnail(0L);
+//        }
+//
+//        curation.changeCuration(
+//                curationRequestDto.getTitle(), curationRequestDto.getBudget(), curationRequestDto.getPersonnel(),
+//                curationRequestDto.getDescription(), imageList.size()
+//        );
 
         localRepository.deleteByCuration(curation);
         themeRepository.deleteByCuration(curation);
