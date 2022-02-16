@@ -48,7 +48,7 @@ public class UserController {
             @ApiResponse(code=200,message="회원 가입 성공"),
             @ApiResponse(code=404,message = "page not found")
     })
-    @PostMapping("/users/signout")
+    @GetMapping("/users/signout")
     public ResponseEntity<Response> signoutUser(){
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
