@@ -15,21 +15,21 @@ public class StoreInfoDto {
     private String addressName;
     private String placeUrl;
     private String phone;
-    private String lat;
-    private String lng;
-    
+    private String x;
+    private String y;
+
     @Builder
     public StoreInfoDto(Long storeSeq, String storeName, String categoryName,
                         String addressName, String placeUrl, String phone,
-                        String lat, String lng) {
+                        String x, String y) {
         this.storeSeq = storeSeq;
         this.storeName = storeName;
         this.categoryName = categoryName;
         this.addressName = addressName;
         this.placeUrl = placeUrl;
         this.phone = phone;
-        this.lat = lat;
-        this.lng = lng;
+        this.x = x;
+        this.y = y;
     }
 
     public StoreInfo toEntity() {
@@ -39,8 +39,8 @@ public class StoreInfoDto {
                 .categoryName(categoryName)
                 .placeUrl(placeUrl)
                 .phone(phone)
-                .lat(lat)
-                .lng(lng)
+                .x(x)
+                .y(y)
                 .build();
     }
 
@@ -51,8 +51,8 @@ public class StoreInfoDto {
                 .categoryName(storeInfo.getCategoryName())
                 .placeUrl(storeInfo.getPlaceUrl())
                 .phone(storeInfo.getPhone())
-                .lat(storeInfo.getLat())
-                .lng(storeInfo.getLng())
+                .x(storeInfo.getX())
+                .x(storeInfo.getY())
                 .build();
     }
 }

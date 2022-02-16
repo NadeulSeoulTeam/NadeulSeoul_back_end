@@ -20,14 +20,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @Api(value = "CurationController")
-@RequestMapping("api/v1/curations")
+@RequestMapping("api/v1/auth/curations")
 public class CurationController {
 
     @Autowired
@@ -80,24 +80,47 @@ public class CurationController {
 
     @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "큐레이션 작성이 완료되었습니다."),
+            @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
     @PostMapping
-    public ResponseEntity<Response> insertCuration(final CurationRequestDto curationRequestDto) {
+    public ResponseEntity<Response> insertCuration(@RequestBody CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 작성이 완료되었습니다.");
         try {
             curationService.insertCuration(curationRequestDto);
-        } catch (IOException e) {
+            response.setStatus(StatusEnum.OK);
+            response.setMessage("큐레이션 작성이 완료되었습니다.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
+
+    @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @PostMapping("/images")
+    public ResponseEntity<Response> insertImageInCuration(final List<MultipartFile> fileList) {
+        Response response = new Response();
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            curationService.insertCurationImage(fileList);
+            response.setStatus(StatusEnum.OK);
+            response.setMessage("이미지 업로드가 완료되었습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
+
 
     @ApiOperation(value = "큐레이션 수정", notes = "큐레이션 수정하기")
     @ApiResponses({
@@ -109,11 +132,11 @@ public class CurationController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        try {
-            curationService.updateCuration(curationRequestDto);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            curationService.updateCuration(curationRequestDto);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         response.setMessage("큐레이션 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);

@@ -78,8 +78,8 @@ public class StoreService {
                         .addressName(storeInfoDto.getAddressName())
                         .placeUrl(storeInfoDto.getPlaceUrl())
                         .phone(storeInfoDto.getPhone())
-                        .lat(storeInfoDto.getLat())
-                        .lng(storeInfoDto.getLng())
+                        .x(storeInfoDto.getX())
+                        .y(storeInfoDto.getY())
                         .bookmarkCount(0L)
                         .build());
 
