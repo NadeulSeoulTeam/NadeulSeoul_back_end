@@ -59,7 +59,7 @@ public class InquiryService {
     //문의 사항 내용 가져오기
     public InquiryInfoDto getInquiry(Long questionSeq) {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(questionSeq)
-                .orElseThrow(() -> new InquiryNotFoundException("문의 사항이"));
+                .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
 
         return InquiryInfoDto.builder()
                 .questionTitle(inquiry.getQuestionTitle())
@@ -88,7 +88,7 @@ public class InquiryService {
     @Transactional
     public void updateInquiry(Long questionSeq, InquiryInfoDto inquiryInfoDto) {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(questionSeq)
-                .orElseThrow(() -> new InquiryNotFoundException("문의 사항이"));
+                .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
 
         inquiry.update(inquiryInfoDto.getQuestionTitle(), inquiryInfoDto.getQuestion());
     }
@@ -119,11 +119,9 @@ public class InquiryService {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(answerDto.getQuestionSeq())
                 .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
 
-
         if (inquiry.getAnswer() != null) {
             throw new AnswerExistenceException("잘 못된 요청입니다.");
         }
-      
         inquiry.updateAnswer(answerDto.getAnswer());
     }
 
@@ -148,7 +146,6 @@ public class InquiryService {
     public void deleteAnswer(Long questionSeq) {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(questionSeq)
                 .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
-
         // 삭제대신 null 처리
         inquiry.updateAnswer(null);
     }
