@@ -18,12 +18,12 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name="tb_user")
-public class User{
+@Table(name = "tb_user")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="userSeq")
+    @Column(name = "userSeq")
     private Long userSeq;
 
     @Column(nullable = false)
@@ -52,17 +52,33 @@ public class User{
 
     @ColumnDefault("0")
     private int followerCount;
+    //팔로잉 리스트 (사용자가 팔로우한 사람)
+    @OneToMany(mappedBy = "followee")
+    private Set<FollowInfo> followeeList;
+    //팔로워 리스트 (사용자를 팔로우한 사람)
+    @OneToMany(mappedBy = "follower")
+    private Set<FollowInfo> followerList;
+    //문의 사항 리스트
+    @OneToMany(mappedBy = "user")
+    private List<Inquiry> inquiryList;
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList;
+    @OneToMany(mappedBy = "user")
+    private List<Curation> curationList;
+    //찜한 장소 리스트
+    @OneToMany(mappedBy = "user")
+    @BatchSize(size = 8)
+    private List<StoreBookmark> storeBookmarkList;
 
     @Builder
-    public User(String nickname,String name, String email, Role role) {
+    public User(String nickname, String name, String email, Role role) {
         this.nickname = name;
         this.name = name;
         this.email = email;
         this.role = role;
     }
 
-
-    public User update(String nickname,String emoji) {
+    public User update(String nickname, String emoji) {
         this.nickname = nickname;
         this.emoji = emoji;
         return this;
@@ -71,27 +87,6 @@ public class User{
     public String getRoleKey() {
         return this.role.getKey();
     }
-    //팔로잉 리스트 (사용자가 팔로우한 사람)
-    @OneToMany(mappedBy = "followee")
-    private Set<FollowInfo> followeeList;
-
-    //팔로워 리스트 (사용자를 팔로우한 사람)
-    @OneToMany(mappedBy = "follower")
-    private Set<FollowInfo> followerList;
-
-    //문의 사항 리스트
-    @OneToMany(mappedBy = "user")
-    private List<Inquiry> inquiryList;
-
-    @OneToMany(mappedBy = "user")
-    private List<Comment> commentList;
-
-    @OneToMany(mappedBy = "user")
-    private List<Curation> curationList;
-    //찜한 장소 리스트
-    @OneToMany(mappedBy = "user")
-    @BatchSize(size = 8)
-    private List<StoreBookmark> storeBookmarkList;
 
     // MemberEntity에 추가
     public void addFollowee() {
@@ -110,11 +105,11 @@ public class User{
         this.followerCount--;
     }
 
-    public void addMyCurationCount(){
+    public void addMyCurationCount() {
         this.myCurationCount++;
     }
 
-    public void removeMyCurationCount(){
+    public void removeMyCurationCount() {
         this.myCurationCount--;
     }
 
