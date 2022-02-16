@@ -142,5 +142,4 @@ public class StoreController {
         response.setData(storeService.getStoreInfoListInOrder(userSeq, storeSeqList));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
-
 }

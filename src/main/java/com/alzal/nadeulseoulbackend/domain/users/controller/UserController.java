@@ -40,10 +40,10 @@ public class UserController {
 //
 //    }
 
-    @ApiOperation(value = "토큰 제거", notes = "로그아웃")
+    @ApiOperation(value="로그아웃",notes="redis내 토큰 제거 및 로그아웃")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "회원 가입 성공"),
-            @ApiResponse(code = 404, message = "page not found")
+            @ApiResponse(code=200,message="로그아웃 성공"),
+            @ApiResponse(code=404,message = "page not found")
     })
     @GetMapping("/users/signout")
     public ResponseEntity<Response> signoutUser() {
@@ -55,6 +55,21 @@ public class UserController {
         response.setStatus(StatusEnum.OK);
         response.setMessage("로그아웃 성공");
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
+    }
+    @ApiOperation(value="회원 정보 수정",notes="닉네임,이모지 세팅")
+    @ApiResponses({
+            @ApiResponse(code=200,message="회원 정보 수정"),
+            @ApiResponse(code=404,message = "page not found")
+    })
+    @PutMapping("/users/{id}")
+    public ResponseEntity<Response> editUserInfo(@Valid @RequestBody @ApiParam(value = "회원가입 정보",required = true) SignupInfoDto signupInfo ,@PathVariable String id){
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        userInfoService.editUserInfo(signupInfo,id);
+
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("회원 정보 수정 성공");
+        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원 가입", notes = "닉네임,이모지 세팅")

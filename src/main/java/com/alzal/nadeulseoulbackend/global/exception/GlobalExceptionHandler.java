@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-// TODO:
-//  각 Domain에서 처리할 exception 정리 필요
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

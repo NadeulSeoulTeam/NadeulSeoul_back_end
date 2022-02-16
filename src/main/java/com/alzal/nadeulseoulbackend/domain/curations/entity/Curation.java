@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
+import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class Curation {
     private Integer budget;
     private Integer personnel;
     private String description;
+
     @UpdateTimestamp
     private LocalDateTime date;
     private Integer good;
@@ -56,6 +58,14 @@ public class Curation {
     @OneToMany(mappedBy = "curation")
     private List<Image> imageList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "curation")
+    Set<LocalCuration> localCuration;
+
+    @OneToMany(mappedBy = "curation")
+    Set<ThemeCuration> themeCuration;
+
+    @OneToMany(mappedBy = "curation")
+    List<StoreInCuration> curationInCuration;
 
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,

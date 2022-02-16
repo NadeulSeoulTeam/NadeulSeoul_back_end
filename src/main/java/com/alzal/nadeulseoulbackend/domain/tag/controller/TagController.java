@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -47,7 +48,7 @@ public class TagController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         response.setStatus(StatusEnum.OK);
         response.setMessage("지역 태그 목록 조회 성공");
         response.setData(localTagDtoList);
@@ -66,7 +67,7 @@ public class TagController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         response.setStatus(StatusEnum.OK);
         response.setMessage("테마 태그 목록 조회 성공");
         response.setData(themeTagDtoList);
@@ -88,7 +89,7 @@ public class TagController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         Page<CurationSearchResponseDto> page = curationService.getCurationListByPageWithCode(codeRequestDto, pageable);
         response.setStatus(StatusEnum.OK);
         response.setMessage("태그 검색 목록 조회 성공");

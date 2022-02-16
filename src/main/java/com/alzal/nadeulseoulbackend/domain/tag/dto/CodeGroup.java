@@ -23,7 +23,7 @@ public class CodeGroup {
     private String groupName;
 
     @OneToMany(mappedBy = "codeGroup")
-    private List<Code> codeList = new ArrayList<>();
+    private final List<Code> codeList = new ArrayList<>();
 
     @Builder
     public CodeGroup(Long groupSeq, String groupName) {
