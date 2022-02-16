@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @Api(value = "ImageController")
@@ -44,7 +47,7 @@ public class ImageController {
             byte[] imageByteArray = IOUtils.toByteArray(imageStream);
             imageStream.close();
             return new ResponseEntity<>(imageByteArray, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new IOException("이미지 가져오기 실패");
         }
     }

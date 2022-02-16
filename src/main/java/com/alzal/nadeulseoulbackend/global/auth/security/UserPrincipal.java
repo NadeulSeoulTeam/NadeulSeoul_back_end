@@ -23,7 +23,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String name,String email,String emoji,Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String name, String email, String emoji, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -60,7 +60,9 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 //
 
     @Override
-    public String getUsername() { return email;}
+    public String getUsername() {
+        return email;
+    }
 
     @Override
     public boolean isAccountNonExpired() {

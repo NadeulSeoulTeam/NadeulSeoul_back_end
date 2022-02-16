@@ -19,7 +19,7 @@ public class CurationSearchResponseDto {
         this.thumnail = thumnail;
     }
 
-    public static CurationSearchResponseDto fromEntity(Curation curation){
+    public static CurationSearchResponseDto fromEntity(Curation curation) {
         return CurationSearchResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
                 .title(curation.getTitle())

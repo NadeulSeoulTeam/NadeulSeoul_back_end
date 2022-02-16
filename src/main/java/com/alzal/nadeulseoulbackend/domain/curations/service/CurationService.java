@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.service;
 
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.*;
+
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.*;
@@ -21,7 +22,6 @@ import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +76,9 @@ public class CurationService {
         curation.addViews(); // 조회수 추가
 
         List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
-                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+                .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
-                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+                .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
@@ -97,13 +97,11 @@ public class CurationService {
         return curationResponseDto;
     }
 
-
     public List<CurationSearchResponseDto> getHotCurationList() {
         List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
         return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
     }
-
-
+  
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.findByUserSeq(userSeq, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
@@ -127,6 +125,7 @@ public class CurationService {
         }
     }
 
+
     public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
         List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
         User user = userRepository.findById(userInfoService.getId()) // 멤버 변수 토큰으로 받아오기
@@ -145,7 +144,6 @@ public class CurationService {
 
         curationRepository.save(curation);
 
-
         storeInfos.stream().forEach((store) ->
                 storeInCurationRepository.save(
                         StoreInCuration.builder()
@@ -157,7 +155,7 @@ public class CurationService {
         );
         for(Long localSeq : curationRequestDto.getLocal()) {
             Code localTag = codeRepository.findById(localSeq)
-                    .orElseThrow(()-> new TagNotFoundException("지역 태그가"));
+                    .orElseThrow(() -> new TagNotFoundException("지역 태그가"));
 
             localRepository.save(
                     LocalCuration.builder()
@@ -167,9 +165,9 @@ public class CurationService {
             );
         }
 
-        for(Long themeSeq : curationRequestDto.getTheme()) {
+        for (Long themeSeq : curationRequestDto.getTheme()) {
             Code themeTag = codeRepository.findById(themeSeq)
-                    .orElseThrow(()->new TagNotFoundException("테마 태그가 "));
+                    .orElseThrow(() -> new TagNotFoundException("테마 태그가 "));
 
             themeRepository.save(
                     ThemeCuration.builder()
@@ -193,8 +191,6 @@ public class CurationService {
         user.addMyCurationCount();
 
     }
-
-
 
 //    public void updateCuration(CurationRequestDto curationRequestDto) throws ImageIOException {
 //        Curation curation = curationRepository.findById(curationRequestDto.getCurationSeq())
@@ -262,7 +258,7 @@ public class CurationService {
     }
 
 
-    public Page<CurationSearchResponseDto> getCurationListByPageWithCode(CodeRequestDto codeRequestDto, Pageable pageable){
+    public Page<CurationSearchResponseDto> getCurationListByPageWithCode(CodeRequestDto codeRequestDto, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.searchByTag(codeRequestDto, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
     }

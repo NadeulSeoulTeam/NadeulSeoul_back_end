@@ -10,7 +10,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -24,6 +27,10 @@ import java.util.*;
 )
 public class Curation {
 
+    @OneToMany(mappedBy = "curation")
+    Set<LocalCuration> localCuration;
+    @OneToMany(mappedBy = "curation")
+    Set<ThemeCuration> themeCuration;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long curationSeq;
@@ -32,29 +39,22 @@ public class Curation {
     private Integer personnel;
     private String description;
 
-
     @UpdateTimestamp
     private LocalDateTime date;
-
     private Integer good;
     private Integer views;
     private Integer photoCount;
     private Long thumnail;
-
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;
-
     @ManyToOne
     @JoinColumn(name = "user_seq")
     private User user;
-
     @Column(name = "user_seq", insertable = false, updatable = false)
     private Long userSeq;
-
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "curation")
     private Set<Comment> commentList = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "curation")
     private List<Image> imageList = new ArrayList<>();
 

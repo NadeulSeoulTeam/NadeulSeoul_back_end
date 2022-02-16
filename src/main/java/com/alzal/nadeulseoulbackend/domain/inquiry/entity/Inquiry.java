@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -42,7 +41,7 @@ public class Inquiry {
     @UpdateTimestamp
     private LocalDateTime answerDate;
 
-    @Column(columnDefinition="boolean default false")
+    @Column(columnDefinition = "boolean default false")
     private boolean hidden;
 
     public void update(String questionTitle, String question) {

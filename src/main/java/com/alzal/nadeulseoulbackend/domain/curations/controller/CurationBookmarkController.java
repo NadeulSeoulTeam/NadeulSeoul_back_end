@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Api(value = "BookmarkController")
-@RequestMapping("api/v1/auth/curations/bookmarks")
+@RequestMapping("api/v1")
 public class CurationBookmarkController {
 
     @Autowired
@@ -32,14 +32,14 @@ public class CurationBookmarkController {
     UserInfoService userInfoService;
 
     /*
-    * 큐레이션 스크랩하기
-    * */
+     * 큐레이션 스크랩하기
+     * */
     @ApiOperation(value = "큐레이션을 스크랩한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "큐레이션 스크랩하기 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping("/{curation_seq}")
+    @PostMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> insertCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
         Response response = new Response();
@@ -58,7 +58,7 @@ public class CurationBookmarkController {
             @ApiResponse(code = 200, message = "큐레이션 스크랩 취소하기 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @DeleteMapping("/{curation_seq}")
+    @DeleteMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> deleteCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
         Response response = new Response();
@@ -77,7 +77,7 @@ public class CurationBookmarkController {
             @ApiResponse(code = 200, message = "큐레이션 스크랩 여부 확인 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/{curation_seq}")
+    @GetMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> isCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
         Response response = new Response();
@@ -96,9 +96,8 @@ public class CurationBookmarkController {
             @ApiResponse(code = 200, message = "큐레이션 스크랩 리스트 조회 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping
-    public ResponseEntity<Response> getCurationBookmarkList(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Long userSeq = userInfoService.getId();
+    @GetMapping("/curations/bookmarks/{user_seq}")
+    public ResponseEntity<Response> getCurationBookmarkList(@PathVariable("user_seq") Long userSeq, @RequestParam("page") int page, @RequestParam("size") int size) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);

@@ -1,13 +1,13 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentRequestDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentAuthorizationMismatchException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
-
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
@@ -39,12 +39,12 @@ public class CommentService {
 
     public List<CommentResponseDto> getCommentList(Long curationSeq) {
         Set<Comment> commentSet = curationRepository.findById(curationSeq)
-                .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
+                .orElseThrow(() -> new CurationNotFoundException("큐레이션이 "))
                 .getCommentList();
         return commentSet.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
     }
 
-    public Page<CommentResponseDto> getCommentListByPage(Long curationSeq, Pageable pageable){
+    public Page<CommentResponseDto> getCommentListByPage(Long curationSeq, Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findByCurationSeq(curationSeq, pageable);
         return commentPage.map(CommentResponseDto::fromEntity);
     }
