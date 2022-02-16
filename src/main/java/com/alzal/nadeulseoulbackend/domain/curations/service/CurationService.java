@@ -131,7 +131,6 @@ public class CurationService {
     }
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
-//        List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
         List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
         User user = userRepository.findById(userInfoService.getId()) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
@@ -193,15 +192,9 @@ public class CurationService {
                 curation.changeThumnail(0L);
             }
         }
-//        List<Image> imageList = imageHandler.parseImageInfo(multipartFileList, curation);
-//        if (!imageList.isEmpty()) {
-//            for (Image image : imageList) {
-//                curation.addImage(imageRepositoroy.save(image));
-//            }
-//            curation.changeThumnail(imageList.get(0).getImageSeq());
-//        } else {
-//            curation.changeThumnail(0L);
-//        }
+
+        user.addMyCurationCount();
+
     }
 
 
