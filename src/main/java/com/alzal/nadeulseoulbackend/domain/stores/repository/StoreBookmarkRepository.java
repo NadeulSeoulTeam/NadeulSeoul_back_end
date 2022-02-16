@@ -1,8 +1,8 @@
 package com.alzal.nadeulseoulbackend.domain.stores.repository;
 
-import com.alzal.nadeulseoulbackend.domain.mypage.entity.User;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

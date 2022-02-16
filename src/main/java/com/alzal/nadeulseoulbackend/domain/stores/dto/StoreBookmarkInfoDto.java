@@ -16,6 +16,7 @@ public class StoreBookmarkInfoDto {
         return StoreBookmarkInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
                 .storeName(storeInfo.getStoreName())
+                .addressName(storeInfo.getAddressName())
                 .categoryName(storeInfo.getCategoryName())
                 .build();
     }

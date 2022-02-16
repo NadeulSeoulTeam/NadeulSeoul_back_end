@@ -18,7 +18,7 @@ public class Code {
     private String codeName;
 
     @ManyToOne
-    @JoinColumn(name="group_seq")
+    @JoinColumn(name = "group_seq")
     private CodeGroup codeGroup;
 
     @Builder

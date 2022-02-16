@@ -1,11 +1,11 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.ImageDto;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationRepository;
+import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.ImageRepositoroy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ImageService {
     private ImageRepositoroy imageRepositoroy;
 
     @Autowired
-    private CurationRepository curationRepository;
+    private CurationTagRepository curationRepository;
 
     // 큐레이션 이미지 전체 조회
     public List<Long> getImageByCuration(Long curationSeq) {

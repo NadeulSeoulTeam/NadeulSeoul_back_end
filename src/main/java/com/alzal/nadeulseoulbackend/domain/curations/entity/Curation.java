@@ -1,16 +1,15 @@
-package com.alzal.nadeulseoulbackend.domain.curations.dto;
+package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -37,15 +36,22 @@ public class Curation {
 
     private Integer good;
     private Integer views;
-    private Long memberSeq;
     private Integer photoCount;
     private Long thumnail;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;
 
+    @ManyToOne
+    @JoinColumn(name = "user_seq")
+    private User user;
+
+    @Column(name = "user_seq", insertable = false, updatable = false)
+    private Long userSeq;
+
+    @BatchSize(size = 100)
     @OneToMany(mappedBy = "curation")
-    private List<Comment> commentList = new ArrayList<>();
+    private Set<Comment> commentList = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "curation")
     private List<Image> imageList = new ArrayList<>();
@@ -60,7 +66,7 @@ public class Curation {
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,
                     String description, LocalDateTime date, Integer good, Integer views,
-                    Long memberSeq, Integer photoCount, Long thumnail, Boolean hidden) {
+                    Integer photoCount, Long thumnail, Boolean hidden, User user) {
         this.curationSeq = curationSeq;
         this.title = title;
         this.budget = budget;
@@ -69,10 +75,10 @@ public class Curation {
         this.date = date;
         this.good = good;
         this.views = views;
-        this.memberSeq = memberSeq;
         this.photoCount = photoCount;
         this.thumnail = thumnail;
         this.hidden = hidden;
+        this.user = user;
     }
 
     public void changeHidden(Boolean flag) {
@@ -82,12 +88,13 @@ public class Curation {
     public void addImage(Image image) {
         this.imageList.add(image);
     }
+
     public void changeThumnail(Long imageSeq) {
         this.thumnail = imageSeq;
     }
 
     public void changeCuration(String title, Integer budget, Integer personnel,
-                               String description, Integer photoCount ) {
+                               String description, Integer photoCount) {
         this.title = title;
         this.budget = budget;
         this.personnel = personnel;
@@ -98,8 +105,17 @@ public class Curation {
     public void addLocalTag(LocalCuration localCuration) {
         this.localCuration.add(localCuration);
     }
+
     public void addThemeTag(ThemeCuration themeCuration) {
         this.themeCuration.add(themeCuration);
+    }
+
+    public void addViews() {
+        this.views++;
+    }
+
+    public void changeGood(boolean status) {
+        this.good = status ? this.good++ : this.good--;
     }
 
 }

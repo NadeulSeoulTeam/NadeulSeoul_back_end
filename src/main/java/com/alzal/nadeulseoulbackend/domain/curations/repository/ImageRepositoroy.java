@@ -1,7 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.curations.repository;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Image;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

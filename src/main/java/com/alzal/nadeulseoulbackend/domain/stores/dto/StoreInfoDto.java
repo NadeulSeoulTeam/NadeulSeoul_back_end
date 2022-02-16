@@ -32,7 +32,7 @@ public class StoreInfoDto {
         this.lng = lng;
     }
 
-    public StoreInfo toEntity(){
+    public StoreInfo toEntity() {
         return StoreInfo.builder()
                 .storeSeq(storeSeq)
                 .storeName(storeName)

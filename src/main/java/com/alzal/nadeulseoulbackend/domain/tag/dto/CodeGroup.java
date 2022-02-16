@@ -1,8 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.tag.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name ="tb_code_group")
+@Table(name = "tb_code_group")
 public class CodeGroup {
 
     @Id
@@ -23,7 +22,7 @@ public class CodeGroup {
 
     private String groupName;
 
-    @OneToMany(mappedBy="codeGroup")
+    @OneToMany(mappedBy = "codeGroup")
     private List<Code> codeList = new ArrayList<>();
 
     @Builder

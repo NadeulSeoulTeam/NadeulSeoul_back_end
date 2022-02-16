@@ -1,15 +1,16 @@
-package com.alzal.nadeulseoulbackend.domain.curations.dto;
+package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.Curation;
+import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Entity
@@ -26,24 +27,27 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long commentSeq;
 
-    @Column(name="curation_seq", insertable = false, updatable = false)
+    @Column(name = "curation_seq", insertable = false, updatable = false)
     private Long curationSeq;
 
-    @ManyToOne( fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curation_seq")
     private Curation curation;
 
-    private Long memberSeq;
+    @ManyToOne
+    @JoinColumn(name = "user_seq")
+    private User user;
+
     private String content;
 
     @UpdateTimestamp
     private LocalDateTime date;
 
     @Builder
-    public Comment(Long commentSeq, Curation curation, Long memberSeq, String content, LocalDateTime date) {
+    public Comment(Long commentSeq, Curation curation, User user, String content, LocalDateTime date) {
         this.commentSeq = commentSeq;
         this.curation = curation;
-        this.memberSeq = memberSeq;
+        this.user = user;
         this.content = content;
         this.date = date;
     }

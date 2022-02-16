@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class CurationRequestDto {
     private Long curationSeq;
-    private Long memberSeq;
     private String title;
     private String description;
     private Integer personnel;
@@ -24,13 +23,12 @@ public class CurationRequestDto {
     private List<Long> local;
 
     @Builder
-    public CurationRequestDto(Long curationSeq, Long memberSeq, String title, String description,
+    public CurationRequestDto(Long curationSeq, String title, String description,
                               Integer personnel, Integer budget, LocalDateTime date, Integer good,
                               Integer views, Integer photoCount, List<MultipartFile> fileList,
                               List<Long> theme, List<Long> local
                               ) {
         this.curationSeq = curationSeq;
-        this.memberSeq = memberSeq;
         this.title = title;
         this.description = description;
         this.personnel = personnel;

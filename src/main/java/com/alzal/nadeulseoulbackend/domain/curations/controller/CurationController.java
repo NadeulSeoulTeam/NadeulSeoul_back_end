@@ -1,7 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationHotResponseDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationRequestDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
@@ -13,6 +12,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +35,22 @@ public class CurationController {
 
     @Autowired
     private ImageService imageService;
+
+    @ApiOperation(value = "큐레이션 목록", notes = "큐레이션 목록 불러오기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "큐레이션 목록 불러오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping()
+    public ResponseEntity<Response> getCurationListPage(@PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC ) Pageable pageable) {
+        Response response = new Response();
+        HttpHeaders headers = new HttpHeaders();
+        Page<CurationSearchResponseDto> curationSearchResponseDtoPage = curationService.getCurationListByPage(3L, pageable);
+        response.setMessage("큐레이션 목록을 불러왔습니다.");
+        response.setData(curationSearchResponseDtoPage);
+        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "큐레이션 불러오기", notes = "큐레이션 불러오기")
     @ApiResponses({
@@ -56,25 +75,6 @@ public class CurationController {
 
         curationResponseDto.changeFileList(imageSeqList);
         response.setData(curationResponseDto);
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
-
-    @ApiOperation(value = "HOT한 코스 목록 불러오기", notes = "조회수로 정렬한 코스 목록 top 10 불러오기")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "HOT한 코스 목록 불러오기가 완료되었습니다."),
-            @ApiResponse(code = 404, message = "page not found")
-    })
-    @GetMapping("/statics/courses")
-    public ResponseEntity<Response> getHostCurationList() {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
-
-        List<CurationHotResponseDto> curationHotResponseDtoList = curationService.getHotCurationList();
-        response.setData(curationHotResponseDtoList);
-
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

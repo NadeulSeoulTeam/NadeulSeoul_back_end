@@ -1,19 +1,13 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.ImageDto;
-import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.service.ImageService;
-import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
-import com.alzal.nadeulseoulbackend.global.common.Response;
-import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
