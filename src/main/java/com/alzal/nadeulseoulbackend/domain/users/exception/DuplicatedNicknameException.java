@@ -6,6 +6,6 @@ import com.alzal.nadeulseoulbackend.global.exception.CustomException;
 public class DuplicatedNicknameException extends CustomException {
 
     public DuplicatedNicknameException(String message) {
-        super(ErrorStatusEnum.DUPLICATED_NICKNAME,message);
+        super(ErrorStatusEnum.NICKNAME_DUPLICATION,message);
     }
 }

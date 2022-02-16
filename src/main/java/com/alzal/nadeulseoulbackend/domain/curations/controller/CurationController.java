@@ -78,25 +78,6 @@ public class CurationController {
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "HOT한 코스 목록 불러오기", notes = "조회수로 정렬한 코스 목록 top 10 불러오기")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "HOT한 코스 목록 불러오기가 완료되었습니다."),
-            @ApiResponse(code = 404, message = "page not found")
-    })
-    @GetMapping("/statics/courses")
-    public ResponseEntity<Response> getHostCurationList() {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
-
-        List<CurationSearchResponseDto> curationSearchResponseDtoList = curationService.getHotCurationList();
-        response.setData(curationSearchResponseDtoList);
-
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
-
     @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
     @ApiResponses({
             @ApiResponse(code = 200, message = "큐레이션 작성이 완료되었습니다."),

@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.stores.controller;
 
-import com.alzal.nadeulseoulbackend.domain.stores.dto.PageRequestDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.service.StoreService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -15,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 // http://localhost:8080/swagger-ui/index.html
 
@@ -38,7 +37,7 @@ public class StoreController {
     @ApiResponses({
             @ApiResponse(code= 200, message = "찜한 장소 리스트 가져오기 성공"),
             @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/bookmarks/")
+    @GetMapping("/bookmarks")
     public ResponseEntity<Response> getStoreBookmarkList(@RequestParam("page") int page, @RequestParam("size") int size) {
         Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
@@ -119,12 +118,27 @@ public class StoreController {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 찜하기 성공");
-        Map<String, Boolean> map = storeService.getIsBookmark(userSeq, storeSeq);
-        response.setData(map);
+        response.setMessage("장소 찜한 여부 확인 성공");
+        response.setData(storeService.getIsBookmark(userSeq, storeSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
+    /*
+     * 찜한 장소 목록에서 선택한 순서대로 장소 정보 가져오기
+     * */
+    @ApiOperation(value = "찜한 장소 목록에서 선택한 순서대로 장소 정보 가져온다.", response = Response.class)
+    @ApiResponses({
+            @ApiResponse(code= 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
+            @ApiResponse(code= 404, message = "page not found")})
+    @PostMapping("/bookmarks/courses")
+    public ResponseEntity<Response> getIsBookmark(@RequestParam("store_seq") List<Long> storeSeqList) {
+        Long userSeq = 1L; //임시 : 사용자 토큰으로 가져와야함
 
-
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        response.setStatus(StatusEnum.OK);
+        response.setMessage("선택한 순서대로 장소 정보 가져오기 성공");
+        response.setData(storeService.getStoreInfoListInOrder(userSeq, storeSeqList));
+        return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
+    }
 }

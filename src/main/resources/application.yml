@@ -5,7 +5,7 @@ spring:
 
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/nadeulseoul
+    url: jdbc:mariadb://localhost:3307/nadeulseoul
     username: root
     password: root
 
