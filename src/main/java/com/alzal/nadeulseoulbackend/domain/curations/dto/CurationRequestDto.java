@@ -32,7 +32,7 @@ public class CurationRequestDto {
     public CurationRequestDto(Long curationSeq, String title, String description,
                               Integer personnel, Integer budget, LocalDateTime date, Integer good,
                               Integer views, Integer photoCount, List<MultipartFile> fileList,
-                              List<Long> theme, List<Long> local,List<StoreInfoDto> courseRoute
+                              List<Long> theme, List<Long> local,List<StoreInfoDto>courseRoute
                               ) {
         this.curationSeq = curationSeq;
         this.title = title;

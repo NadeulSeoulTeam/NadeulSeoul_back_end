@@ -108,7 +108,7 @@ public class CurationService {
 
     public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
-        List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
+//        List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
 
         User user = userRepository.findById(5L) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
@@ -128,15 +128,15 @@ public class CurationService {
         curationRepository.save(curation);
 
 
-        storeInfos.stream().forEach((store) ->
-                storeInCurationRepository.save(
-                        StoreInCuration.builder()
-                                .storeOrder(storeInfos.indexOf(store))
-                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(StoreInfo.builder().addressName(store.getAddressName()).categoryName(store.getCategoryName()).placeUrl(store.getPlaceUrl()).x(store.getX()).y(store.getY()).phone(store.getPhone()).build())))
-                                .curation(curation)
-                                .build()
-                )
-        );
+//        storeInfos.stream().forEach((store) ->
+//                storeInCurationRepository.save(
+//                        StoreInCuration.builder()
+//                                .storeOrder(storeInfos.indexOf(store))
+//                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(StoreInfo.builder().addressName(store.getAddressName()).categoryName(store.getCategoryName()).placeUrl(store.getPlaceUrl()).x(store.getX()).y(store.getY()).phone(store.getPhone()).build())))
+//                                .curation(curation)
+//                                .build()
+//                )
+//        );
 
 
         for(Long localSeq : curationRequestDto.getLocal()) {
