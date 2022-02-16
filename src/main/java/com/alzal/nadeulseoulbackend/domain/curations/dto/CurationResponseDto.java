@@ -4,10 +4,8 @@ import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -51,7 +49,7 @@ public class CurationResponseDto {
                 .build();
     }
 
-    public void changeFileList(List<Long> fileList){
+    public void changeFileList(List<Long> fileList) {
         this.fileList = fileList;
     }
 }

@@ -26,19 +26,18 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 //    private final HttpSession httpSession;
 
 
-
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
         System.out.println(oAuth2User);
-        System.out.println("client registration id : "+userRequest.getClientRegistration().getRegistrationId());
-        try{
-            return processOAuth2User(userRequest,oAuth2User);
-        }catch(AuthenticationException ex){
+        System.out.println("client registration id : " + userRequest.getClientRegistration().getRegistrationId());
+        try {
+            return processOAuth2User(userRequest, oAuth2User);
+        } catch (AuthenticationException ex) {
             throw ex;
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw new InternalAuthenticationServiceException(ex.getMessage());
         }
 
@@ -59,25 +58,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(oAuth2User.getAttributes());
         Optional<User> optionalUser = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User user;
-        if(optionalUser.isPresent()){
+        if (optionalUser.isPresent()) {
             // throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
-            user = updateExistingUser(optionalUser.get(),oAuth2UserInfo);
+            user = updateExistingUser(optionalUser.get(), oAuth2UserInfo);
             System.out.println("이미 있는 사용자 입니다.");
 
-        }else{
+        } else {
             System.out.println("없는 사용자 입니다.");
-            user = registerNewUser(oAuth2UserRequest,oAuth2UserInfo);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
     private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-            User user = User.builder()
-                    .name(oAuth2UserInfo.getName())
-                    .email(oAuth2UserInfo.getEmail())
-                    .role(Role.MEMBER)
-                    .build();
-            return userRepository.save(user);
+        User user = User.builder()
+                .name(oAuth2UserInfo.getName())
+                .email(oAuth2UserInfo.getEmail())
+                .role(Role.MEMBER)
+                .build();
+        return userRepository.save(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

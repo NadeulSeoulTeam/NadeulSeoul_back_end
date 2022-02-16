@@ -49,7 +49,7 @@ public class CommentController {
             @ApiResponse(code = 404, message = "page not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Response> getCommentListPage(@PathVariable("id") final Long curationSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.ASC ) Pageable pageable) {
+    public ResponseEntity<Response> getCommentListPage(@PathVariable("id") final Long curationSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.ASC) Pageable pageable) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 

@@ -106,7 +106,7 @@ public class InquiryService {
         }
 
         // 답글이 있는 경우 삭제 불가
-        if (inquiry.getAnswer() != null){
+        if (inquiry.getAnswer() != null) {
             throw new AnswerExistenceException("답글이 있는 경우 삭제가 불가합니다.");
         }
 
@@ -131,11 +131,11 @@ public class InquiryService {
         Inquiry inquiry = inquiryRepository.findByQuestionSeq(answerDto.getQuestionSeq())
                 .orElseThrow(() -> new InquiryNotFoundException("문의 사항이 존재하지 않습니다."));
         // 문의 사항이 삭제 처리 됐다면
-        if(inquiry.isHidden()){
+        if (inquiry.isHidden()) {
             throw new AlreadyDeletedInquiryException("잘 못된 요청입니다.");
         }
         // 문의 사항에 등록된 답변이 없다면
-        if(inquiry.getAnswer() == null){
+        if (inquiry.getAnswer() == null) {
             throw new AnswerNotFoundException("잘 못된 요청입니다.");
         }
         inquiry.updateAnswer(answerDto.getAnswer());

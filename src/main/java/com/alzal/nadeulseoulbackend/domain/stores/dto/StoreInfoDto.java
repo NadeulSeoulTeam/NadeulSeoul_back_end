@@ -17,7 +17,7 @@ public class StoreInfoDto {
     private String phone;
     private String lat;
     private String lng;
-    
+
     @Builder
     public StoreInfoDto(Long storeSeq, String storeName, String categoryName,
                         String addressName, String placeUrl, String phone,
@@ -32,18 +32,6 @@ public class StoreInfoDto {
         this.lng = lng;
     }
 
-    public StoreInfo toEntity() {
-        return StoreInfo.builder()
-                .storeSeq(storeSeq)
-                .storeName(storeName)
-                .categoryName(categoryName)
-                .placeUrl(placeUrl)
-                .phone(phone)
-                .lat(lat)
-                .lng(lng)
-                .build();
-    }
-
     static public StoreInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
@@ -53,6 +41,18 @@ public class StoreInfoDto {
                 .phone(storeInfo.getPhone())
                 .lat(storeInfo.getLat())
                 .lng(storeInfo.getLng())
+                .build();
+    }
+
+    public StoreInfo toEntity() {
+        return StoreInfo.builder()
+                .storeSeq(storeSeq)
+                .storeName(storeName)
+                .categoryName(categoryName)
+                .placeUrl(placeUrl)
+                .phone(phone)
+                .lat(lat)
+                .lng(lng)
                 .build();
     }
 }

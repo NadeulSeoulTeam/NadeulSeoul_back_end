@@ -1,6 +1,8 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationRequestDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Image;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.LocalCuration;
@@ -23,7 +25,6 @@ import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,11 +67,11 @@ public class CurationService {
                 .orElseThrow(() -> new CurationNotFoundException("큐레이션이"));
 
         curation.addViews(); // 조회수 추가
-        
+
         List<CodeDto> localDtoList = curation.getLocalCuration().stream().map(LocalCuration::getCode).collect(Collectors.toList())
-                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+                .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
-                                            .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
+                .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
@@ -90,7 +91,6 @@ public class CurationService {
     }
 
 
-
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.findByUserSeq(userSeq, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
@@ -101,7 +101,7 @@ public class CurationService {
         List<MultipartFile> multipartFileList = curationRequestDto.getFileList();
 
         User user = userRepository.findById(1L) // 멤버 변수 토큰으로 받아오기
-                .orElseThrow(()->new UserNotFoundException("사용자가 "));
+                .orElseThrow(() -> new UserNotFoundException("사용자가 "));
 
         Curation curation = Curation.builder()
                 .title(curationRequestDto.getTitle())
@@ -117,9 +117,9 @@ public class CurationService {
 
         curationRepository.save(curation);
 
-        for(Long localSeq : curationRequestDto.getLocal()) {
+        for (Long localSeq : curationRequestDto.getLocal()) {
             Code localTag = codeRepository.findById(localSeq)
-                    .orElseThrow(()-> new TagNotFoundException("지역 태그가"));
+                    .orElseThrow(() -> new TagNotFoundException("지역 태그가"));
 
             localRepository.save(
                     LocalCuration.builder()
@@ -129,9 +129,9 @@ public class CurationService {
             );
         }
 
-        for(Long themeSeq : curationRequestDto.getTheme()) {
+        for (Long themeSeq : curationRequestDto.getTheme()) {
             Code themeTag = codeRepository.findById(themeSeq)
-                    .orElseThrow(()->new TagNotFoundException("테마 태그가 "));
+                    .orElseThrow(() -> new TagNotFoundException("테마 태그가 "));
 
             themeRepository.save(
                     ThemeCuration.builder()
@@ -186,9 +186,9 @@ public class CurationService {
         localRepository.deleteByCuration(curation);
         themeRepository.deleteByCuration(curation);
 
-        for(Long localSeq : curationRequestDto.getLocal()) {
+        for (Long localSeq : curationRequestDto.getLocal()) {
             Code localTag = codeRepository.findById(localSeq)
-                    .orElseThrow(()-> new TagNotFoundException("지역 태그가"));
+                    .orElseThrow(() -> new TagNotFoundException("지역 태그가"));
 
             localRepository.save(
                     LocalCuration.builder()
@@ -198,9 +198,9 @@ public class CurationService {
             );
         }
 
-        for(Long themeSeq : curationRequestDto.getTheme()) {
+        for (Long themeSeq : curationRequestDto.getTheme()) {
             Code themeTag = codeRepository.findById(themeSeq)
-                    .orElseThrow(()->new TagNotFoundException("테마 태그가 "));
+                    .orElseThrow(() -> new TagNotFoundException("테마 태그가 "));
 
             themeRepository.save(
                     ThemeCuration.builder()
@@ -219,7 +219,7 @@ public class CurationService {
     }
 
 
-    public Page<CurationSearchResponseDto> getCurationListByPageWithCode(CodeRequestDto codeRequestDto, Pageable pageable){
+    public Page<CurationSearchResponseDto> getCurationListByPageWithCode(CodeRequestDto codeRequestDto, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.searchByTag(codeRequestDto, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
     }

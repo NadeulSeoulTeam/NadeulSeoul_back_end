@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.users.dto;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

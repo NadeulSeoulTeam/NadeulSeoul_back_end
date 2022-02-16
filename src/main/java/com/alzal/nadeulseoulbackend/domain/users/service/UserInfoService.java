@@ -28,18 +28,18 @@ public class UserInfoService {
 
     //User정보 등록하기
     @Transactional
-    public AssignedUserDto updateSignupInfo (SignupInfoDto signupInfo){
+    public AssignedUserDto updateSignupInfo(SignupInfoDto signupInfo) {
 
         Long id = getId();
-        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji())).orElseGet(User::new);
+        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseGet(User::new);
         userRepository.save(user);
         AssignedUserDto assignedUserDto = getAssignedUserInfo();
         return assignedUserDto;
     }
 
 
-    public Long getId(){
-        UserPrincipal userPrincipal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public Long getId() {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         id = userPrincipal.getId();
         return id;
     }
@@ -47,15 +47,15 @@ public class UserInfoService {
     public AssignedUserDto getAssignedUserInfo() {
 
         Long id = getId();
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
         AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).role(user.getRoleKey()).followeeCount(user.getFolloweeCount()).followerCount(user.getFollowerCount()).build();
         return assignedUserDto;
     }
 
 
-    public void checkNicknameDuplication(String nickname){
+    public void checkNicknameDuplication(String nickname) {
         System.out.println(userRepository.existsByNickname(nickname));
-        if(userRepository.existsByNickname(nickname)){
+        if (userRepository.existsByNickname(nickname)) {
             throw new DuplicatedNicknameException("중복된 닉네임입니다.");
         }
     }
@@ -64,7 +64,7 @@ public class UserInfoService {
         String userId = Long.toString(getId());
         stringRedisTemplate.delete(userId);
         String valueForCheck = stringRedisTemplate.opsForValue().get(userId);
-        if(valueForCheck!=null){
+        if (valueForCheck != null) {
             throw new CannotDeleteUserTokenInRedisException("유저 토큰을 레디스에서 삭제할 수 없습니다.");
         }
     }

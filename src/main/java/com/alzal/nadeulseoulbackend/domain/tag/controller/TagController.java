@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.tag.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
@@ -83,7 +82,7 @@ public class TagController {
     @PostMapping("/search")
     public ResponseEntity<Response> getCurationListByTag(
             @RequestBody CodeRequestDto codeRequestDto,
-            @PageableDefault(page = 0, size = 10, sort = "views", direction = Sort.Direction.DESC ) Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "views", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         Response response = new Response();

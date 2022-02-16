@@ -27,7 +27,7 @@ public class CurationRequestDto {
                               Integer personnel, Integer budget, LocalDateTime date, Integer good,
                               Integer views, Integer photoCount, List<MultipartFile> fileList,
                               List<Long> theme, List<Long> local
-                              ) {
+    ) {
         this.curationSeq = curationSeq;
         this.title = title;
         this.description = description;

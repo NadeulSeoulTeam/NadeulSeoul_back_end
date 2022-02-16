@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface CurationTagRepository extends JpaRepository<Curation, Long>, CurationTagRepositoryCustom {
     List<Curation> findTop10ByHiddenFalseOrderByViewsDesc();
+
     Page<Curation> findByUserSeq(Long userSeq, Pageable pageable);
 }

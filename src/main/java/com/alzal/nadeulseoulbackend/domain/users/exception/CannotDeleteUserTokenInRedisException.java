@@ -6,6 +6,6 @@ import com.alzal.nadeulseoulbackend.global.exception.CustomException;
 public class CannotDeleteUserTokenInRedisException extends CustomException {
 
     public CannotDeleteUserTokenInRedisException(String message) {
-        super(ErrorStatusEnum.CANNOT_DELETE_USER_TOKEN,message);
+        super(ErrorStatusEnum.CANNOT_DELETE_USER_TOKEN, message);
     }
 }

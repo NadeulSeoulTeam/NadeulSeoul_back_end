@@ -3,7 +3,7 @@ package com.alzal.nadeulseoulbackend.global.common;
 import lombok.Getter;
 
 @Getter
-public enum  ErrorStatusEnum {
+public enum ErrorStatusEnum {
 
     // common
     BAD_REQUEST(400, "BAD REQUEST"),
@@ -14,31 +14,30 @@ public enum  ErrorStatusEnum {
 
 
     // user
-    User_Not_Found(400,"유저를 찾을 수 없습니다."),
-    INVALID_TOKEN(400,"비정상적인 토큰입니다."),
-    NULL_TOKEN(400,"토큰값이 비어있습니다."),
+    User_Not_Found(400, "유저를 찾을 수 없습니다."),
+    INVALID_TOKEN(400, "비정상적인 토큰입니다."),
+    NULL_TOKEN(400, "토큰값이 비어있습니다."),
     EMAIL_DUPLICATION(400, "DUPLICATED EMAIL"),
-    NICKNAME_DUPLICATION(409,"DUPLICATED NICKNAME"),
-    ALREADY_LOGGED_IN_USER(403,"이미 로그인된 사용자입니다."),
-    CANNOT_DELETE_USER_TOKEN(400,"유저의 토큰을 삭제할 수 없습니다."),
+    NICKNAME_DUPLICATION(409, "DUPLICATED NICKNAME"),
+    ALREADY_LOGGED_IN_USER(403, "이미 로그인된 사용자입니다."),
+    CANNOT_DELETE_USER_TOKEN(400, "유저의 토큰을 삭제할 수 없습니다."),
 
     //curation
     CURATION_NOT_FOUND(400, "CURATION NOT FOUND"),
-    CURATIONBOOKMARK_EXISTENCE(400,"CURATIONBOOKMARK EXISTENCE"),
-    MY_CURATION_BOOKMARK_EXCEPTION(400,"MY CURATION BOOKMARK EXCEPTION"),
+    CURATIONBOOKMARK_EXISTENCE(400, "CURATIONBOOKMARK EXISTENCE"),
+    MY_CURATION_BOOKMARK_EXCEPTION(400, "MY CURATION BOOKMARK EXCEPTION"),
 
     //comment
     COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
 
     // inquiry
-    ANSWER_EXISTENCE(400,"ANSWER EXISTENCE"),
+    ANSWER_EXISTENCE(400, "ANSWER EXISTENCE"),
 
     // mypage
-    FOLLOWINFO_EXISTENCE(400,"FOLLOWINFO EXISTENCE"),
+    FOLLOWINFO_EXISTENCE(400, "FOLLOWINFO EXISTENCE"),
 
     // tag
-    CODE_EXCEPTION(400, "CODE EXCEPTION")
-    ;
+    CODE_EXCEPTION(400, "CODE EXCEPTION");
 
 
     int code;
