@@ -54,6 +54,8 @@ public class CurationBookmarkService {
             throw new CurationBookmarkExistenceException("이미 사용자가 해당 큐레이션을 스크랩하였습니다.");
         });
 
+        curation.changeGood(true);
+
         curationBookmarkRepository.save(CurationBookmark.builder()
                 .user(user)
                 .curation(curation)
@@ -71,6 +73,8 @@ public class CurationBookmarkService {
 
         CurationBookmark curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation)
                 .orElseThrow(() -> new CurationBookmarkNotFoundException("사용자가 해당 큐레이션을 스크랩한적이 없습니다."));
+
+        curation.changeGood(false);
 
         curationBookmarkRepository.delete(curationBookmark);
     }
