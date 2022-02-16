@@ -29,6 +29,7 @@ public enum  ErrorStatusEnum {
 
     //comment
     COMMENT_NOT_FOUND(400, "COMMENT NOT FOUND"),
+    USER_MISMATCH(400, "USER MISMATCH"),
 
     // inquiry
     ANSWER_EXISTENCE(400,"ANSWER EXISTENCE"),

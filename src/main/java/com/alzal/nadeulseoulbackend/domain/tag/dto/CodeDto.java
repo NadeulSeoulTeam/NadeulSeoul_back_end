@@ -17,16 +17,16 @@ public class CodeDto {
         this.codeName = codeName;
     }
 
-    public Code toEntity() {
-        return Code.builder()
-                .codeName(codeName)
-                .build();
-    }
-
     public static CodeDto fromEntity(Code code) {
         return CodeDto.builder()
                 .codeSeq(code.getCodeSeq())
                 .codeName(code.getCodeName())
+                .build();
+    }
+
+    public Code toEntity() {
+        return Code.builder()
+                .codeName(codeName)
                 .build();
     }
 }

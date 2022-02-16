@@ -57,18 +57,54 @@ public class CurationTagRepositoryImpl implements CurationTagRepositoryCustom {
         List<Long> localList = codeRequestDto.getLocal();
         List<Long> themeList = codeRequestDto.getTheme();
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+        
+        QueryResults<Curation> results = null;
+        if (localList.size() > 0 && themeList.size() > 0) {
+            results = jpaQueryFactory
+                    .select(curation)
+                    .from(curation)
+                    .join(localCuration).on(curation.curationSeq.eq(localCuration.curation.curationSeq))
+                    .join(themeCuration).on(curation.curationSeq.eq(themeCuration.curation.curationSeq))
+                    .where(localCuration.code.codeSeq.in(localList), themeCuration.code.codeSeq.in(themeList), curation.hidden.eq(Boolean.FALSE))
+                    .groupBy(curation.curationSeq)
+                    .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+            System.out.println(results.getTotal());
+        } else if (localList.size() == 0 && themeList.size() > 0) {
+            results = jpaQueryFactory
+                    .select(curation)
+                    .from(curation)
+                    .join(themeCuration).on(curation.curationSeq.eq(themeCuration.curation.curationSeq))
+                    .where(themeCuration.code.codeSeq.in(themeList), curation.hidden.eq(Boolean.FALSE))
+                    .groupBy(curation.curationSeq)
+                    .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        } else if (localList.size() > 0 && themeList.size() == 0) {
+            results = jpaQueryFactory
+                    .select(curation)
+                    .from(curation)
+                    .join(localCuration).on(curation.curationSeq.eq(localCuration.curation.curationSeq))
+                    .where(localCuration.code.codeSeq.in(localList), curation.hidden.eq(Boolean.FALSE))
+                    .groupBy(curation.curationSeq)
+                    .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        } else {
+            results = jpaQueryFactory
+                    .select(curation)
+                    .from(curation)
+                    .where(curation.hidden.eq(Boolean.FALSE))
+                    .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }
 
-        QueryResults<Curation> results = jpaQueryFactory
-                .select(curation)
-                .from(curation)
-                .join(localCuration).on(curation.curationSeq.eq(localCuration.curation.curationSeq))
-                .join(themeCuration).on(curation.curationSeq.eq(localCuration.curation.curationSeq))
-                .where(localCuration.code.codeSeq.in(localList), themeCuration.code.codeSeq.in(themeList))
-                .groupBy(curation.curationSeq)
-                .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }

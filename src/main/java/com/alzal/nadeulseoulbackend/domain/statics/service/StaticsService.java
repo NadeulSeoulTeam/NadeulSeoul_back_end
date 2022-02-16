@@ -51,7 +51,6 @@ public class StaticsService {
     public List<StoreBookmarkInfoDto> getStoreBookmarkList() {
         List<StoreInfo> storeBookmarkList = storeInfoRepository.findTop10ByOrderByBookmarkCountDesc();
         return  storeBookmarkList.stream().map(StoreBookmarkInfoDto::fromEntity).collect(Collectors.toList());
-//        return null;
     }
 
 }

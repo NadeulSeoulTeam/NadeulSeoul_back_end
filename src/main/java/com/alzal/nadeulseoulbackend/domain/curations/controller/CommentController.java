@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.controller;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentRequestDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CommentService;
+import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,9 @@ public class CommentController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private UserInfoService userInfoService;
 
     @ApiOperation(value = "댓글 목록", notes = "댓글 목록 불러오기")
     @ApiResponses({
@@ -64,11 +68,11 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 작성 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping("")
+    @PostMapping("/auth")
     public ResponseEntity<Response> insertComment(@RequestBody final CommentRequestDto commentRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
-        commentService.insertComment(commentRequestDto);
+        commentService.insertComment(commentRequestDto, userInfoService.getId());
         response.setMessage("댓글 작성이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -79,11 +83,11 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 수정 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PutMapping("")
+    @PutMapping("/auth")
     public ResponseEntity<Response> updateComment(@RequestBody final CommentRequestDto commentRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
-        commentService.updateComment(commentRequestDto);
+        commentService.updateComment(commentRequestDto, userInfoService.getId());
         response.setMessage("댓글 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
@@ -93,11 +97,11 @@ public class CommentController {
             @ApiResponse(code = 200, message = "댓글 삭제 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/auth")
     public ResponseEntity<Response> deleteComment(@PathVariable("id") final Long commentSeq) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
-        commentService.deleteByCommentSeq(commentSeq);
+        commentService.deleteByCommentSeq(commentSeq, userInfoService.getId());
         response.setMessage("댓글 삭제가 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

@@ -1,12 +1,11 @@
 package com.alzal.nadeulseoulbackend.domain.users.dto;
 
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
 public class SignupInfoDto {
-    private String nickname;
-    private String emoji;
+    private final String nickname;
+    private final String emoji;
 
     public SignupInfoDto(String nickname, String emoji) {
         this.nickname = nickname;
