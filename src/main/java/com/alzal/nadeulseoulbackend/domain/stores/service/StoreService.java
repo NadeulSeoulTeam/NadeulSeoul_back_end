@@ -2,7 +2,6 @@ package com.alzal.nadeulseoulbackend.domain.stores.service;
 
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.BookmarkDto;
-import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
@@ -37,20 +36,15 @@ public class StoreService {
     UserRepository userRepository;
 
     // 찜한 장소 정보 리스트 가져오기
-    public Page<StoreBookmarkInfoDto> getStoreBookmarkInfoDto(Long userSeq, int page, int size) {
+    public Page<StoreInfoDto> getStoreBookmarkInfoDto(Long userSeq, int page, int size) {
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         // pagination 구현
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<StoreInfo> pageStoreInfo = storeInfoRepository.findByUser(pageRequest, user);
-        Page<StoreBookmarkInfoDto> pageStoreInfoDto
-                = pageStoreInfo.map(StoreInfo -> StoreBookmarkInfoDto.builder()
-                .storeSeq(StoreInfo.getStoreSeq())
-                .storeName(StoreInfo.getStoreName())
-                .addressName(StoreInfo.getAddressName())
-                .categoryName(StoreInfo.getCategoryName())
-                .build());
+        Page<StoreBookmark> pageStoreInfo = storeBookmarkRepository.findByUser(pageRequest, user);
+        Page<StoreInfoDto> pageStoreInfoDto
+                = pageStoreInfo.map(StoreBookmark::getStoreInfo).map(StoreInfoDto::fromEntity);
 
         return pageStoreInfoDto;
     }
