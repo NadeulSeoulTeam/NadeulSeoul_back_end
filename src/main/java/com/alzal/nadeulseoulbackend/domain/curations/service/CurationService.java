@@ -96,17 +96,11 @@ public class CurationService {
                 .theme(themeDtoList)
                 .curationCourse(courseInfoList)
                 .date(curation.getDate())
+                .transportation(curation.getTransportation())
                 .build();
 
         return curationResponseDto;
     }
-
-//
-//
-//    public List<CurationSearchResponseDto> getHotCurationList() {
-//        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
-//        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
-//    }
 
 
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
@@ -151,6 +145,7 @@ public class CurationService {
                 .photoCount(fileList.size())
                 .hidden(Boolean.FALSE)
                 .user(user)
+                .transportation(curationRequestDto.getTransportation())
                 .build();
 
         curationRepository.save(curation);

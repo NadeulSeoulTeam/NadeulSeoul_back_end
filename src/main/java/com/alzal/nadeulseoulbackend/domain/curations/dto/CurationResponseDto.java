@@ -25,9 +25,13 @@ public class CurationResponseDto {
     private List<CodeDto> local;
     private List<CodeDto> theme;
     private List<StoreInCurationDto> curationCourse;
+    private String transportation;
 
     @Builder
-    public CurationResponseDto(Long curationSeq, Long memberSeq, UserInfoDto userinfos, String title, String description, Integer personnel, Integer budget, LocalDateTime date, Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local, List<CodeDto> theme, List<StoreInCurationDto> curationCourse) {
+    public CurationResponseDto(Long curationSeq, Long memberSeq, UserInfoDto userinfos, String title,
+                               String description, Integer personnel, Integer budget, LocalDateTime date,
+                               Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local,
+                               List<CodeDto> theme, List<StoreInCurationDto> curationCourse, String transportation) {
         this.curationSeq = curationSeq;
         this.memberSeq = memberSeq;
         this.userinfos = userinfos;
@@ -43,6 +47,7 @@ public class CurationResponseDto {
         this.local = local;
         this.theme = theme;
         this.curationCourse = curationCourse;
+        this.transportation = transportation;
     }
 
     public static CurationResponseDto fromEntity(Curation curation) {

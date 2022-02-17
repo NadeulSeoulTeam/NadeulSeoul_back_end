@@ -42,6 +42,8 @@ public class Curation {
     private Long thumnail;
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;
+    private String transportation;
+
     @ManyToOne
     @JoinColumn(name = "user_seq")
     private User user;
