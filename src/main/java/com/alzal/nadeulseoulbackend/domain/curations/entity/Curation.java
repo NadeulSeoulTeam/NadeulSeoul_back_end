@@ -114,8 +114,11 @@ public class Curation {
         this.views++;
     }
 
-    public void changeGood(boolean status) {
-        this.good = status ? this.good++ : this.good--;
+    public void addGood() {
+        this.good++;
     }
 
+    public void removeGood() {
+        this.good++;
+    }
 }
