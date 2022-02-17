@@ -43,7 +43,7 @@ public class StoreService {
 
         // pagination 구현
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<StoreInfo> pageStoreInfo = storeInfoRepository.findAll(pageRequest);
+        Page<StoreInfo> pageStoreInfo = storeInfoRepository.findByUser(pageRequest, user);
         Page<StoreBookmarkInfoDto> pageStoreInfoDto
                 = pageStoreInfo.map(StoreInfo -> StoreBookmarkInfoDto.builder()
                 .storeSeq(StoreInfo.getStoreSeq())
