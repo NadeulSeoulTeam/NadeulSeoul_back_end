@@ -11,6 +11,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findById(Long userSeq);
 
+    Optional<User> findByNickname(String nickname);
+
     boolean existsByNickname(String nickname);
 
     List<User> findTop10ByOrderByMyCurationCountDesc();

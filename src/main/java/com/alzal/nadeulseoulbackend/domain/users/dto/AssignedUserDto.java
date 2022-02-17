@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.users.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+
 @Getter
 public class AssignedUserDto {
     Long userSeq;
