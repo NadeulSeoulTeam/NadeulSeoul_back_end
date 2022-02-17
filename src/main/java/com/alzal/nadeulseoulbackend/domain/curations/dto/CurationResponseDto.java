@@ -12,6 +12,7 @@ import java.util.List;
 public class CurationResponseDto {
     private Long curationSeq;
     private Long memberSeq;
+    private UserCommentDto userinfos;
     private String title;
     private String description;
     private Integer personnel;
@@ -23,14 +24,13 @@ public class CurationResponseDto {
     private List<Long> fileList;
     private List<CodeDto> local;
     private List<CodeDto> theme;
-    private List<CurationCourseInfoDto> curationCourse;
+    private List<StoreInCurationDto> curationCourse;
 
     @Builder
-    public CurationResponseDto(Long curationSeq, Long memberSeq, String title, String description,
-                               Integer personnel, Integer budget, LocalDateTime date, Integer good,
-                               Integer views, Integer photoCount, List<CodeDto> local, List<CodeDto> theme,List<CurationCourseInfoDto> curationCourse) {
+    public CurationResponseDto(Long curationSeq, Long memberSeq, UserCommentDto userinfos, String title, String description, Integer personnel, Integer budget, LocalDateTime date, Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local, List<CodeDto> theme, List<StoreInCurationDto> curationCourse) {
         this.curationSeq = curationSeq;
         this.memberSeq = memberSeq;
+        this.userinfos = userinfos;
         this.title = title;
         this.description = description;
         this.personnel = personnel;
@@ -38,10 +38,11 @@ public class CurationResponseDto {
         this.date = date;
         this.good = good;
         this.views = views;
-        this.curationCourse = curationCourse;
         this.photoCount = photoCount;
+        this.fileList = fileList;
         this.local = local;
         this.theme = theme;
+        this.curationCourse = curationCourse;
     }
 
     public static CurationResponseDto fromEntity(Curation curation) {

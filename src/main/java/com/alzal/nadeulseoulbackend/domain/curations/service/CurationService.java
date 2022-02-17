@@ -84,12 +84,7 @@ public class CurationService {
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
                                             .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
-        List<StoreInfoDto> courseInfoList = curation.getStoreInCuration().stream().map();
-//        curation.getStoreInCuration().stream().
-//                forEach((courseInfo)-> courseInfoList.add(CurationCourseInfoDto.builder()
-//                .storeOrder(courseInfo.getStoreOrder())
-//                .storeInfo(StoreInfoDto.builder()
-//                        .storeSeq(courseInfo.getStoreInfo().getStoreSeq()).storeName(courseInfo.getStoreInfo()).build()).build()));
+        List<StoreInCurationDto> courseInfoList = curation.getStoreInCuration().stream().map(StoreInCurationDto::fromEntity).collect(Collectors.toList());
 
 
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
@@ -103,18 +98,18 @@ public class CurationService {
                 .photoCount(curation.getPhotoCount())
                 .local(localDtoList)
                 .theme(themeDtoList)
-                .curationCourse(C)
+                .curationCourse(courseInfoList)
                 .date(curation.getDate())
                 .build();
 
         return curationResponseDto;
     }
-
-
-    public List<CurationSearchResponseDto> getHotCurationList() {
-        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
-        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
-    }
+//
+//
+//    public List<CurationSearchResponseDto> getHotCurationList() {
+//        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
+//        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
+//    }
 
 
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
