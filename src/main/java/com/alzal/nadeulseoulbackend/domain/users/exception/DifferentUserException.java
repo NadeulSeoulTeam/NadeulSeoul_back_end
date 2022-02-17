@@ -5,6 +5,6 @@ import com.alzal.nadeulseoulbackend.global.exception.CustomException;
 
 public class DifferentUserException extends CustomException {
     public DifferentUserException(String message) {
-        super(ErrorStatusEnum.User_Not_Found,message);
+        super(ErrorStatusEnum.User_Not_Found, message);
     }
 }

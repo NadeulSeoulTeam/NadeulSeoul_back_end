@@ -16,7 +16,7 @@ public class AssignedUserDto {
     Integer followerCount;
 
     @Builder
-    public AssignedUserDto(Long userSeq,String emoji, String nickname, String role, Integer followeeCount, Integer followerCount) {
+    public AssignedUserDto(Long userSeq, String emoji, String nickname, String role, Integer followeeCount, Integer followerCount) {
         this.userSeq = userSeq;
         this.emoji = emoji;
         this.nickname = nickname;

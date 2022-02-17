@@ -32,18 +32,6 @@ public class StoreInfoDto {
         this.y = y;
     }
 
-    public StoreInfo toEntity() {
-        return StoreInfo.builder()
-                .storeSeq(storeSeq)
-                .storeName(storeName)
-                .categoryName(categoryName)
-                .placeUrl(placeUrl)
-                .phone(phone)
-                .x(x)
-                .y(y)
-                .build();
-    }
-
     static public StoreInfoDto fromEntity(StoreInfo storeInfo) {
         return StoreInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
@@ -54,6 +42,18 @@ public class StoreInfoDto {
                 .phone(storeInfo.getPhone())
                 .x(storeInfo.getX())
                 .y(storeInfo.getY())
+                .build();
+    }
+
+    public StoreInfo toEntity() {
+        return StoreInfo.builder()
+                .storeSeq(storeSeq)
+                .storeName(storeName)
+                .categoryName(categoryName)
+                .placeUrl(placeUrl)
+                .phone(phone)
+                .x(x)
+                .y(y)
                 .build();
     }
 

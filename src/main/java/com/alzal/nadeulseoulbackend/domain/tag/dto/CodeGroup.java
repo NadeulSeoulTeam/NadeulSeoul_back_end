@@ -17,13 +17,11 @@ import java.util.List;
 @Table(name = "tb_code_group")
 public class CodeGroup {
 
-    @Id
-    private Long groupSeq;
-
-    private String groupName;
-
     @OneToMany(mappedBy = "codeGroup")
     private final List<Code> codeList = new ArrayList<>();
+    @Id
+    private Long groupSeq;
+    private String groupName;
 
     @Builder
     public CodeGroup(Long groupSeq, String groupName) {

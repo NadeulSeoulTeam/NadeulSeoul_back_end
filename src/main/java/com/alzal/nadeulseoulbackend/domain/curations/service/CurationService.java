@@ -122,7 +122,7 @@ public class CurationService {
                 .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
-                .photoCount(fileList.size())
+                .photoCount(photocount)
                 .hidden(Boolean.FALSE)
                 .user(user)
                 .transportation(curationRequestDto.getTransportation())
@@ -139,6 +139,7 @@ public class CurationService {
                                 .build()
                 )
         );
+
         for(Long localSeq : curationRequestDto.getLocal()) {
             Code localTag = codeRepository.findById(localSeq)
                     .orElseThrow(() -> new TagNotFoundException("지역 태그가"));
@@ -162,7 +163,7 @@ public class CurationService {
                             .build()
             );
         }
-        
+
         List<Image>imageList = imageHandler.parseImageInfo( fileList, curation);
         if(imageList.size()>0){
             if (!imageList.isEmpty()) {
