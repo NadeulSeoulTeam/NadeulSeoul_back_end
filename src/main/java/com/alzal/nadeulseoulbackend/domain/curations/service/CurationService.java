@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,6 +84,14 @@ public class CurationService {
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
                                             .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
+        List<StoreInfoDto> courseInfoList = curation.getStoreInCuration().stream().map();
+//        curation.getStoreInCuration().stream().
+//                forEach((courseInfo)-> courseInfoList.add(CurationCourseInfoDto.builder()
+//                .storeOrder(courseInfo.getStoreOrder())
+//                .storeInfo(StoreInfoDto.builder()
+//                        .storeSeq(courseInfo.getStoreInfo().getStoreSeq()).storeName(courseInfo.getStoreInfo()).build()).build()));
+
+
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
                 .title(curation.getTitle())
@@ -94,6 +103,7 @@ public class CurationService {
                 .photoCount(curation.getPhotoCount())
                 .local(localDtoList)
                 .theme(themeDtoList)
+                .curationCourse(C)
                 .date(curation.getDate())
                 .build();
 
@@ -113,27 +123,30 @@ public class CurationService {
 
     }
 
-    public void insertCurationImage(List<MultipartFile> fileList) throws ImageIOException {
-        Long userSeq = userInfoService.getId();
-        imageFileList=fileList;
-//        Curation curation = curationRepository.findById(userSeq).orElseGet(Curation::new);
-        if(curation.getCurationSeq()!=null){
-            List<Image> imageList = imageHandler.parseImageInfo(fileList, curation);
-            if (!imageList.isEmpty()) {
-                for (Image image : imageList) {
-                    curation.addImage(imageRepositoroy.save(image));
-                }
-                curation.changeThumnail(imageList.get(0).getImageSeq());
-            } else {
-                curation.changeThumnail(0L);
-            }
-        }
-    }
+//    public void insertCurationImage(List<MultipartFile> fileList) throws ImageIOException {
+//        Long userSeq = userInfoService.getId();
+//        imageFileList=fileList;
+////        Curation curation = curationRepository.findById(userSeq).orElseGet(Curation::new);
+//        if(curation.getCurationSeq()!=null){
+//            List<Image> imageList = imageHandler.parseImageInfo(fileList, curation);
+//            if (!imageList.isEmpty()) {
+//                for (Image image : imageList) {
+//                    curation.addImage(imageRepositoroy.save(image));
+//                }
+//                curation.changeThumnail(imageList.get(0).getImageSeq());
+//            } else {
+//                curation.changeThumnail(0L);
+//            }
+//        }
+//    }
 
-    public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
+
+    public void insertCuration(List<MultipartFile>fileList,CurationRequestDto curationRequestDto) throws Exception {
         List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
         User user = userRepository.findById(userInfoService.getId()) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
+        int photocount = 0;
+        if(fileList!=null) photocount = fileList.size();
 
         curation = Curation.builder()
                 .title(curationRequestDto.getTitle())
@@ -142,6 +155,7 @@ public class CurationService {
                 .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
+                .photoCount(fileList.size())
                 .hidden(Boolean.FALSE)
                 .user(user)
                 .build();

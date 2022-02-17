@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
+import com.alzal.nadeulseoulbackend.domain.curations.dto.StoreInCurationDto;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
@@ -42,4 +43,5 @@ public class StoreInCuration {
         this.curation = curation;
         this.storeInfo = storeInfo;
     }
+
 }

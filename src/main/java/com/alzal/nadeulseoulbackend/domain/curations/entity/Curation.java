@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.curations.entity;
 
-import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -65,7 +64,7 @@ public class Curation {
     Set<ThemeCuration> themeCuration;
 
     @OneToMany(mappedBy = "curation")
-    List<StoreInCuration> curationInCuration;
+    List<StoreInCuration> storeInCuration;
 
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,
@@ -106,6 +105,8 @@ public class Curation {
         this.photoCount = photoCount;
     }
 
+    public void getCourseInfo(){
+         }
     public void addLocalTag(LocalCuration localCuration) {
         this.localCuration.add(localCuration);
     }
