@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
+@NoArgsConstructor
 @Entity
 @SequenceGenerator(
         name = "STORE_IN_CURATION_SEQ_GENERATOR",

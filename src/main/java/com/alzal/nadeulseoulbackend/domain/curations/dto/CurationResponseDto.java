@@ -11,7 +11,6 @@ import java.util.List;
 @Data
 public class CurationResponseDto {
     private Long curationSeq;
-    private Long memberSeq;
     private UserInfoDto userinfos;
     private String title;
     private String description;
@@ -33,7 +32,6 @@ public class CurationResponseDto {
                                Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local,
                                List<CodeDto> theme, List<StoreInCurationDto> curationCourse, String transportation) {
         this.curationSeq = curationSeq;
-        this.memberSeq = memberSeq;
         this.userinfos = userinfos;
         this.title = title;
         this.description = description;

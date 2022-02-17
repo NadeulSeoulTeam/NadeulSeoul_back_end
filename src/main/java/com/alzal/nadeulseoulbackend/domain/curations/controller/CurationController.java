@@ -76,7 +76,6 @@ public class CurationController {
             e.printStackTrace();
         }
 
-        curationResponseDto.changeFileList(imageSeqList);
         response.setData(curationResponseDto);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }

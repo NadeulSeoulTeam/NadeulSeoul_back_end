@@ -79,6 +79,7 @@ public class CurationService {
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
                 .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
+        List<Long> fileList = curation.getImageList().stream().map(Image::getImageSeq).collect(Collectors.toList());
         List<StoreInCurationDto> courseInfoList = curation.getStoreInCuration().stream().map(StoreInCurationDto::fromEntity).collect(Collectors.toList());
 
 
@@ -97,6 +98,7 @@ public class CurationService {
                 .curationCourse(courseInfoList)
                 .date(curation.getDate())
                 .transportation(curation.getTransportation())
+                .fileList(fileList)
                 .build();
 
         return curationResponseDto;
