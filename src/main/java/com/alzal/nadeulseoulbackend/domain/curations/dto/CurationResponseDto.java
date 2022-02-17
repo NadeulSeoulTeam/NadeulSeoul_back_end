@@ -52,7 +52,7 @@ public class CurationResponseDto {
                 .build();
     }
 
-    public void changeFileList(List<Long> fileList){
+    public void changeFileList(List<Long> fileList) {
         this.fileList = fileList;
     }
 }

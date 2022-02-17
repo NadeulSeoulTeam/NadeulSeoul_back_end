@@ -5,6 +5,6 @@ import com.alzal.nadeulseoulbackend.global.exception.EntityNotFoundException;
 public class CurationNotFoundException extends EntityNotFoundException {
 
     public CurationNotFoundException(String name) {
-        super(name+" 존재하지 않습니다.");
+        super(name + " 존재하지 않습니다.");
     }
 }

@@ -4,6 +4,7 @@ import com.alzal.nadeulseoulbackend.domain.users.dto.AssignedUserDto;
 import com.alzal.nadeulseoulbackend.domain.users.dto.SignupInfoDto;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.exception.CannotDeleteUserTokenInRedisException;
+import com.alzal.nadeulseoulbackend.domain.users.exception.DifferentUserException;
 import com.alzal.nadeulseoulbackend.domain.users.exception.DuplicatedNicknameException;
 import com.alzal.nadeulseoulbackend.domain.users.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
@@ -13,6 +14,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 
 @Service
@@ -28,18 +31,20 @@ public class UserInfoService {
 
     //User정보 등록하기
     @Transactional
-    public AssignedUserDto updateSignupInfo (SignupInfoDto signupInfo){
+    public AssignedUserDto updateSignupInfo(SignupInfoDto signupInfo) {
 
         Long id = getId();
-        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(),signupInfo.getEmoji())).orElseGet(User::new);
+
+        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(()->new UserNotFoundException("구글에서 유저 정보를 받을 수 없습니다."));
+
         userRepository.save(user);
         AssignedUserDto assignedUserDto = getAssignedUserInfo();
         return assignedUserDto;
     }
 
 
-    public Long getId(){
-        UserPrincipal userPrincipal = (UserPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public Long getId() {
+        UserPrincipal userPrincipal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         id = userPrincipal.getId();
         return id;
     }
@@ -47,16 +52,19 @@ public class UserInfoService {
     public AssignedUserDto getAssignedUserInfo() {
 
         Long id = getId();
-        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
-        AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).nickname(user.getNickname()).role(user.getRoleKey()).followeeCount(user.getFolloweeCount()).followerCount(user.getFollowerCount()).build();
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("받아온 id로는 유저를 찾을 수 없습니다."));
+        AssignedUserDto assignedUserDto = AssignedUserDto.builder().userSeq(user.getUserSeq()).emoji(user.getEmoji()).nickname(user.getNickname()).role(user.getRoleKey()).followeeCount(user.getFolloweeCount()).followerCount(user.getFollowerCount()).build();
         return assignedUserDto;
     }
 
 
-    public void checkNicknameDuplication(String nickname){
-        System.out.println(userRepository.existsByNickname(nickname));
-        if(userRepository.existsByNickname(nickname)){
-            throw new DuplicatedNicknameException("중복된 닉네임입니다.");
+    public void checkNicknameDuplication(String nickname) {
+        User user = userRepository.findById(getId()).orElseGet(User::new);
+        Long userId = getId();
+        if(user.getUserSeq()!=userId) {
+            if (userRepository.existsByNickname(nickname)) {
+                throw new DuplicatedNicknameException("중복된 닉네임입니다.");
+            }
         }
     }
 
@@ -64,8 +72,17 @@ public class UserInfoService {
         String userId = Long.toString(getId());
         stringRedisTemplate.delete(userId);
         String valueForCheck = stringRedisTemplate.opsForValue().get(userId);
-        if(valueForCheck!=null){
+        if (valueForCheck != null) {
             throw new CannotDeleteUserTokenInRedisException("유저 토큰을 레디스에서 삭제할 수 없습니다.");
         }
+    }
+
+    @Transactional
+    public void editUserInfo(SignupInfoDto signupInfo,String paramId) {
+        Long Id = getId();
+        if(!paramId.equals(Long.toString(Id))) throw new DifferentUserException("다른 사용자의 접근 입니다.");
+        User user = userRepository.findById(Id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(()->new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
+
+        userRepository.save(user);
     }
 }

@@ -1,7 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.service;
 
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreBookmarkInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.BookmarkDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreBookmark;
@@ -12,7 +11,6 @@ import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreBookmarkReposi
 import com.alzal.nadeulseoulbackend.domain.stores.repository.StoreInfoRepository;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
-import com.sun.istack.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,20 +36,15 @@ public class StoreService {
     UserRepository userRepository;
 
     // 찜한 장소 정보 리스트 가져오기
-    public Page<StoreBookmarkInfoDto> getStoreBookmarkInfoDto(Long userSeq, int page, int size) {
+    public Page<StoreInfoDto> getStoreBookmarkInfoDto(Long userSeq, int page, int size) {
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 
         // pagination 구현
         Pageable pageRequest = PageRequest.of(page, size);
-        Page<StoreInfo> pageStoreInfo = storeInfoRepository.findAll(pageRequest);
-        Page<StoreBookmarkInfoDto> pageStoreInfoDto
-                = pageStoreInfo.map(StoreInfo -> StoreBookmarkInfoDto.builder()
-                                                                    .storeSeq(StoreInfo.getStoreSeq())
-                                                                    .storeName(StoreInfo.getStoreName())
-                                                                    .addressName(StoreInfo.getAddressName())
-                                                                    .categoryName(StoreInfo.getCategoryName())
-                                                                    .build());
+        Page<StoreBookmark> pageStoreInfo = storeBookmarkRepository.findByUser(pageRequest, user);
+        Page<StoreInfoDto> pageStoreInfoDto
+                = pageStoreInfo.map(StoreBookmark::getStoreInfo).map(StoreInfoDto::fromEntity);
 
         return pageStoreInfoDto;
     }
@@ -92,7 +87,7 @@ public class StoreService {
                         .user(user)
                         .storeInfo(storeInfo)
                         .build()
-                );
+        );
     }
 
     // 장소 찜하기 취소
@@ -108,7 +103,7 @@ public class StoreService {
                 .orElseThrow(() -> new StoreBookmarkNotFoundException("사용자가 해당 장소를 찜한적이 없습니다."));
 
         // 1이상이면 bookmarkCount -1
-        if(storeInfo.getBookmarkCount() > 0) storeInfo.deleteBookmarkCount();
+        if (storeInfo.getBookmarkCount() > 0) storeInfo.deleteBookmarkCount();
 
         // 상가 찜하기 테이블에서 삭제
         storeBookmarkRepository.delete(storeBookmark);
@@ -121,7 +116,7 @@ public class StoreService {
 
         // 해당 장소가 없을 때 -> 찜하기 0, false
         Optional<StoreInfo> storeInfo = storeInfoRepository.findById(storeSeq);
-        if(storeInfo.isEmpty()){
+        if (storeInfo.isEmpty()) {
             return BookmarkDto.builder()
                     .BookmarkCount(0L)
                     .IsBookmark(false)
@@ -130,7 +125,7 @@ public class StoreService {
 
         // 찜한적이 없을 때 -> 상가정보의 bookmarkCount, false
         Optional<StoreBookmark> storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo.get());
-        if(storeBookmark.isEmpty()){
+        if (storeBookmark.isEmpty()) {
             return BookmarkDto.builder()
                     .BookmarkCount(storeInfo.get().getBookmarkCount())
                     .IsBookmark(false)

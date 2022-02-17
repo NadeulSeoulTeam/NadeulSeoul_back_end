@@ -1,8 +1,8 @@
 package com.alzal.nadeulseoulbackend.global.config;
 
+import com.alzal.nadeulseoulbackend.global.auth.CustomOAuth2UserService;
 import com.alzal.nadeulseoulbackend.global.auth.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.alzal.nadeulseoulbackend.global.auth.security.OAuth2AuthenticationSuccessHandler;
-import com.alzal.nadeulseoulbackend.global.auth.CustomOAuth2UserService;
 import com.alzal.nadeulseoulbackend.global.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -40,12 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final ClientRegistrationRepository clientRegistrationRepository;
 
     @Bean
-    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository(){
+    public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
         return new HttpCookieOAuth2AuthorizationRequestRepository();
     }
 
     @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter(){
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter();
     }
 
@@ -60,10 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors().configurationSource(corsConfigurationSource()) //cors 허용
                 .and()
-                .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Session 비활성화
                 .and()
-                .addFilterBefore(tokenAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable() //csrf 비활성화
                 .formLogin().disable() //로그인폼 비활성화
                 .httpBasic().disable() //기본 로그인 창 비활성화
@@ -83,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(oAuth2AuthenticationSuccessHandler);
 
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

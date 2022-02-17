@@ -3,7 +3,6 @@ package com.alzal.nadeulseoulbackend.domain.mypage.service;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.FollowDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.dto.MypageInfoDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.entity.FollowInfo;
-
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.FollowInfoExistenceException;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.FollowInfoNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
@@ -51,7 +50,7 @@ public class MypageService {
         Iterator<FollowInfo> iter = followeeList.iterator();
         while (iter.hasNext()) {
             User follower = iter.next().getFollower();
-            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickname(),follower.getEmoji()));
+            followDtoList.add(new FollowDto(follower.getUserSeq(), follower.getNickname(), follower.getEmoji()));
         }
 
         return followDtoList;
@@ -86,7 +85,9 @@ public class MypageService {
 
         // 이미 팔로우된 사람인지 확인
         Optional<FollowInfo> followInfo = mypageRepository.findByFolloweeAndFollower(followee, follower);
-        followInfo.ifPresent(f -> {throw new FollowInfoExistenceException("이미 팔로우한 사용자 입니다.");});
+        followInfo.ifPresent(f -> {
+            throw new FollowInfoExistenceException("이미 팔로우한 사용자 입니다.");
+        });
 
         //팔로우 테이블에 저장
         FollowInfo followInfoEntity = mypageRepository.save(

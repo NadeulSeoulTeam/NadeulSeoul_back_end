@@ -1,12 +1,13 @@
 package com.alzal.nadeulseoulbackend.domain.curations.service;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentRequestDto;
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CommentResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Comment;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentAuthorizationMismatchException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CommentNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CommentRepository;
-
 import com.alzal.nadeulseoulbackend.domain.curations.repository.CurationTagRepository;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
@@ -19,13 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-
-// TODO :
-//      User 관련 변수 전부 1L 로 임의 값 설정
 
 @Service
 @RequiredArgsConstructor
@@ -43,20 +39,20 @@ public class CommentService {
 
     public List<CommentResponseDto> getCommentList(Long curationSeq) {
         Set<Comment> commentSet = curationRepository.findById(curationSeq)
-                .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "))
+                .orElseThrow(() -> new CurationNotFoundException("큐레이션이 "))
                 .getCommentList();
         return commentSet.stream().map(CommentResponseDto::fromEntity).collect(Collectors.toList());
     }
 
-    public Page<CommentResponseDto> getCommentListByPage(Long curationSeq, Pageable pageable){
+    public Page<CommentResponseDto> getCommentListByPage(Long curationSeq, Pageable pageable) {
         Page<Comment> commentPage = commentRepository.findByCurationSeq(curationSeq, pageable);
         return commentPage.map(CommentResponseDto::fromEntity);
     }
 
-    public void insertComment(CommentRequestDto commentRequestDto) {
+    public void insertComment(CommentRequestDto commentRequestDto, Long id) {
         Curation curation = curationRepository.findById(commentRequestDto.getCurationSeq())
                 .orElseThrow(()-> new CurationNotFoundException("큐레이션이 "));
-        User user = userRepository.findById(1L) // 현재 임의 값
+        User user = userRepository.findById(id) // 현재 임의 값
                 .orElseThrow(()-> new UserNotFoundException("사용자가 "));
 
         Comment comment = Comment.builder()
@@ -68,15 +64,22 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public void updateComment(CommentRequestDto commentRequestDto) {
+    public void updateComment(CommentRequestDto commentRequestDto, Long id) {
         Comment comment = commentRepository.findById(commentRequestDto.getCommentSeq())
                 .orElseThrow(() -> new CommentNotFoundException("댓글이"));
+
+        if(!id.equals(comment.getUser().getUserSeq())){
+            throw new CommentAuthorizationMismatchException("해당 댓글의 사용자가 아닙니다.");
+        }
         comment.change(commentRequestDto.getContent());
     }
 
-    public void deleteByCommentSeq(Long commentSeq) {
+    public void deleteByCommentSeq(Long commentSeq, Long id) {
         Comment comment = commentRepository.findById(commentSeq)
                 .orElseThrow(() -> new CommentNotFoundException("댓글이"));
+        if(!id.equals(comment.getUser().getUserSeq())){
+            throw new CommentAuthorizationMismatchException("해당 댓글의 사용자가 아닙니다.");
+        }
         commentRepository.deleteById(commentSeq);
     }
 }

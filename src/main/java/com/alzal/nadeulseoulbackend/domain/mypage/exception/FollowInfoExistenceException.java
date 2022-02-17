@@ -5,6 +5,6 @@ import com.alzal.nadeulseoulbackend.global.exception.CustomException;
 
 public class FollowInfoExistenceException extends CustomException {
     public FollowInfoExistenceException(String message) {
-        super(ErrorStatusEnum.FOLLOWINFO_EXISTENCE,message);
+        super(ErrorStatusEnum.FOLLOWINFO_EXISTENCE, message);
     }
 }

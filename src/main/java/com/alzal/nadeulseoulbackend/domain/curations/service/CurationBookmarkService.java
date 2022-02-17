@@ -44,18 +44,22 @@ public class CurationBookmarkService {
                 .orElseThrow(() -> new CurationNotFoundException("해당 큐레이션이"));
 
         // 본인이 만든 큐레이션 찜하기 금지 예외처리
-        if(curation.getUser().getUserSeq() == userSeq) {
+        if (curation.getUser().getUserSeq() == userSeq) {
             throw new MyCurationBookmarkException("사용자가 만든 큐레이션은 스크랩 할 수 없습니다.");
         }
 
         // 스크랩 여부 확인 api 미작동시 예외처리
         Optional<CurationBookmark> curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation);
-        curationBookmark.ifPresent(c -> {throw new CurationBookmarkExistenceException("이미 사용자가 해당 큐레이션을 스크랩하였습니다.");});
+        curationBookmark.ifPresent(c -> {
+            throw new CurationBookmarkExistenceException("이미 사용자가 해당 큐레이션을 스크랩하였습니다.");
+        });
+
+        curation.addGood();
 
         curationBookmarkRepository.save(CurationBookmark.builder()
-                        .user(user)
-                        .curation(curation)
-                        .build());
+                .user(user)
+                .curation(curation)
+                .build());
     }
 
     // 큐레이션 스크랩 취소하기
@@ -69,6 +73,8 @@ public class CurationBookmarkService {
 
         CurationBookmark curationBookmark = curationBookmarkRepository.findByUserAndCuration(user, curation)
                 .orElseThrow(() -> new CurationBookmarkNotFoundException("사용자가 해당 큐레이션을 스크랩한적이 없습니다."));
+
+        curation.removeGood();
 
         curationBookmarkRepository.delete(curationBookmark);
     }
@@ -86,7 +92,7 @@ public class CurationBookmarkService {
     }
 
     // 스크랩한 큐레이션 나열
-    public Page<CurationBookmarkDto> getCurationBookmarkList(Long userSeq, int page, int size){
+    public Page<CurationBookmarkDto> getCurationBookmarkList(Long userSeq, int page, int size) {
         User user = userRepository.findById(userSeq)
                 .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
 

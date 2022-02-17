@@ -10,7 +10,5 @@ import java.util.List;
 
 
 public interface StoreInfoRepository extends JpaRepository<StoreInfo, Long> {
-    // 찜 목록 가져오기 pagination
-    Page<StoreInfo> findAll(Pageable pageable);
     List<StoreInfo> findTop10ByOrderByBookmarkCountDesc();
 }

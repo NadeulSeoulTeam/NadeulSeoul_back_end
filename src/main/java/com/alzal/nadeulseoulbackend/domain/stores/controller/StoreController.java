@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.controller;
 
+import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreCartDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.service.StoreService;
 import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
@@ -36,15 +37,14 @@ public class StoreController {
     private UserInfoService userInfoService;
 
     /*
-    *  찜한 장소 리스트 가져오기
-    * */
+     *  찜한 장소 리스트 가져오기
+     * */
     @ApiOperation(value = "user_seq가 찜한 장소 리스트를 가져온다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "찜한 장소 리스트 가져오기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
-    @GetMapping("/auth/stores/bookmarks")
-    public ResponseEntity<Response> getStoreBookmarkList(@RequestParam("page") int page, @RequestParam("size") int size) {
-        Long userSeq = userInfoService.getId();
+            @ApiResponse(code = 200, message = "찜한 장소 리스트 가져오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
+    @GetMapping("/stores/bookmarks/{user_seq}")
+    public ResponseEntity<Response> getStoreBookmarkList(@PathVariable("user_seq") Long userSeq, @RequestParam("page") int page, @RequestParam("size") int size) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
@@ -58,8 +58,8 @@ public class StoreController {
      * */
     @ApiOperation(value = "장소 상세 정보를 가져온다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "장소 상세 정보 가져오기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "장소 상세 정보 가져오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/stores/{store_seq}")
     public ResponseEntity<Response> getStoreInfo(@PathVariable("store_seq") Long storeSeq) {
         Response response = new Response();
@@ -75,8 +75,8 @@ public class StoreController {
      * */
     @ApiOperation(value = "user가 store_seq에 해당하는 장소를 찜한다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "장소 찜하기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "장소 찜하기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> insertStoreBookmark(@PathVariable("store_seq") Long storeSeq, @RequestBody StoreInfoDto storeInfoDto) {
         Long userSeq = userInfoService.getId();
@@ -93,8 +93,8 @@ public class StoreController {
      * */
     @ApiOperation(value = "user가 store_seq에 해당하는 찜한 장소 취소한다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "확인 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "확인 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @DeleteMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> deleteStoreBookmark(@PathVariable("store_seq") Long storeSeq) {
         Long userSeq = userInfoService.getId();
@@ -111,8 +111,8 @@ public class StoreController {
      * */
     @ApiOperation(value = "user가 store_seq에 해당하는 장소를 찜했는지 확인한다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "확인 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "확인 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> getIsBookmark(@PathVariable("store_seq") Long storeSeq) {
         Long userSeq = userInfoService.getId();
@@ -129,19 +129,15 @@ public class StoreController {
      * */
     @ApiOperation(value = "찜한 장소 목록에서 선택한 순서대로 장소 정보 가져온다.", response = Response.class)
     @ApiResponses({
-            @ApiResponse(code= 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
-            @ApiResponse(code= 404, message = "page not found")})
+            @ApiResponse(code = 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
+            @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/auth/stores/bookmarks/courses")
-    public ResponseEntity<Response> getIsBookmark(@RequestBody Map<String, List<Long>> param) {
-        Long userSeq = userInfoService.getId();
-        List<Long> storeSeqList = param.get("storeSeqList");
-        System.out.println(storeSeqList.size());
+    public ResponseEntity<Response> getIsBookmark(@RequestBody StoreCartDto storeCartDto) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("선택한 순서대로 장소 정보 가져오기 성공");
-        response.setData(storeService.getStoreInfoListInOrder(userSeq, storeSeqList));
+        response.setData(storeService.getStoreInfoListInOrder(storeCartDto.getUserSeq(), storeCartDto.getStoreSeqList()));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
-
 }

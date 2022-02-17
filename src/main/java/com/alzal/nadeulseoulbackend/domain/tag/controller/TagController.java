@@ -1,6 +1,5 @@
 package com.alzal.nadeulseoulbackend.domain.tag.controller;
 
-import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.tag.dto.CodeDto;
@@ -24,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -48,7 +48,7 @@ public class TagController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         response.setStatus(StatusEnum.OK);
         response.setMessage("지역 태그 목록 조회 성공");
         response.setData(localTagDtoList);
@@ -67,7 +67,7 @@ public class TagController {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         response.setStatus(StatusEnum.OK);
         response.setMessage("테마 태그 목록 조회 성공");
         response.setData(themeTagDtoList);
@@ -83,13 +83,13 @@ public class TagController {
     @PostMapping("/search")
     public ResponseEntity<Response> getCurationListByTag(
             @RequestBody CodeRequestDto codeRequestDto,
-            @PageableDefault(page = 0, size = 10, sort = "views", direction = Sort.Direction.DESC ) Pageable pageable
+            @PageableDefault(page = 0, size = 10, sort = "views", direction = Sort.Direction.DESC) Pageable pageable
     ) {
 
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         Page<CurationSearchResponseDto> page = curationService.getCurationListByPageWithCode(codeRequestDto, pageable);
         response.setStatus(StatusEnum.OK);
         response.setMessage("태그 검색 목록 조회 성공");
