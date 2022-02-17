@@ -59,13 +59,22 @@ public class UserInfoService {
 
 
     public void checkNicknameDuplication(String nickname) {
-        User user = userRepository.findById(getId()).orElseGet(User::new);
         Long userId = getId();
-        if(user.getUserSeq()!=userId) {
-            if (userRepository.existsByNickname(nickname)) {
+        if(userRepository.existsByNickname(nickname)){ // 존재하면
+            User user = userRepository.findByNickname(nickname).orElseGet(User::new);
+            if (!userId.equals(user.getUserSeq())){
                 throw new DuplicatedNicknameException("중복된 닉네임입니다.");
             }
         }
+
+        //        User user = userRepository.findById(getId()).orElseGet(User::new);
+//        Long userId = getId();
+//        if (userRepository.existsByNickname(nickname)) {
+//            if(user.getUserSeq()!=userId) {
+//                throw new DuplicatedNicknameException("중복된 닉네임입니다.");
+//            }
+//        }
+
     }
 
     public void signoutUserfromRedis() {

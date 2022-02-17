@@ -3,10 +3,12 @@ package com.alzal.nadeulseoulbackend.domain.curations.dto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NoArgsConstructor
 @Getter
 public class CurationRequestDto {
     private Long curationSeq;
