@@ -5,6 +5,7 @@ import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationSearchResponseDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationService;
 import com.alzal.nadeulseoulbackend.domain.curations.service.ImageService;
+import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.Api;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 목록 불러오기 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
+
     @GetMapping("/curations/{user_seq}")
     public ResponseEntity<Response> getCurationListPage(@PathVariable("user_seq") Long userSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
         Response response = new Response();
@@ -83,13 +86,15 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PostMapping("/auth/curations")
-    public ResponseEntity<Response> insertCuration(@RequestBody CurationRequestDto curationRequestDto) {
+
+    @PostMapping(value = "/auth/curations", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Response> insertCuration(
+            @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList,
+            @RequestPart(value = "curationRequestDto") CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
-
         try {
-            curationService.insertCuration(curationRequestDto);
+            curationService.insertCuration(fileList, curationRequestDto);
             response.setStatus(StatusEnum.OK);
             response.setMessage("큐레이션 작성이 완료되었습니다.");
         } catch (Exception e) {
@@ -98,27 +103,27 @@ public class CurationController {
 
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
-
-    @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
-            @ApiResponse(code = 404, message = "page not found")
-    })
-    @PostMapping("/auth/curations/images")
-    public ResponseEntity<Response> insertImageInCuration(final List<MultipartFile> fileList) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        try {
-            curationService.insertCurationImage(fileList);
-            response.setStatus(StatusEnum.OK);
-            response.setMessage("이미지 업로드가 완료되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
-    }
+  
+//    @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "큐레이션 생성이 완료되었습니다."),
+//            @ApiResponse(code = 404, message = "page not found")
+//    })
+//    @PostMapping("/images")
+//    public ResponseEntity<Response> insertImageInCuration(final List<MultipartFile> fileList) {
+//        Response response = new Response();
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        try {
+//            curationService.insertCurationImage(fileList);
+//            response.setStatus(StatusEnum.OK);
+//            response.setMessage("이미지 업로드가 완료되었습니다.");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return new ResponseEntity<>(response, headers, HttpStatus.OK);
+//    }
 
 
 

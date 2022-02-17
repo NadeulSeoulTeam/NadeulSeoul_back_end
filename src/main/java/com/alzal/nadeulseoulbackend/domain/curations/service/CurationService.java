@@ -4,7 +4,6 @@ import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.*;
 
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.*;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
@@ -80,8 +79,12 @@ public class CurationService {
         List<CodeDto> themeDtoList = curation.getThemeCuration().stream().map(ThemeCuration::getCode).collect(Collectors.toList())
                 .stream().map(CodeDto::fromEntity).collect(Collectors.toList());
 
+        List<StoreInCurationDto> courseInfoList = curation.getStoreInCuration().stream().map(StoreInCurationDto::fromEntity).collect(Collectors.toList());
+
+
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
+                .userinfos(UserInfoDto.fromEntity(curation.getUser()))
                 .title(curation.getTitle())
                 .budget(curation.getBudget())
                 .personnel(curation.getPersonnel())
@@ -91,45 +94,52 @@ public class CurationService {
                 .photoCount(curation.getPhotoCount())
                 .local(localDtoList)
                 .theme(themeDtoList)
+                .curationCourse(courseInfoList)
                 .date(curation.getDate())
                 .build();
 
         return curationResponseDto;
     }
 
-    public List<CurationSearchResponseDto> getHotCurationList() {
-        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
-        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
-    }
-  
+//
+//
+//    public List<CurationSearchResponseDto> getHotCurationList() {
+//        List<Curation> curationList = curationRepository.findTop10ByHiddenFalseOrderByViewsDesc();
+//        return curationList.stream().map(CurationSearchResponseDto::fromEntity).collect(Collectors.toList());
+//    }
+
+
     public Page<CurationSearchResponseDto> getCurationListByPage(Long userSeq, Pageable pageable) {
         Page<Curation> curationPage = curationRepository.findByUserSeqAndHiddenIsFalse(userSeq, pageable);
         return curationPage.map(CurationSearchResponseDto::fromEntity);
 
     }
 
-    public void insertCurationImage(List<MultipartFile> fileList) throws ImageIOException {
-        Long userSeq = userInfoService.getId();
-        imageFileList=fileList;
-//        Curation curation = curationRepository.findById(userSeq).orElseGet(Curation::new);
-        if(curation.getCurationSeq()!=null){
-            List<Image> imageList = imageHandler.parseImageInfo(fileList, curation);
-            if (!imageList.isEmpty()) {
-                for (Image image : imageList) {
-                    curation.addImage(imageRepositoroy.save(image));
-                }
-                curation.changeThumnail(imageList.get(0).getImageSeq());
-            } else {
-                curation.changeThumnail(0L);
-            }
-        }
-    }
+//    public void insertCurationImage(List<MultipartFile> fileList) throws ImageIOException {
+//        Long userSeq = userInfoService.getId();
+//        imageFileList=fileList;
+////        Curation curation = curationRepository.findById(userSeq).orElseGet(Curation::new);
+//        if(curation.getCurationSeq()!=null){
+//            List<Image> imageList = imageHandler.parseImageInfo(fileList, curation);
+//            if (!imageList.isEmpty()) {
+//                for (Image image : imageList) {
+//                    curation.addImage(imageRepositoroy.save(image));
+//                }
+//                curation.changeThumnail(imageList.get(0).getImageSeq());
+//            } else {
+//                curation.changeThumnail(0L);
+//            }
+//        }
+//    }
 
 
-    public void insertCuration(CurationRequestDto curationRequestDto) throws Exception {
+
+    public void insertCuration(List<MultipartFile>fileList,CurationRequestDto curationRequestDto) throws Exception {
         List<StoreInfoDto> storeInfos = curationRequestDto.getCourseRoute();
         User user = userRepository.findById(userInfoService.getId()) // 멤버 변수 토큰으로 받아오기
                 .orElseThrow(()->new UserNotFoundException("사용자가 "));
+        int photocount = 0;
+        if(fileList!=null) photocount = fileList.size();
 
         curation = Curation.builder()
                 .title(curationRequestDto.getTitle())
@@ -138,6 +148,7 @@ public class CurationService {
                 .description(curationRequestDto.getDescription())
                 .good(0)
                 .views(0)
+                .photoCount(fileList.size())
                 .hidden(Boolean.FALSE)
                 .user(user)
                 .build();

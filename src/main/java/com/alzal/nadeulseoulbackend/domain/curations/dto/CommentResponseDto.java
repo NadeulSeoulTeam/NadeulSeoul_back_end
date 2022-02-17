@@ -14,11 +14,11 @@ public class CommentResponseDto {
     private Long commentSeq;
     private Long curationSeq;
     private String content;
-    private UserCommentDto user;
+    private UserInfoDto user;
     private LocalDateTime date;
 
     @Builder
-    public CommentResponseDto(Long commentSeq, Long curationSeq, UserCommentDto user, String content, LocalDateTime date) {
+    public CommentResponseDto(Long commentSeq, Long curationSeq, UserInfoDto user, String content, LocalDateTime date) {
         this.commentSeq = commentSeq;
         this.curationSeq = curationSeq;
         this.user = user;
@@ -30,7 +30,7 @@ public class CommentResponseDto {
         return CommentResponseDto.builder()
                 .commentSeq(comment.getCommentSeq())
                 .curationSeq(comment.getCurationSeq())
-                .user(UserCommentDto.fromEntity(comment.getUser()))
+                .user(UserInfoDto.fromEntity(comment.getUser()))
                 .content(comment.getContent())
                 .date(comment.getDate())
                 .build();
