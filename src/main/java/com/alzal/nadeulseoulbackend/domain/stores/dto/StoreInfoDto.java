@@ -48,11 +48,12 @@ public class StoreInfoDto {
         return StoreInfoDto.builder()
                 .storeSeq(storeInfo.getStoreSeq())
                 .storeName(storeInfo.getStoreName())
+                .addressName(storeInfo.getAddressName())
                 .categoryName(storeInfo.getCategoryName())
                 .placeUrl(storeInfo.getPlaceUrl())
                 .phone(storeInfo.getPhone())
                 .x(storeInfo.getX())
-                .x(storeInfo.getY())
+                .y(storeInfo.getY())
                 .build();
     }
 

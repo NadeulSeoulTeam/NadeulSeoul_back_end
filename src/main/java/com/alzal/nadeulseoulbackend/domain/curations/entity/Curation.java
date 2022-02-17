@@ -42,6 +42,8 @@ public class Curation {
     private Long thumnail;
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;
+    private String transportation;
+
     @ManyToOne
     @JoinColumn(name = "user_seq")
     private User user;
@@ -65,7 +67,7 @@ public class Curation {
     @Builder
     public Curation(Long curationSeq, String title, Integer budget, Integer personnel,
                     String description, LocalDateTime date, Integer good, Integer views,
-                    Integer photoCount, Long thumnail, Boolean hidden, User user) {
+                    Integer photoCount, Long thumnail, Boolean hidden, User user, String transportation) {
         this.curationSeq = curationSeq;
         this.title = title;
         this.budget = budget;
@@ -78,6 +80,7 @@ public class Curation {
         this.thumnail = thumnail;
         this.hidden = hidden;
         this.user = user;
+        this.transportation = transportation;
     }
 
     public void changeHidden(Boolean flag) {
