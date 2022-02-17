@@ -79,6 +79,8 @@ public class StoreController {
         Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        System.out.println("x값");
+        System.out.println(storeInfoDto.getX());
         storeService.insertStoreBookmark(userSeq, storeSeq, storeInfoDto);
         response.setStatus(StatusEnum.OK);
         response.setMessage("장소 찜하기 성공");

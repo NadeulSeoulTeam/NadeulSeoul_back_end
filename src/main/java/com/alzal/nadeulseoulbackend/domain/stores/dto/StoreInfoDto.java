@@ -1,6 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.stores.dto;
 
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

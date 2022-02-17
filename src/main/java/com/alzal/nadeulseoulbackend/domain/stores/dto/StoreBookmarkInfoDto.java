@@ -1,9 +1,13 @@
 package com.alzal.nadeulseoulbackend.domain.stores.dto;
 
 import com.alzal.nadeulseoulbackend.domain.stores.entity.StoreInfo;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class StoreBookmarkInfoDto {
