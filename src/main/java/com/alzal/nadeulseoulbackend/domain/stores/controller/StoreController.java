@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.controller;
 
+import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreCartDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.service.StoreService;
 import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
@@ -131,15 +132,12 @@ public class StoreController {
             @ApiResponse(code = 200, message = "선택한 순서대로 장소 정보 가져오기 성공"),
             @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/auth/stores/bookmarks/courses")
-    public ResponseEntity<Response> getIsBookmark(@RequestBody Map<String, List<Long>> param) {
-        Long userSeq = userInfoService.getId();
-        List<Long> storeSeqList = param.get("storeSeqList");
-        System.out.println(storeSeqList.size());
+    public ResponseEntity<Response> getIsBookmark(@RequestBody StoreCartDto storeCartDto) {
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         response.setStatus(StatusEnum.OK);
         response.setMessage("선택한 순서대로 장소 정보 가져오기 성공");
-        response.setData(storeService.getStoreInfoListInOrder(userSeq, storeSeqList));
+        response.setData(storeService.getStoreInfoListInOrder(storeCartDto.getUserSeq(), storeCartDto.getStoreSeqList()));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 }
