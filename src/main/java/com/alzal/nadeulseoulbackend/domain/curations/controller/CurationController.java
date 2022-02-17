@@ -29,7 +29,7 @@ import java.util.List;
 
 @RestController
 @Api(value = "CurationController")
-@RequestMapping("api/v1/auth/curations")
+@RequestMapping("api/v1")
 public class CurationController {
 
     @Autowired
@@ -43,7 +43,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 목록 불러오기 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping()
+    @GetMapping("/curations")
     public ResponseEntity<Response> getCurationListPage(@PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC ) Pageable pageable) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -59,7 +59,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 상세 정보 불러오기가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/{id}")
+    @GetMapping("/auth/curations/{id}")
     public ResponseEntity<Response> getCuration(@PathVariable("id") final Long curationSeq) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -129,7 +129,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 수정이 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @PutMapping
+    @PutMapping("/auth/curations")
     public ResponseEntity<Response> updateCuration(final CurationRequestDto curationRequestDto) {
         Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
@@ -149,7 +149,7 @@ public class CurationController {
             @ApiResponse(code = 200, message = "큐레이션 삭제가 완료되었습니다."),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/auth/curations/{id}")
     public ResponseEntity<Response> deleteCuration(@PathVariable("id") final Long curationSeq) {
 
         curationService.deleteCuration(curationSeq);

@@ -12,7 +12,7 @@ import java.util.List;
 public class CurationResponseDto {
     private Long curationSeq;
     private Long memberSeq;
-    private UserCommentDto userinfos;
+    private UserInfoDto userinfos;
     private String title;
     private String description;
     private Integer personnel;
@@ -27,7 +27,7 @@ public class CurationResponseDto {
     private List<StoreInCurationDto> curationCourse;
 
     @Builder
-    public CurationResponseDto(Long curationSeq, Long memberSeq, UserCommentDto userinfos, String title, String description, Integer personnel, Integer budget, LocalDateTime date, Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local, List<CodeDto> theme, List<StoreInCurationDto> curationCourse) {
+    public CurationResponseDto(Long curationSeq, Long memberSeq, UserInfoDto userinfos, String title, String description, Integer personnel, Integer budget, LocalDateTime date, Integer good, Integer views, Integer photoCount, List<Long> fileList, List<CodeDto> local, List<CodeDto> theme, List<StoreInCurationDto> curationCourse) {
         this.curationSeq = curationSeq;
         this.memberSeq = memberSeq;
         this.userinfos = userinfos;

@@ -7,21 +7,21 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class UserCommentDto {
+public class UserInfoDto {
 
     private Long userSeq;
     private String nickname;
     private String emoji;
 
     @Builder
-    public UserCommentDto(Long userSeq, String nickname, String emoji) {
+    public UserInfoDto(Long userSeq, String nickname, String emoji) {
         this.userSeq = userSeq;
         this.nickname = nickname;
         this.emoji = emoji;
     }
 
-    public static UserCommentDto fromEntity(User user) {
-        return UserCommentDto.builder()
+    public static UserInfoDto fromEntity(User user) {
+        return UserInfoDto.builder()
                 .userSeq(user.getUserSeq())
                 .nickname(user.getNickname())
                 .emoji(user.getEmoji())

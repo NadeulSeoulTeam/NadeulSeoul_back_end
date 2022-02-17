@@ -3,7 +3,6 @@ package com.alzal.nadeulseoulbackend.domain.curations.service;
 import com.alzal.nadeulseoulbackend.domain.curations.dto.*;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.*;
 import com.alzal.nadeulseoulbackend.domain.curations.exception.CurationNotFoundException;
-import com.alzal.nadeulseoulbackend.domain.curations.exception.ImageIOException;
 import com.alzal.nadeulseoulbackend.domain.curations.repository.*;
 import com.alzal.nadeulseoulbackend.domain.curations.util.ImageHandler;
 import com.alzal.nadeulseoulbackend.domain.mypage.exception.UserNotFoundException;
@@ -21,16 +20,12 @@ import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 // TODO :
@@ -89,6 +84,7 @@ public class CurationService {
 
         CurationResponseDto curationResponseDto = CurationResponseDto.builder()
                 .curationSeq(curation.getCurationSeq())
+                .userinfos(UserInfoDto.fromEntity(curation.getUser()))
                 .title(curation.getTitle())
                 .budget(curation.getBudget())
                 .personnel(curation.getPersonnel())
