@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.curations.dto;
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class CurationSearchResponseDto {

@@ -2,8 +2,10 @@ package com.alzal.nadeulseoulbackend.domain.users.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
+@NoArgsConstructor
 @Getter
 public class AssignedUserDto {
     Long userSeq;
