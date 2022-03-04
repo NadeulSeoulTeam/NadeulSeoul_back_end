@@ -134,7 +134,7 @@ public class CurationService {
                 storeInCurationRepository.save(
                         StoreInCuration.builder()
                                 .storeOrder(storeInfos.indexOf(store))
-                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(StoreInfo.builder().storeSeq(store.getStoreSeq()).storeName(store.getStoreName()).addressName(store.getAddressName()).categoryName(store.getCategoryName()).placeUrl(store.getPlaceUrl()).x(store.getX()).y(store.getY()).phone(store.getPhone()).build())))
+                                .storeInfo(storeInfoRepository.findById(store.getStoreSeq()).orElse(storeInfoRepository.save(StoreInfo.builder().storeSeq(store.getStoreSeq()).storeName(store.getStoreName()).addressName(store.getAddressName()).categoryName(store.getCategoryName()).placeUrl(store.getPlaceUrl()).x(store.getX()).y(store.getY()).phone(store.getPhone()).bookmarkCount(0L).build())))
                                 .curation(curation)
                                 .build()
                 )

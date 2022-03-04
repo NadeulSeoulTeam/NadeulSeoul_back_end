@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class Curation {
     private Integer good;
     private Integer views;
     private Integer photoCount;
+    @ColumnDefault("0")
     private Long thumnail;
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private Boolean hidden;

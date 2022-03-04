@@ -3,6 +3,7 @@ package com.alzal.nadeulseoulbackend.domain.stores.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,6 +24,8 @@ public class StoreInfo {
     private String phone;
     private String x;
     private String y;
+
+    @ColumnDefault("0")
     private Long bookmarkCount;
 
     @Builder
