@@ -1,8 +1,9 @@
 package com.alzal.nadeulseoulbackend.domain.stores.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -25,7 +26,7 @@ public class StoreInfo {
     private Long bookmarkCount;
 
     @Builder
-    public StoreInfo(Long storeSeq,String storeName, String categoryName, String addressName,
+    public StoreInfo(Long storeSeq, String storeName, String categoryName, String addressName,
                      String placeUrl, String phone, String x, String y, Long bookmarkCount) {
         this.storeSeq = storeSeq;
         this.storeName = storeName;

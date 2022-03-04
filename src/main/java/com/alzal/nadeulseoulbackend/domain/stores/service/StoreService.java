@@ -78,8 +78,8 @@ public class StoreService {
                         .bookmarkCount(0L)
                         .build());
 
-        storeInfo.updateBookmarkCount();
         StoreInfo storeInfoEntity = storeInfoRepository.save(storeInfo);
+        storeInfo.updateBookmarkCount();
 
         // 유저가 상가를 찜한 정보 테이블에 insert
         StoreBookmark storeBookmarkEntity = storeBookmarkRepository.save(
@@ -152,6 +152,8 @@ public class StoreService {
             StoreBookmark storeBookmark = storeBookmarkRepository.findByUserAndStoreInfo(user, storeInfo)
                     .orElseThrow(() -> new StoreBookmarkNotFoundException("해당 장소를 찜한적이 없습니다."));
 
+            System.out.println("x값 출력");
+            System.out.println(storeInfo.getX());
             storeInfoDtoList.add(StoreInfoDto.fromEntity(storeInfo));
         }
         return storeInfoDtoList;

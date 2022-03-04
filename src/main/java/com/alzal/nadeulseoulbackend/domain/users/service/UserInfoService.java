@@ -15,8 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 
 @Service
 @Transactional(readOnly = true)
@@ -35,7 +33,7 @@ public class UserInfoService {
 
         Long id = getId();
 
-        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(()->new UserNotFoundException("구글에서 유저 정보를 받을 수 없습니다."));
+        User user = userRepository.findById(id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(() -> new UserNotFoundException("구글에서 유저 정보를 받을 수 없습니다."));
 
         userRepository.save(user);
         AssignedUserDto assignedUserDto = getAssignedUserInfo();
@@ -60,9 +58,9 @@ public class UserInfoService {
 
     public void checkNicknameDuplication(String nickname) {
         Long userId = getId();
-        if(userRepository.existsByNickname(nickname)){ // 존재하면
+        if (userRepository.existsByNickname(nickname)) { // 존재하면
             User user = userRepository.findByNickname(nickname).orElseGet(User::new);
-            if (!userId.equals(user.getUserSeq())){
+            if (!userId.equals(user.getUserSeq())) {
                 throw new DuplicatedNicknameException("중복된 닉네임입니다.");
             }
         }
@@ -87,10 +85,10 @@ public class UserInfoService {
     }
 
     @Transactional
-    public void editUserInfo(SignupInfoDto signupInfo,String paramId) {
+    public void editUserInfo(SignupInfoDto signupInfo, String paramId) {
         Long Id = getId();
-        if(!paramId.equals(Long.toString(Id))) throw new DifferentUserException("다른 사용자의 접근 입니다.");
-        User user = userRepository.findById(Id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(()->new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
+        if (!paramId.equals(Long.toString(Id))) throw new DifferentUserException("다른 사용자의 접근 입니다.");
+        User user = userRepository.findById(Id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
 
         userRepository.save(user);
     }

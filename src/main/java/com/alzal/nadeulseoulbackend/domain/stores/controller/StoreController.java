@@ -16,9 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-
 // http://localhost:8080/swagger-ui/index.html
 
 /*
@@ -82,6 +79,8 @@ public class StoreController {
         Long userSeq = userInfoService.getId();
         Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
+        System.out.println("x값");
+        System.out.println(storeInfoDto.getX());
         storeService.insertStoreBookmark(userSeq, storeSeq, storeInfoDto);
         response.setStatus(StatusEnum.OK);
         response.setMessage("장소 찜하기 성공");
