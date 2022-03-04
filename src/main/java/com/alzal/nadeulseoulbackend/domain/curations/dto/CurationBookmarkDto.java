@@ -1,9 +1,13 @@
 package com.alzal.nadeulseoulbackend.domain.curations.dto;
 
 import com.alzal.nadeulseoulbackend.domain.curations.entity.Curation;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Data
 public class CurationBookmarkDto {

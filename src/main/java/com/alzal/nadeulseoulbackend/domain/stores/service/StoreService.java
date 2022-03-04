@@ -79,7 +79,7 @@ public class StoreService {
                         .build());
 
         StoreInfo storeInfoEntity = storeInfoRepository.save(storeInfo);
-        storeInfo.updateBookmarkCount();
+
 
         // 유저가 상가를 찜한 정보 테이블에 insert
         StoreBookmark storeBookmarkEntity = storeBookmarkRepository.save(
@@ -88,6 +88,7 @@ public class StoreService {
                         .storeInfo(storeInfo)
                         .build()
         );
+        storeInfo.updateBookmarkCount();
     }
 
     // 장소 찜하기 취소
