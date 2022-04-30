@@ -2,12 +2,15 @@ package com.alzal.nadeulseoulbackend.domain.users.controller;
 
 import com.alzal.nadeulseoulbackend.domain.users.dto.AssignedUserDto;
 import com.alzal.nadeulseoulbackend.domain.users.dto.SignupInfoDto;
+import com.alzal.nadeulseoulbackend.domain.users.dto.SocialLoginInfoDto;
 import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.auth.security.TokenProvider;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,7 @@ public class UserController {
     private TokenProvider tokenProvider;
     @Autowired
     private UserInfoService userInfoService;
+
 //
 //    @ApiOperation(value="소셜 로그인 버튼",notes="이미 로그인된 사용자 검사")
 //    @ApiResponses({
@@ -39,6 +43,25 @@ public class UserController {
 //        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
 //
 //    }
+    @ApiOperation(value = "구글 로그인 API 연동", notes = "redirectUri,clientId,scope 정보 보내기")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그아웃 성공"),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping("/users/google")
+    public ResponseEntity<Response> googleInfo(){
+        Response response = new Response();
+        HttpHeaders httpHeaders = new HttpHeaders();
+
+        SocialLoginInfoDto socialLoginInfoDto = userInfoService.getSocialLoginInfo();
+
+        response.setMessage("소셜 로그인 정보 반환 성공");
+        response.setData(socialLoginInfoDto);
+        response.setStatus(StatusEnum.OK);
+
+        return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
+    }
+
 
     @ApiOperation(value = "로그아웃", notes = "redis내 토큰 제거 및 로그아웃")
     @ApiResponses({

@@ -2,6 +2,7 @@ package com.alzal.nadeulseoulbackend.domain.users.service;
 
 import com.alzal.nadeulseoulbackend.domain.users.dto.AssignedUserDto;
 import com.alzal.nadeulseoulbackend.domain.users.dto.SignupInfoDto;
+import com.alzal.nadeulseoulbackend.domain.users.dto.SocialLoginInfoDto;
 import com.alzal.nadeulseoulbackend.domain.users.entity.User;
 import com.alzal.nadeulseoulbackend.domain.users.exception.CannotDeleteUserTokenInRedisException;
 import com.alzal.nadeulseoulbackend.domain.users.exception.DifferentUserException;
@@ -9,7 +10,9 @@ import com.alzal.nadeulseoulbackend.domain.users.exception.DuplicatedNicknameExc
 import com.alzal.nadeulseoulbackend.domain.users.exception.UserNotFoundException;
 import com.alzal.nadeulseoulbackend.domain.users.repository.UserRepository;
 import com.alzal.nadeulseoulbackend.global.auth.security.UserPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alzal.nadeulseoulbackend.global.config.SocialLoginYamlConfig;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -17,15 +20,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserInfoService {
 
-    @Autowired
-    private UserRepository userRepository;
+    final private UserRepository userRepository;
+    final private StringRedisTemplate stringRedisTemplate;
+    final private SocialLoginYamlConfig socialLoginYamlConfig;
+
     private Long id;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+
 
     //User정보 등록하기
     @Transactional
@@ -91,5 +96,14 @@ public class UserInfoService {
         User user = userRepository.findById(Id).map(entity -> entity.update(signupInfo.getNickname(), signupInfo.getEmoji())).orElseThrow(() -> new UserNotFoundException("유저 정보를 찾을 수 없습니다."));
 
         userRepository.save(user);
+    }
+
+
+    public SocialLoginInfoDto getSocialLoginInfo() {
+        return SocialLoginInfoDto
+                .builder()
+                .clientId(socialLoginYamlConfig.getClientId())
+                .scope(socialLoginYamlConfig.getScope())
+                .build();
     }
 }

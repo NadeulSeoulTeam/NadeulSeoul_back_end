@@ -50,7 +50,6 @@ public class User {
     @ColumnDefault("0")
     private int followeeCount;
 
-    @ColumnDefault("0")
     private int followerCount;
     //팔로잉 리스트 (사용자가 팔로우한 사람)
     @OneToMany(mappedBy = "followee")
