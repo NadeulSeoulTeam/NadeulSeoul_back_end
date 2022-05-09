@@ -7,16 +7,21 @@ import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.auth.security.TokenProvider;
 import com.alzal.nadeulseoulbackend.global.common.Response;
 import com.alzal.nadeulseoulbackend.global.common.StatusEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 @RestController
@@ -62,6 +67,39 @@ public class UserController {
         return new ResponseEntity<Response>(response,httpHeaders,HttpStatus.OK);
     }
 
+    @ApiOperation(value = "구글 로그인 API- authorizationCode", notes = "AuthorizationCode 받는 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그아웃 성공"),
+            @ApiResponse(code = 404, message = "page not found")
+    })
+    @GetMapping("/users/google/{authorizationCode}")
+    public ResponseEntity<Response> GoogleLogin(@PathVariable("authorizationCode") String authorizationCode){
+//        Response response = new Response();
+
+        ResponseEntity<String> response = null;
+        RestTemplate restTemplate = new RestTemplate();
+
+        // According OAuth documentation we need to send the client id and secret key in the header for authentication
+        String credentials = "javainuse:secret";
+        String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("Authorization", "Basic " + encodedCredentials);
+
+        HttpEntity<String> request = new HttpEntity<String>(headers);
+
+        String access_token_url = "http://localhost:8080/oauth/token";
+        access_token_url += "?code=" + authorizationCode;
+        access_token_url += "&grant_type=authorization_code";
+        access_token_url += "&redirect_uri=http://localhost:3000/";
+
+        response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
+
+        System.out.println("Access Token Response ---------" + response.getBody());
+
+        return null;
+    }
 
     @ApiOperation(value = "로그아웃", notes = "redis내 토큰 제거 및 로그아웃")
     @ApiResponses({
