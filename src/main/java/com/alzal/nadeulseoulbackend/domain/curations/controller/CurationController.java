@@ -46,11 +46,9 @@ public class CurationController {
 
     @GetMapping("/curations/{user_seq}")
     public ResponseEntity<Response> getCurationListPage(@PathVariable("user_seq") Long userSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
         Page<CurationSearchResponseDto> curationSearchResponseDtoPage = curationService.getCurationListByPage(userSeq, pageable);
-        response.setMessage("큐레이션 목록을 불러왔습니다.");
-        response.setData(curationSearchResponseDtoPage);
+        Response response = new Response("큐레이션 목록을 불러왔습니다.", curationSearchResponseDtoPage);
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -62,11 +60,7 @@ public class CurationController {
     })
     @GetMapping("/auth/curations/{id}")
     public ResponseEntity<Response> getCuration(@PathVariable("id") final Long curationSeq) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
 
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 상세 정보 불러오기가 완료되었습니다.");
         CurationResponseDto curationResponseDto = null;
         List<Long> imageSeqList = new ArrayList<>();
         try {
@@ -76,7 +70,8 @@ public class CurationController {
             e.printStackTrace();
         }
 
-        response.setData(curationResponseDto);
+        Response response = new Response("큐레이션 상세 정보 불러오기가 완료되었습니다.", curationResponseDto);
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -90,17 +85,15 @@ public class CurationController {
     public ResponseEntity<Response> insertCuration(
             @RequestPart(value = "fileList", required = false) List<MultipartFile> fileList,
             @RequestPart(value = "curationRequestDto") CurationRequestDto curationRequestDto) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
         try {
             curationService.insertCuration(fileList, curationRequestDto);
-            response.setStatus(StatusEnum.OK);
-            response.setMessage("큐레이션 작성이 완료되었습니다.");
+            Response response = new Response("큐레이션 작성이 완료되었습니다.");
+            HttpHeaders headers = new HttpHeaders();
+            return new ResponseEntity<>(response, headers, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
   
 //    @ApiOperation(value = "큐레이션 작성", notes = "큐레이션 작성하기")
@@ -133,16 +126,8 @@ public class CurationController {
     })
     @PutMapping("/auth/curations")
     public ResponseEntity<Response> updateCuration(final CurationRequestDto curationRequestDto) {
-        Response response = new Response();
+        Response response = new Response("큐레이션 수정이 완료되었습니다.");
         HttpHeaders headers = new HttpHeaders();
-
-//        try {
-//            curationService.updateCuration(curationRequestDto);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        response.setMessage("큐레이션 수정이 완료되었습니다.");
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -153,15 +138,9 @@ public class CurationController {
     })
     @DeleteMapping("/auth/curations/{id}")
     public ResponseEntity<Response> deleteCuration(@PathVariable("id") final Long curationSeq) {
-
         curationService.deleteCuration(curationSeq);
-
-        Response response = new Response();
+        Response response = new Response("큐레이션 삭제가 완료되었습니다.");
         HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 삭제가 완료되었습니다.");
-
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 }

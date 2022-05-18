@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.curations.controller;
 
+import com.alzal.nadeulseoulbackend.domain.curations.dto.CurationBookmarkDto;
 import com.alzal.nadeulseoulbackend.domain.curations.service.CurationBookmarkService;
 import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,11 +44,9 @@ public class CurationBookmarkController {
     @PostMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> insertCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         curationBookmarkService.insertCurationBookmark(userSeq, curationSeq);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 스크랩하기 성공");
+        Response response = new Response("큐레이션 스크랩하기 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -61,11 +61,9 @@ public class CurationBookmarkController {
     @DeleteMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> deleteCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         curationBookmarkService.deleteCurationBookmark(userSeq, curationSeq);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 스크랩 취소하기 성공");
+        Response response = new Response("큐레이션 스크랩 취소하기 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -80,11 +78,9 @@ public class CurationBookmarkController {
     @GetMapping("/auth/curations/bookmarks/{curation_seq}")
     public ResponseEntity<Response> isCurationBookmark(@PathVariable("curation_seq") Long curationSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
+        Boolean data = curationBookmarkService.isCurationBookmark(userSeq, curationSeq);
+        Response response = new Response("큐레이션 스크랩 여부 확인 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 스크랩 여부 확인 성공");
-        response.setData(curationBookmarkService.isCurationBookmark(userSeq, curationSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -98,11 +94,9 @@ public class CurationBookmarkController {
     })
     @GetMapping("/curations/bookmarks/{user_seq}")
     public ResponseEntity<Response> getCurationBookmarkList(@PathVariable("user_seq") Long userSeq, @RequestParam("page") int page, @RequestParam("size") int size) {
-        Response response = new Response();
+        Page<CurationBookmarkDto> data = curationBookmarkService.getCurationBookmarkList(userSeq, page, size);
+        Response response = new Response("큐레이션 스크랩 리스트 조회 성공",data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("큐레이션 스크랩 리스트 조회 성공");
-        response.setData(curationBookmarkService.getCurationBookmarkList(userSeq, page, size));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 

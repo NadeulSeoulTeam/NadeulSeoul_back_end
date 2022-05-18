@@ -35,15 +35,9 @@ public class StaticsController {
     })
     @GetMapping("/courses")
     public ResponseEntity<Response> getHotCurationList() {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("HOT한 코스 목록 불러오기가 완료되었습니다.");
-
         List<CurationSearchResponseDto> curationSearchResponseDtoList = staticsService.getHotCurationList();
-        response.setData(curationSearchResponseDtoList);
-
+        Response response = new Response("HOT한 코스 목록 불러오기가 완료되었습니다.", curationSearchResponseDtoList);
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -54,13 +48,9 @@ public class StaticsController {
     })
     @GetMapping("/nadeulers")
     public ResponseEntity<Response> getNadeulers() {
-        Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("열정적인 나들러 불러오기가 완료되었습니다.");
         List<NadeulerDto> nadeulerDtoList = staticsService.getNadeulerList();
-        response.setData(nadeulerDtoList);
+        Response response = new Response("열정적인 나들러 불러오기가 완료되었습니다.", nadeulerDtoList);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -71,13 +61,9 @@ public class StaticsController {
     })
     @GetMapping("/stores")
     public ResponseEntity<Response> getStoreBookmarkList() {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("나들러가 많이 찜한 장소 불러오기가 완료되었습니다.");
         List<StoreBookmarkInfoDto> storeBookmarkInfoDtoList = staticsService.getStoreBookmarkList();
-        response.setData(storeBookmarkInfoDtoList);
+         Response response = new Response("나들러가 많이 찜한 장소 불러오기가 완료되었습니다.", storeBookmarkInfoDtoList);
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

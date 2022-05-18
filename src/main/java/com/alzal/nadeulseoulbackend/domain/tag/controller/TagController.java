@@ -44,14 +44,9 @@ public class TagController {
     @GetMapping("/local")
     public ResponseEntity<Response> getLocalTagList() {
         List<CodeDto> localTagDtoList = codeService.findAllByGroup(1L);
-        Response response = new Response();
+        Response response = new Response("지역 태그 목록 조회 성공", localTagDtoList);
         HttpHeaders headers = new HttpHeaders();
-
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("지역 태그 목록 조회 성공");
-        response.setData(localTagDtoList);
-
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -63,14 +58,9 @@ public class TagController {
     @GetMapping("/theme")
     public ResponseEntity<Response> getThemeTagList() {
         List<CodeDto> themeTagDtoList = codeService.findAllByGroup(2L);
-        Response response = new Response();
+        Response response = new Response("테마 태그 목록 조회 성공", themeTagDtoList);
         HttpHeaders headers = new HttpHeaders();
-
         headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("테마 태그 목록 조회 성공");
-        response.setData(themeTagDtoList);
-
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -84,15 +74,10 @@ public class TagController {
             @RequestBody CodeRequestDto codeRequestDto,
             @PageableDefault(page = 0, size = 10, sort = "views", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         Page<CurationSearchResponseDto> page = curationService.getCurationListByPageWithCode(codeRequestDto, pageable);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("태그 검색 목록 조회 성공");
-        response.setData(page);
+        Response response = new Response("태그 검색 목록 조회 성공", page);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

@@ -47,13 +47,9 @@ public class UserController {
     })
     @GetMapping("/users/signout")
     public ResponseEntity<Response> signoutUser() {
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
-
         userInfoService.signoutUserfromRedis();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("로그아웃 성공");
+        Response response = new Response("로그아웃 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -64,12 +60,10 @@ public class UserController {
     })
     @PutMapping("/users/{id}")
     public ResponseEntity<Response> editUserInfo(@Valid @RequestBody @ApiParam(value = "회원가입 정보", required = true) SignupInfoDto signupInfo, @PathVariable String id) {
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         userInfoService.editUserInfo(signupInfo, id);
 
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("회원 정보 수정 성공");
+        Response response = new Response("회원 정보 수정 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -80,13 +74,9 @@ public class UserController {
     })
     @PostMapping("/users/signup")
     public ResponseEntity<Response> getExtraUserInfo(@Valid @RequestBody @ApiParam(value = "회원가입 정보", required = true) SignupInfoDto signupInfo) {
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         AssignedUserDto assignedUser = userInfoService.updateSignupInfo(signupInfo);
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("회원 가입 성공");
-        response.setData(assignedUser);
+        Response response = new Response("회원 가입 성공", assignedUser);
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -97,16 +87,12 @@ public class UserController {
     })
     @PostMapping("/users/nickname")
     public ResponseEntity<Response> checkNickname(@Valid @RequestBody @ApiParam(value = "닉네임 ", required = true) HashMap<String, String> map) {
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
-
         String nickname = map.get("nickname");
         System.out.println("nickname : " + nickname);
         userInfoService.checkNicknameDuplication(nickname);
 
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("사용가능한 닉네임입니다.");
-
+        Response response = new Response("사용가능한 닉네임입니다.");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -117,15 +103,9 @@ public class UserController {
     })
     @GetMapping("/users")
     public ResponseEntity<Response> getUserInfo() {
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
-
         AssignedUserDto assignedUserDto = userInfoService.getAssignedUserInfo();
-
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("유저 정보를 성공적으로 받아왔습니다.");
-        response.setData(assignedUserDto);
-
+        Response response = new Response("유저 정보를 성공적으로 받아왔습니다.", assignedUserDto);
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 }

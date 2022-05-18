@@ -39,11 +39,9 @@ public class CommentController {
     })
     @GetMapping("/{id}/list")
     public ResponseEntity<Response> getCommentList(@PathVariable("id") final Long curationSeq) {
-        Response response = new Response();
         HttpHeaders headers = new HttpHeaders();
         List<CommentResponseDto> commentResponseDtoList = commentService.getCommentList(curationSeq);
-        response.setMessage("댓글 목록을 불러왔습니다.");
-        response.setData(commentResponseDtoList);
+        Response response = new Response( "댓글 목록을 불러왔습니다.", commentResponseDtoList);
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -54,12 +52,9 @@ public class CommentController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<Response> getCommentListPage(@PathVariable("id") final Long curationSeq, @PageableDefault(page = 0, size = 10, sort = "date", direction = Sort.Direction.ASC) Pageable pageable) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
-
         Page<CommentResponseDto> commentResponseDtoPage = commentService.getCommentListByPage(curationSeq, pageable);
-        response.setMessage("댓글 목록을 불러왔습니다.");
-        response.setData(commentResponseDtoPage);
+        Response response = new Response("댓글 목록을 불러왔습니다.", commentResponseDtoPage);
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -70,10 +65,9 @@ public class CommentController {
     })
     @PostMapping("/auth")
     public ResponseEntity<Response> insertComment(@RequestBody final CommentRequestDto commentRequestDto) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
         commentService.insertComment(commentRequestDto, userInfoService.getId());
-        response.setMessage("댓글 작성이 완료되었습니다.");
+        Response response = new Response("댓글 작성이 완료되었습니다.");
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -85,10 +79,9 @@ public class CommentController {
     })
     @PutMapping("/auth")
     public ResponseEntity<Response> updateComment(@RequestBody final CommentRequestDto commentRequestDto) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
         commentService.updateComment(commentRequestDto, userInfoService.getId());
-        response.setMessage("댓글 수정이 완료되었습니다.");
+        Response response = new Response("댓글 수정이 완료되었습니다.");
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 
@@ -99,10 +92,9 @@ public class CommentController {
     })
     @DeleteMapping("/{id}/auth")
     public ResponseEntity<Response> deleteComment(@PathVariable("id") final Long commentSeq) {
-        Response response = new Response();
-        HttpHeaders headers = new HttpHeaders();
         commentService.deleteByCommentSeq(commentSeq, userInfoService.getId());
-        response.setMessage("댓글 삭제가 완료되었습니다.");
+        Response response = new Response("댓글 삭제가 완료되었습니다.");
+        HttpHeaders headers = new HttpHeaders();
         return new ResponseEntity<>(response, headers, HttpStatus.OK);
     }
 

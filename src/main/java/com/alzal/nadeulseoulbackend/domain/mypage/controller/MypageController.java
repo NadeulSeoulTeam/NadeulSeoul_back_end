@@ -1,5 +1,7 @@
 package com.alzal.nadeulseoulbackend.domain.mypage.controller;
 
+import com.alzal.nadeulseoulbackend.domain.mypage.dto.FollowDto;
+import com.alzal.nadeulseoulbackend.domain.mypage.dto.MypageInfoDto;
 import com.alzal.nadeulseoulbackend.domain.mypage.service.MypageService;
 import com.alzal.nadeulseoulbackend.domain.users.service.UserInfoService;
 import com.alzal.nadeulseoulbackend.global.common.Response;
@@ -13,6 +15,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // http://localhost:8080/swagger-ui/index.html
 
@@ -39,11 +43,9 @@ public class MypageController {
             @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/mypage/{user_seq}")
     public ResponseEntity<Response> getMyInfo(@PathVariable("user_seq") Long userSeq) {
-        Response response = new Response();
+        MypageInfoDto data = mypageService.getMypageInfo(userSeq);
+        Response response = new Response("마이페이지 정보 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("마이페이지 정보 가져오기 성공");
-        response.setData(mypageService.getMypageInfo(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -56,11 +58,9 @@ public class MypageController {
             @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/mypage/{user_seq}/followee")
     public ResponseEntity<Response> getFolloweeList(@PathVariable("user_seq") Long userSeq) {
-        Response response = new Response();
+        List<FollowDto> data = mypageService.getFollowingList(userSeq);
+        Response response = new Response("팔로잉 리스트 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("팔로잉 리스트 가져오기 성공");
-        response.setData(mypageService.getFollowingList(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -73,11 +73,9 @@ public class MypageController {
             @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/mypage/{user_seq}/follower")
     public ResponseEntity<Response> getFollowerList(@PathVariable("user_seq") Long userSeq) {
-        Response response = new Response();
+        List<FollowDto> data = mypageService.getFollowerList(userSeq);
+        Response response = new Response("팔로워 리스트 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("팔로워 리스트 가져오기 성공");
-        response.setData(mypageService.getFollowerList(userSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -91,11 +89,9 @@ public class MypageController {
     @PostMapping("/auth/mypage/{user_seq}/follow")
     public ResponseEntity<Response> follow(@PathVariable("user_seq") Long followedUserSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.insertFollow(userSeq, followedUserSeq);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("팔로우 하기 성공");
+        Response response = new Response("팔로우 하기 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -109,11 +105,9 @@ public class MypageController {
     @DeleteMapping("/auth/mypage/{user_seq}/unfollow")
     public ResponseEntity<Response> unfollow(@PathVariable("user_seq") Long followedUserSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         mypageService.deleteFollow(userSeq, followedUserSeq);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("언팔로우 하기 성공");
+        Response response = new Response("언팔로우 하기 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 

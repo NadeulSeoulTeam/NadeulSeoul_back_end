@@ -1,5 +1,6 @@
 package com.alzal.nadeulseoulbackend.domain.stores.controller;
 
+import com.alzal.nadeulseoulbackend.domain.stores.dto.BookmarkDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreCartDto;
 import com.alzal.nadeulseoulbackend.domain.stores.dto.StoreInfoDto;
 import com.alzal.nadeulseoulbackend.domain.stores.service.StoreService;
@@ -11,10 +12,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // http://localhost:8080/swagger-ui/index.html
 
@@ -42,11 +46,9 @@ public class StoreController {
             @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/stores/bookmarks/{user_seq}")
     public ResponseEntity<Response> getStoreBookmarkList(@PathVariable("user_seq") Long userSeq, @RequestParam("page") int page, @RequestParam("size") int size) {
-        Response response = new Response();
+        Page<StoreInfoDto> data = storeService.getStoreBookmarkInfoDto(userSeq, page, size);
+        Response response = new Response("찜한 장소 리스트 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("찜한 장소 리스트 가져오기 성공");
-        response.setData(storeService.getStoreBookmarkInfoDto(userSeq, page, size));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -59,11 +61,9 @@ public class StoreController {
             @ApiResponse(code = 404, message = "page not found")})
     @GetMapping("/stores/{store_seq}")
     public ResponseEntity<Response> getStoreInfo(@PathVariable("store_seq") Long storeSeq) {
-        Response response = new Response();
+        StoreInfoDto data = storeService.getStoreInfoDto(storeSeq);
+        Response response = new Response("장소 상세 정보 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 상세 정보 가져오기 성공");
-        response.setData(storeService.getStoreInfoDto(storeSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -77,13 +77,9 @@ public class StoreController {
     @PostMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> insertStoreBookmark(@PathVariable("store_seq") Long storeSeq, @RequestBody StoreInfoDto storeInfoDto) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        System.out.println("x값");
-        System.out.println(storeInfoDto.getX());
         storeService.insertStoreBookmark(userSeq, storeSeq, storeInfoDto);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 찜하기 성공");
+        Response response = new Response("장소 찜하기 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -97,11 +93,9 @@ public class StoreController {
     @DeleteMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> deleteStoreBookmark(@PathVariable("store_seq") Long storeSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
-        HttpHeaders httpHeaders = new HttpHeaders();
         storeService.deleteStoreBookmark(userSeq, storeSeq);
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 찜하기 취소 성공");
+        Response response = new Response("장소 찜하기 취소 성공");
+        HttpHeaders httpHeaders = new HttpHeaders();
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -115,11 +109,9 @@ public class StoreController {
     @GetMapping("/auth/stores/bookmarks/{store_seq}")
     public ResponseEntity<Response> getIsBookmark(@PathVariable("store_seq") Long storeSeq) {
         Long userSeq = userInfoService.getId();
-        Response response = new Response();
+        BookmarkDto data = storeService.getIsBookmark(userSeq, storeSeq);
+        Response response = new Response("장소 찜한 여부 확인 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("장소 찜한 여부 확인 성공");
-        response.setData(storeService.getIsBookmark(userSeq, storeSeq));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 
@@ -132,11 +124,9 @@ public class StoreController {
             @ApiResponse(code = 404, message = "page not found")})
     @PostMapping("/auth/stores/bookmarks/courses")
     public ResponseEntity<Response> getIsBookmark(@RequestBody StoreCartDto storeCartDto) {
-        Response response = new Response();
+        List<StoreInfoDto> data = storeService.getStoreInfoListInOrder(storeCartDto.getUserSeq(), storeCartDto.getStoreSeqList());
+        Response response = new Response("선택한 순서대로 장소 정보 가져오기 성공", data);
         HttpHeaders httpHeaders = new HttpHeaders();
-        response.setStatus(StatusEnum.OK);
-        response.setMessage("선택한 순서대로 장소 정보 가져오기 성공");
-        response.setData(storeService.getStoreInfoListInOrder(storeCartDto.getUserSeq(), storeCartDto.getStoreSeqList()));
         return new ResponseEntity<Response>(response, httpHeaders, HttpStatus.OK);
     }
 }
