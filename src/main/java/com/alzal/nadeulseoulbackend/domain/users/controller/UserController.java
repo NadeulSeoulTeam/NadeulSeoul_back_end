@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -51,8 +48,8 @@ public class UserController {
             @ApiResponse(code = 200, message = "로그아웃 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/users/google/{authorizationCode}")
-    public ResponseEntity<Response> GoogleLogin(@PathVariable("authorizationCode") String authorizationCode){
+    @GetMapping("/users/google")
+    public ResponseEntity<Response> GoogleLogin(@RequestParam("code") String authorizationCode){
 //        Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
         RestTemplate restTemplate = new RestTemplate();
