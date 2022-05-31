@@ -48,7 +48,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "로그아웃 성공"),
             @ApiResponse(code = 404, message = "page not found")
     })
-    @GetMapping("/users/google")
+    @RequestMapping("/users/google")
     public ResponseEntity<Response> GoogleLogin(@RequestParam("code") String authorizationCode){
 //        Response response = new Response();
         HttpHeaders httpHeaders = new HttpHeaders();
